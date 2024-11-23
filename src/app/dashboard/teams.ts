@@ -20,6 +20,10 @@ type TeamScheduleResponse = {
     id: string;
     date: string;
     name: string;
+    competitions: [{
+        competitors: [{ id: string }, {id: string}]
+        status: {type: {detail: string, completed: boolean}}
+    }]
   }[];
 };
 
@@ -28,6 +32,7 @@ export const getTeamSchedule = async (teamAbbrev: string) => {
 
   const response = await fetch(teamUrl);
   const responseJson: TeamScheduleResponse = await response.json();
+  console.log(responseJson.events[0]?.competitions[0].status)
   const result = {
     team: {
       id: responseJson.team.id,
@@ -40,6 +45,8 @@ export const getTeamSchedule = async (teamAbbrev: string) => {
       id: game.id,
       date: new Date(game.date),
       name: game.name,
+      teamIds: [game.competitions[0].competitors[0].id, game.competitions[0].competitors[1].id] as [string, string],
+      status: game.competitions[0].status.type.completed ? 'completed': game.competitions[0].status.type.detail
     })),
   };
   return result;

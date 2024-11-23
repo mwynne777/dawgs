@@ -36,15 +36,25 @@ const getPlayerStatsForDate = async (
   for (const teamRecord of teamRecords) {
     const game = teamRecord.games[0];
     if (!game) continue;
+
+    const player = getPlayerByTeamAbbreviation(
+      teamRecord.team.abbreviation as TeamAbbreviation,
+    );
+
+    if (game.date > new Date()) {
+      stats.push({
+        player,
+        stats: [],
+      });
+      continue;
+    }
     const boxScoreResponse = await fetch(`${BOX_SCORE_BASE_URL}${game.id}`);
     const boxScoreResponseParsed = await boxScoreResponse.json();
 
     const teamStats = boxScoreResponseParsed.boxscore.players.find(
       (dumbObject: any) => dumbObject.team.id === teamRecord.team.id,
     );
-    const player = getPlayerByTeamAbbreviation(
-      teamRecord.team.abbreviation as TeamAbbreviation,
-    );
+
     const athleteStats = teamStats.statistics[0].athletes.find(
       (p: any) => p.athlete.id === player.id,
     );
@@ -58,11 +68,12 @@ const getPlayerStatsForDate = async (
 };
 
 const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
-  const [selectedDate, setSelectedDate] = useState(() => {
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    return yesterday;
-  });
+  //   const [selectedDate, setSelectedDate] = useState(() => {
+  //     const yesterday = new Date();
+  //     yesterday.setDate(yesterday.getDate() - 1);
+  //     return yesterday;
+  //   });
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [allPlayerStats, setAllPlayerStats] = useState<
     { stats: string[]; player: Player }[]
   >([]);
@@ -96,7 +107,7 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
         <button
           onClick={handlePrevDay}
           className="rounded border px-3 py-1 hover:bg-gray-100"
@@ -118,7 +129,7 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
           &gt;
         </button>
       </div>
-      <Table allPlayerStats={allPlayerStats} />
+      <Table allPlayerStats={allPlayerStats} games={gamesOnSelectedDate} />
     </div>
   );
 };

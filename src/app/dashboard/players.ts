@@ -3,14 +3,15 @@ import { TeamAbbreviation } from "./teams";
 export type Player = {
     id: string;
     name: string;
+    teamId: number
   };
 
 const PLAYERS: Player[] = [
-    { id: "5105565", name: "Donovan Clingan" },
-    { id: "4432190", name: "Andre Jackson" },
-    { id: "4433083", name: "Cam Spencer" },
-    { id: "4683750", name: "Jordan Hawkins" },
-    { id: "4845367", name: "Stephon Castle" },
+    { id: "5105565", name: "Donovan Clingan", teamId: 22 },
+    { id: "4432190", name: "Andre Jackson", teamId: 15 },
+    { id: "4433083", name: "Cam Spencer", teamId: 29 },
+    { id: "4683750", name: "Jordan Hawkins", teamId: 3 },
+    { id: "4845367", name: "Stephon Castle", teamId: 24 },
   ] as const;
 
 export const getPlayerByTeamAbbreviation = (abbrev: TeamAbbreviation): Player => {
