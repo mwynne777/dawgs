@@ -1,4 +1,4 @@
-import { Player } from "../page";
+import { Player } from "../players";
 
 export default function Table({
   allPlayerStats,
