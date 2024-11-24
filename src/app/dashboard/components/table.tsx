@@ -17,6 +17,11 @@ export default function Table({
   const playersGroupedByGame: GameRecord[] = [];
   Object.values(games).map((g) => {
     g.games.forEach((game) => {
+      // skip this game if it was already added
+      if (playersGroupedByGame.find((r) => r.game.id === game.id)) {
+        return;
+      }
+
       const gameRecord: GameRecord = { game: game, players: [] };
       const [team1, team2] = game.teamIds;
       allPlayerStats.forEach((player) => {

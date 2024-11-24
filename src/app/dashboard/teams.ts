@@ -32,7 +32,6 @@ export const getTeamSchedule = async (teamAbbrev: string) => {
 
   const response = await fetch(teamUrl);
   const responseJson: TeamScheduleResponse = await response.json();
-  console.log(responseJson.events[0]?.competitions[0].status)
   const result = {
     team: {
       id: responseJson.team.id,
