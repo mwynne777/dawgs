@@ -77,6 +77,7 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
   const [allPlayerStats, setAllPlayerStats] = useState<
     { stats: string[]; player: Player }[]
   >([]);
+  const [loading, setLoading] = useState(false);
 
   const handlePrevDay = () => {
     setSelectedDate((prev) => {
@@ -100,9 +101,11 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
   );
 
   useEffect(() => {
-    getPlayerStatsForDate(gamesOnSelectedDate).then((data) =>
-      setAllPlayerStats(data),
-    );
+    setLoading(true);
+    getPlayerStatsForDate(gamesOnSelectedDate).then((data) => {
+      setAllPlayerStats(data);
+      setLoading(false);
+    });
   }, [selectedDate]);
 
   return (
@@ -129,7 +132,13 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
           &gt;
         </button>
       </div>
-      <Table allPlayerStats={allPlayerStats} games={gamesOnSelectedDate} />
+      {loading ? (
+        <div className="flex h-[50vh] items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
+        </div>
+      ) : (
+        <Table allPlayerStats={allPlayerStats} games={gamesOnSelectedDate} />
+      )}
     </div>
   );
 };
