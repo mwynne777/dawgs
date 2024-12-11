@@ -1,14 +1,16 @@
-export type TeamAbbreviation = 'no' | 'mil' | 'por' | 'sa' | 'mem'
+export type TeamAbbreviation = 'no' | 'mil' | 'por' | 'sa' | 'mem' | 'bkn'
 
 export const teams: Record<TeamAbbreviation, number> = {
+    // atl: 1,
     no: 3,
+    bkn: 17,
     mil: 15,
     por: 22,
     sa: 24,
     mem: 29,
 } as const;
 
-type TeamScheduleResponse = {
+export type TeamScheduleResponse = {
   team: {
     id: string;
     displayName: string;

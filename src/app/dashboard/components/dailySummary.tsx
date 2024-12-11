@@ -51,6 +51,8 @@ const getPlayerStatsForDate = async (
     const boxScoreResponse = await fetch(`${BOX_SCORE_BASE_URL}${game.id}`);
     const boxScoreResponseParsed = await boxScoreResponse.json();
 
+    console.log(JSON.stringify(boxScoreResponseParsed.boxscore));
+
     const teamStats = boxScoreResponseParsed.boxscore.players.find(
       (dumbObject: any) => dumbObject.team.id === teamRecord.team.id,
     );
@@ -68,11 +70,6 @@ const getPlayerStatsForDate = async (
 };
 
 const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
-  //   const [selectedDate, setSelectedDate] = useState(() => {
-  //     const yesterday = new Date();
-  //     yesterday.setDate(yesterday.getDate() - 1);
-  //     return yesterday;
-  //   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [allPlayerStats, setAllPlayerStats] = useState<
     { stats: string[]; player: Player }[]
