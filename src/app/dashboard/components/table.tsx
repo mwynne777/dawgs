@@ -1,43 +1,9 @@
-import { Player } from "../players";
-import { Game } from "../teams";
-import { Team, teams } from "../teams";
+import { GameRecord } from "./dailySummary";
 
-type GameRecord = {
-  game: Game;
-  players: { stats: string[]; player: Player }[];
-};
-
-export default function Table({
-  allPlayerStats,
-  games,
-}: {
-  allPlayerStats: { stats: string[]; player: Player }[];
-  games: { games: Game[]; team: Team }[];
-}) {
-  const playersGroupedByGame: GameRecord[] = [];
-  Object.values(games).map((g) => {
-    g.games.forEach((game) => {
-      // skip this game if it was already added
-      if (playersGroupedByGame.find((r) => r.game.id === game.id)) {
-        return;
-      }
-
-      const gameRecord: GameRecord = { game: game, players: [] };
-      const [team1, team2] = game.teamIds;
-      allPlayerStats.forEach((player) => {
-        if (
-          player.player.teamId.toString() === team1 ||
-          player.player.teamId.toString() === team2
-        ) {
-          gameRecord.players.push(player);
-        }
-      });
-      playersGroupedByGame.push(gameRecord);
-    });
-  });
+export default function Table({ games }: { games: GameRecord[] }) {
   return (
     <div className="flex flex-col gap-6">
-      {playersGroupedByGame.map((gameRecord) => (
+      {games.map((gameRecord) => (
         <div key={gameRecord.game.id} className="flex flex-col gap-2">
           <div>
             <h4 className="font-bold">{gameRecord.game.name}</h4>

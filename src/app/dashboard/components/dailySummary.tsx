@@ -1,79 +1,56 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TeamSchedule, Game, Team, TeamAbbreviation } from "../teams";
-import { getPlayerByTeamAbbreviation, Player } from "../players";
+import { Game } from "../teams";
+import { Player, PLAYERS } from "../players";
 import Table from "./table";
+import { getGamesByDate } from "../scoreboard";
 
-const getGamesOnSelectedDate = (
-  teamSchedules: TeamSchedule[],
-  selectedDate: Date,
-): { games: Game[]; team: Team }[] => {
-  let result: { games: Game[]; team: Team }[] = [];
-  teamSchedules.map((teamSchedule) => {
-    const currentTeam: { games: Game[]; team: Team } = {
-      games: [],
-      team: teamSchedule.team,
-    };
-    const gameOnSelectedDate = teamSchedule.games.filter(
-      (game) => game.date.toDateString() === selectedDate.toDateString(),
-    );
-    if (gameOnSelectedDate.length > 0) {
-      currentTeam.games = gameOnSelectedDate;
-    }
-    result.push(currentTeam);
-  });
-  return result;
+export type GameRecord = {
+  game: Game;
+  players: { stats: string[]; player: Player }[];
 };
 
 const BOX_SCORE_BASE_URL =
   "https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?region=us&lang=en&contentorigin=espn&event=";
 
-const getPlayerStatsForDate = async (
-  teamRecords: { games: Game[]; team: Team }[],
+const getPlayerStatsByGame = async (
+  gameRecords: Awaited<ReturnType<typeof getGamesByDate>>,
 ) => {
-  const stats = [];
-  for (const teamRecord of teamRecords) {
-    const game = teamRecord.games[0];
-    if (!game) continue;
-
-    const player = getPlayerByTeamAbbreviation(
-      teamRecord.team.abbreviation as TeamAbbreviation,
+  let games: GameRecord[] = [];
+  for (const gameRecord of gameRecords) {
+    let players: { stats: string[]; player: Player }[] = [];
+    const boxScoreResponse = await fetch(
+      `${BOX_SCORE_BASE_URL}${gameRecord.id}`,
     );
-
-    if (game.date > new Date()) {
-      stats.push({
-        player,
-        stats: [],
-      });
-      continue;
-    }
-    const boxScoreResponse = await fetch(`${BOX_SCORE_BASE_URL}${game.id}`);
     const boxScoreResponseParsed = await boxScoreResponse.json();
 
-    console.log(JSON.stringify(boxScoreResponseParsed.boxscore));
+    if (!("players" in boxScoreResponseParsed.boxscore)) continue;
 
-    const teamStats = boxScoreResponseParsed.boxscore.players.find(
-      (dumbObject: any) => dumbObject.team.id === teamRecord.team.id,
-    );
-
-    const athleteStats = teamStats.statistics[0].athletes.find(
-      (p: any) => p.athlete.id === player.id,
-    );
-    const playerRecord = {
-      player,
-      stats: athleteStats ? athleteStats.stats : [],
-    };
-    stats.push(playerRecord);
+    boxScoreResponseParsed.boxscore.players.forEach((element: any) => {
+      const athletes = element.statistics[0].athletes;
+      const uconnPlayerIds = Object.values(PLAYERS).map((p) => p.id);
+      const athletesOfInterest = athletes.filter(
+        (a: { athlete: { id: string } }) =>
+          uconnPlayerIds.includes(a.athlete.id),
+      );
+      athletesOfInterest.forEach(
+        (a: { athlete: { id: string }; stats: string[] }) => {
+          players.push({
+            stats: a.stats,
+            player: PLAYERS.find((p) => p.id === a.athlete.id)!,
+          });
+        },
+      );
+    });
+    games.push({ game: gameRecord, players });
   }
-  return stats;
+  return games;
 };
 
-const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
+const DailySummary = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [allPlayerStats, setAllPlayerStats] = useState<
-    { stats: string[]; player: Player }[]
-  >([]);
+  const [allPlayerStats, setAllPlayerStats] = useState<GameRecord[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handlePrevDay = () => {
@@ -92,16 +69,14 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
     });
   };
 
-  const gamesOnSelectedDate = getGamesOnSelectedDate(
-    teamSchedules,
-    selectedDate,
-  );
-
   useEffect(() => {
     setLoading(true);
-    getPlayerStatsForDate(gamesOnSelectedDate).then((data) => {
-      setAllPlayerStats(data);
-      setLoading(false);
+
+    getGamesByDate(selectedDate).then((data) => {
+      getPlayerStatsByGame(data).then((playerStats) => {
+        setAllPlayerStats(playerStats);
+        setLoading(false);
+      });
     });
   }, [selectedDate]);
 
@@ -134,7 +109,7 @@ const DailySummary = ({ teamSchedules }: { teamSchedules: TeamSchedule[] }) => {
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
         </div>
       ) : (
-        <Table allPlayerStats={allPlayerStats} games={gamesOnSelectedDate} />
+        <Table games={allPlayerStats} />
       )}
     </div>
   );

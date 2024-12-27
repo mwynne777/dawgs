@@ -6,7 +6,7 @@ export type Player = {
     teamId: number
   };
 
-const PLAYERS: Player[] = [
+export const PLAYERS: Player[] = [
     { id: "5105565", name: "Donovan Clingan", teamId: 22 },
     { id: "4432190", name: "Andre Jackson", teamId: 15 },
     { id: "4433083", name: "Cam Spencer", teamId: 29 },
