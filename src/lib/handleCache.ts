@@ -3,6 +3,7 @@ import { Game } from "~/app/dashboard/teams";
 import { PLAYERS } from "~/app/dashboard/players";
 import { Player } from "~/app/dashboard/players";
 import { getGamesByDate } from "~/app/dashboard/scoreboard";
+import { Database } from "./supabase-types";
 
 const BOX_SCORE_BASE_URL =
   "https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?region=us&lang=en&contentorigin=espn&event=";
@@ -12,22 +13,14 @@ export type GameRecord = {
     players: { stats: string[]; player: Player }[];
   };
 
-type PlayerStat = {
-    player_id: number;
-    game_id: number;
-    stat_line: string[];
-    game_date: Date;
-    final: boolean;
-}
-
 export const updateCache = async (gameRecords: GameRecord[]) => {
-    const dataToUpsert: PlayerStat[] = []
+    const dataToUpsert: Database['public']['Tables']['player_stats']['Insert'][] = []
     gameRecords.forEach((gameRecord) => {
         gameRecord.players.forEach((player) => {
             dataToUpsert.push({
                 player_id: parseInt(player.player.id),
                 game_id: parseInt(gameRecord.game.id),
-                game_date: gameRecord.game.date,
+                game_date: gameRecord.game.date.toISOString(),
                 stat_line: player.stats,
                 final: gameRecord.game.status.includes('Final'),
             })
@@ -52,7 +45,6 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
     }
 
     if(data === null || data.length === 0 || data.filter((r) => !r.final).length !== 0) {
-        console.log("No player stats found in cachefor game:", gameRecord.id, 'CALLING API');
         let players: { stats: string[]; player: Player }[] = [];
         const boxScoreResponse = await fetch(
             `${BOX_SCORE_BASE_URL}${gameRecord.id}`,
