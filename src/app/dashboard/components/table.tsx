@@ -1,4 +1,4 @@
-import { GameRecord } from "./dailySummary";
+import { GameRecord } from "~/lib/handleCache";
 
 export default function Table({ games }: { games: GameRecord[] }) {
   return (

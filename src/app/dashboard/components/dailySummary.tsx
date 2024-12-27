@@ -1,49 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Game } from "../teams";
-import { Player, PLAYERS } from "../players";
 import Table from "./table";
 import { getGamesByDate } from "../scoreboard";
-
-export type GameRecord = {
-  game: Game;
-  players: { stats: string[]; player: Player }[];
-};
-
-const BOX_SCORE_BASE_URL =
-  "https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?region=us&lang=en&contentorigin=espn&event=";
+import { GameRecord, getPlayerStats, updateCache } from "~/lib/handleCache";
 
 const getPlayerStatsByGame = async (
   gameRecords: Awaited<ReturnType<typeof getGamesByDate>>,
 ) => {
   let games: GameRecord[] = [];
   for (const gameRecord of gameRecords) {
-    let players: { stats: string[]; player: Player }[] = [];
-    const boxScoreResponse = await fetch(
-      `${BOX_SCORE_BASE_URL}${gameRecord.id}`,
-    );
-    const boxScoreResponseParsed = await boxScoreResponse.json();
-
-    if (!("players" in boxScoreResponseParsed.boxscore)) continue;
-
-    boxScoreResponseParsed.boxscore.players.forEach((element: any) => {
-      const athletes = element.statistics[0].athletes;
-      const uconnPlayerIds = Object.values(PLAYERS).map((p) => p.id);
-      const athletesOfInterest = athletes.filter(
-        (a: { athlete: { id: string } }) =>
-          uconnPlayerIds.includes(a.athlete.id),
-      );
-      athletesOfInterest.forEach(
-        (a: { athlete: { id: string }; stats: string[] }) => {
-          players.push({
-            stats: a.stats,
-            player: PLAYERS.find((p) => p.id === a.athlete.id)!,
-          });
-        },
-      );
-    });
-    games.push({ game: gameRecord, players });
+    const playerStats = await getPlayerStats(gameRecord);
+    if (playerStats === null) continue;
+    games.push({ game: gameRecord, players: playerStats });
   }
   return games;
 };
@@ -75,6 +44,7 @@ const DailySummary = () => {
     getGamesByDate(selectedDate).then((data) => {
       getPlayerStatsByGame(data).then((playerStats) => {
         setAllPlayerStats(playerStats);
+        updateCache(playerStats);
         setLoading(false);
       });
     });
