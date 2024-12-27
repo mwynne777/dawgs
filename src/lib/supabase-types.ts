@@ -15,21 +15,21 @@ export type Database = {
           game_date: string | null
           game_id: number
           player_id: number
-          stat_line: Json | null
+          stat_line: string[]
         }
         Insert: {
           final?: boolean
           game_date?: string | null
           game_id: number
           player_id: number
-          stat_line?: Json | null
+          stat_line?: Json
         }
         Update: {
           final?: boolean
           game_date?: string | null
           game_id?: number
           player_id?: number
-          stat_line?: Json | null
+          stat_line?: Json
         }
         Relationships: []
       }
