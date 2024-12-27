@@ -20,16 +20,16 @@ type PlayerStat = {
     final: boolean;
 }
 
-export const updateCache = async (playerStats: GameRecord[]) => {
+export const updateCache = async (gameRecords: GameRecord[]) => {
     const dataToUpsert: PlayerStat[] = []
-    playerStats.forEach((playerStat) => {
-        playerStat.players.forEach((player) => {
+    gameRecords.forEach((gameRecord) => {
+        gameRecord.players.forEach((player) => {
             dataToUpsert.push({
                 player_id: parseInt(player.player.id),
-                game_id: parseInt(playerStat.game.id),
-                game_date: playerStat.game.date,
+                game_id: parseInt(gameRecord.game.id),
+                game_date: gameRecord.game.date,
                 stat_line: player.stats,
-                final: playerStat.game.status === 'Final',
+                final: gameRecord.game.status.includes('Final'),
             })
         })
     })
@@ -51,7 +51,7 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
         console.error("Error getting player stats:", error);
     }
 
-    if(data === null || data.length === 0) {
+    if(data === null || data.length === 0 || data.filter((r) => !r.final).length !== 0) {
         console.log("No player stats found in cachefor game:", gameRecord.id, 'CALLING API');
         let players: { stats: string[]; player: Player }[] = [];
         const boxScoreResponse = await fetch(
@@ -74,9 +74,10 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
                     stats: a.stats,
                     player: PLAYERS.find((p) => p.id === a.athlete.id)!,
                 });
-                },
-            );
-        });
+            },
+        );
+    });
+        void updateCache([{ game: gameRecord, players }]);
         return players;
     }
     

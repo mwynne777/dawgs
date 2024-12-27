@@ -44,7 +44,6 @@ const DailySummary = () => {
     getGamesByDate(selectedDate).then((data) => {
       getPlayerStatsByGame(data).then((playerStats) => {
         setAllPlayerStats(playerStats);
-        updateCache(playerStats);
         setLoading(false);
       });
     });
