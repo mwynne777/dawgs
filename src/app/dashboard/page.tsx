@@ -1,5 +1,5 @@
-import DailySummary from "./components/dailySummary";
-import ServerComponent from "./components/serverDailySummary";
+import DailySummary from "./components/dailyBoxscore";
+import ServerComponent from "./components/serverDailySummaryWrapper";
 export default async function DashboardPage({
   searchParams,
 }: {

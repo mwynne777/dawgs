@@ -1,22 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Table from "./table";
-import { getGamesByDate } from "../scoreboard";
-import { GameRecord, getPlayerStats } from "~/lib/handleCache";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-
-const getPlayerStatsByGame = async (
-  gameRecords: Awaited<ReturnType<typeof getGamesByDate>>,
-) => {
-  let games: GameRecord[] = [];
-  for (const gameRecord of gameRecords) {
-    const playerStats = await getPlayerStats(gameRecord);
-    if (playerStats === null) continue;
-    games.push({ game: gameRecord, players: playerStats });
-  }
-  return games;
-};
 
 type DailySummaryProps = {
   children: React.ReactNode;
@@ -27,8 +12,6 @@ const DailySummary = ({ children, date }: DailySummaryProps) => {
   const [selectedDate, setSelectedDate] = useState(
     date ? new Date(date) : new Date(),
   );
-  const [allPlayerStats, setAllPlayerStats] = useState<GameRecord[]>([]);
-  const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
@@ -45,17 +28,6 @@ const DailySummary = ({ children, date }: DailySummaryProps) => {
     setSelectedDate(newDate);
     router.push(`/dashboard?date=${newDate.toISOString()}`);
   };
-
-  useEffect(() => {
-    setLoading(true);
-
-    getGamesByDate(selectedDate).then((data) => {
-      getPlayerStatsByGame(data).then((playerStats) => {
-        setAllPlayerStats(playerStats);
-        setLoading(false);
-      });
-    });
-  }, [selectedDate]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -81,13 +53,6 @@ const DailySummary = ({ children, date }: DailySummaryProps) => {
           &gt;
         </button>
       </div>
-      {loading ? (
-        <div className="flex h-[50vh] items-center justify-center">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-blue-600"></div>
-        </div>
-      ) : (
-        <Table games={allPlayerStats} />
-      )}
       {children}
     </div>
   );
