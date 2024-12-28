@@ -1,5 +1,14 @@
 import DailySummary from "./components/dailySummary";
-
-export default async function DashboardPage() {
-  return <DailySummary />;
+import ServerComponent from "./components/serverDailySummary";
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ date: string }>;
+}) {
+  const { date } = await searchParams;
+  return (
+    <DailySummary date={date}>
+      <ServerComponent date={date} />
+    </DailySummary>
+  );
 }

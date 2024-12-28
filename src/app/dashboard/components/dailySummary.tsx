@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import Table from "./table";
 import { getGamesByDate } from "../scoreboard";
-import { GameRecord, getPlayerStats, updateCache } from "~/lib/handleCache";
+import { GameRecord, getPlayerStats } from "~/lib/handleCache";
+import { useRouter } from "next/navigation";
 
 const getPlayerStatsByGame = async (
   gameRecords: Awaited<ReturnType<typeof getGamesByDate>>,
@@ -17,25 +18,32 @@ const getPlayerStatsByGame = async (
   return games;
 };
 
-const DailySummary = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
+type DailySummaryProps = {
+  children: React.ReactNode;
+  date: string | undefined;
+};
+
+const DailySummary = ({ children, date }: DailySummaryProps) => {
+  const [selectedDate, setSelectedDate] = useState(
+    date ? new Date(date) : new Date(),
+  );
   const [allPlayerStats, setAllPlayerStats] = useState<GameRecord[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const router = useRouter();
+
   const handlePrevDay = () => {
-    setSelectedDate((prev) => {
-      const newDate = new Date(prev);
-      newDate.setDate(prev.getDate() - 1);
-      return newDate;
-    });
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() - 1);
+    setSelectedDate(newDate);
+    router.push(`/dashboard?date=${newDate.toISOString()}`);
   };
 
   const handleNextDay = () => {
-    setSelectedDate((prev) => {
-      const newDate = new Date(prev);
-      newDate.setDate(prev.getDate() + 1);
-      return newDate;
-    });
+    const newDate = new Date(selectedDate);
+    newDate.setDate(selectedDate.getDate() + 1);
+    setSelectedDate(newDate);
+    router.push(`/dashboard?date=${newDate.toISOString()}`);
   };
 
   useEffect(() => {
@@ -80,6 +88,7 @@ const DailySummary = () => {
       ) : (
         <Table games={allPlayerStats} />
       )}
+      {children}
     </div>
   );
 };
