@@ -1,11 +1,14 @@
 import { Suspense } from "react";
-import AnotherServerComponent from "./serverDailySummary";
 
-type ServerComponentProps = {
+type SuspensefulServerComponentProps = {
   date: string | undefined;
+  children: React.ReactNode;
 };
 
-const ServerComponent = async ({ date }: ServerComponentProps) => {
+const SuspensefulServerComponent = async ({
+  date,
+  children,
+}: SuspensefulServerComponentProps) => {
   return (
     <Suspense
       key={date}
@@ -15,9 +18,9 @@ const ServerComponent = async ({ date }: ServerComponentProps) => {
         </div>
       }
     >
-      <AnotherServerComponent date={date} />
+      {children}
     </Suspense>
   );
 };
 
-export default ServerComponent;
+export default SuspensefulServerComponent;

@@ -15,15 +15,11 @@ const getPlayerStatsByGame = async (
   return games;
 };
 
-const AnotherServerComponent = async ({
-  date,
-}: {
-  date: string | undefined;
-}) => {
+const DailySummaryLoader = async ({ date }: { date: string | undefined }) => {
   const selectedDate = date ? new Date(date) : new Date();
   const games = await getGamesByDate(selectedDate);
   const playerStats = await getPlayerStatsByGame(games);
   return <Table games={playerStats} />;
 };
 
-export default AnotherServerComponent;
+export default DailySummaryLoader;
