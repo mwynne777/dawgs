@@ -1,4 +1,4 @@
-import { TeamAbbreviation } from "./teams";
+import type { TeamAbbreviation } from "./teams";
 
 export type Player = {
     id: string;

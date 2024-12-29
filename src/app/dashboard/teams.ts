@@ -33,7 +33,7 @@ export const getTeamSchedule = async (teamAbbrev: string) => {
   const teamUrl = `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}teams/${teamAbbrev}/schedule?region=us&lang=en&seasontype=2`;
 
   const response = await fetch(teamUrl);
-  const responseJson: TeamScheduleResponse = await response.json();
+  const responseJson = await response.json() as TeamScheduleResponse;
   const result = {
     team: {
       id: responseJson.team.id,

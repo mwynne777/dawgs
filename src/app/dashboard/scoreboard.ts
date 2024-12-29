@@ -35,7 +35,7 @@ const getScoreboardUrl = (date: Date) => {
 
 export const getGamesByDate = async (date: Date) => {
     const scoreboardResponse = await fetch(getScoreboardUrl(date))
-    const scoreboardResponseParsed: ScoreboardResponse = await scoreboardResponse.json()
+    const scoreboardResponseParsed = await scoreboardResponse.json() as ScoreboardResponse
     const gamesIncludingTeamsOfInterest = scoreboardResponseParsed.events.filter(event => Object.values(teams).includes(parseInt(event.competitions[0]!.competitors[0]!.team.id)) || Object.values(teams).includes(parseInt(event.competitions[0]!.competitors[1]!.team.id)))
     return gamesIncludingTeamsOfInterest.map(g => ({ 
         id: g.id, 

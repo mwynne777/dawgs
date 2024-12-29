@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 export type Json =
   | string
   | number
@@ -34,15 +35,19 @@ export type Database = {
         Relationships: []
       }
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Views: {
       [_ in never]: never
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Functions: {
       [_ in never]: never
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Enums: {
       [_ in never]: never
     }
+    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     CompositeTypes: {
       [_ in never]: never
     }

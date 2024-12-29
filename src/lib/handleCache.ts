@@ -1,9 +1,9 @@
 import { supabase } from "./initSupabase";
-import { Game } from "~/app/dashboard/teams";
+import type { Game } from "~/app/dashboard/teams";
 import { PLAYERS } from "~/app/dashboard/players";
-import { Player } from "~/app/dashboard/players";
+import type { Player } from "~/app/dashboard/players";
 import { getGamesByDate } from "~/app/dashboard/scoreboard";
-import { Database } from "./supabase-types";
+import type { Database } from "./supabase-types";
 
 const BOX_SCORE_BASE_URL =
   `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}summary?region=us&lang=en&contentorigin=espn&event=`;
@@ -32,9 +32,21 @@ export const updateCache = async (gameRecords: GameRecord[]) => {
         return;
     }
 
-    const { data, error } = await supabase.from('player_stats').upsert(dataToUpsert);
+    const { error } = await supabase.from('player_stats').upsert(dataToUpsert);
     if (error) {
         console.error("Error updating cache:", error);
+    }
+}
+
+type BoxScoreStatistic = {
+    athletes: { athlete: { id: string }; stats: string[] }[]
+}
+
+type BoxscoreResponse = {
+    boxscore: {
+        players: {
+            statistics: BoxScoreStatistic[]
+        }[]
     }
 }
 
@@ -45,16 +57,16 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
     }
 
     if(data === null || data.length === 0 || data.filter((r) => !r.final).length !== 0) {
-        let players: { stats: string[]; player: Player }[] = [];
+        const players: { stats: string[]; player: Player }[] = [];
         const boxScoreResponse = await fetch(
             `${BOX_SCORE_BASE_URL}${gameRecord.id}`,
         );
-        const boxScoreResponseParsed = await boxScoreResponse.json();
+        const boxScoreResponseParsed = await boxScoreResponse.json() as BoxscoreResponse;
 
         if (!("players" in boxScoreResponseParsed.boxscore)) return null;
 
-        boxScoreResponseParsed.boxscore.players.forEach((element: any) => {
-            const athletes = element.statistics[0].athletes;
+        boxScoreResponseParsed.boxscore.players.forEach((element) => {
+            const athletes = element.statistics[0]!.athletes;
             const uconnPlayerIds = Object.values(PLAYERS).map((p) => p.id);
             const athletesOfInterest = athletes.filter(
                 (a: { athlete: { id: string } }) =>
