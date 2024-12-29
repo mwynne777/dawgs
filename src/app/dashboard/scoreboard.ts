@@ -30,7 +30,7 @@ const getScoreboardUrl = (date: Date) => {
         String(date.getMonth() + 1).padStart(2, '0') +
         String(date.getDate()).padStart(2, '0');
     
-    return `https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?region=us&lang=en&contentorigin=espn&limit=100&calendartype=offdays&includeModules=videos&dates=${dateParam}&tz=America%2FNew_York`;
+    return `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}scoreboard?region=us&lang=en&contentorigin=espn&limit=100&calendartype=offdays&includeModules=videos&dates=${dateParam}&tz=America%2FNew_York`;
 }
 
 export const getGamesByDate = async (date: Date) => {

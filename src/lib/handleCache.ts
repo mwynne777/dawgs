@@ -6,7 +6,7 @@ import { getGamesByDate } from "~/app/dashboard/scoreboard";
 import { Database } from "./supabase-types";
 
 const BOX_SCORE_BASE_URL =
-  "https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/summary?region=us&lang=en&contentorigin=espn&event=";
+  `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}summary?region=us&lang=en&contentorigin=espn&event=`;
 
 export type GameRecord = {
     game: Game;

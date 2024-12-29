@@ -30,7 +30,7 @@ export type TeamScheduleResponse = {
 };
 
 export const getTeamSchedule = async (teamAbbrev: string) => {
-  const teamUrl = `https://site.web.api.espn.com/apis/site/v2/sports/basketball/nba/teams/${teamAbbrev}/schedule?region=us&lang=en&seasontype=2`;
+  const teamUrl = `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}teams/${teamAbbrev}/schedule?region=us&lang=en&seasontype=2`;
 
   const response = await fetch(teamUrl);
   const responseJson: TeamScheduleResponse = await response.json();
