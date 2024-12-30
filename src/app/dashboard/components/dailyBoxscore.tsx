@@ -10,7 +10,13 @@ type DailySummaryProps = {
 
 const DailySummary = ({ children, date }: DailySummaryProps) => {
   const [selectedDate, setSelectedDate] = useState(
-    date ? new Date(date) : new Date(),
+    date
+      ? new Date(
+          new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
+        )
+      : new Date(
+          new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000,
+        ),
   );
 
   const router = useRouter();
@@ -19,14 +25,18 @@ const DailySummary = ({ children, date }: DailySummaryProps) => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() - 1);
     setSelectedDate(newDate);
-    router.push(`/dashboard?date=${newDate.toISOString()}`);
+    router.push(
+      `/dashboard?date=${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}-${String(newDate.getDate()).padStart(2, "0")}`,
+    );
   };
 
   const handleNextDay = () => {
     const newDate = new Date(selectedDate);
     newDate.setDate(selectedDate.getDate() + 1);
     setSelectedDate(newDate);
-    router.push(`/dashboard?date=${newDate.toISOString()}`);
+    router.push(
+      `/dashboard?date=${newDate.getFullYear()}-${String(newDate.getMonth() + 1).padStart(2, "0")}-${String(newDate.getDate()).padStart(2, "0")}`,
+    );
   };
 
   return (

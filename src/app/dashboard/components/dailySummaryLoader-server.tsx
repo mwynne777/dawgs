@@ -16,7 +16,13 @@ const getPlayerStatsByGame = async (
 };
 
 const DailySummaryLoader = async ({ date }: { date: string | undefined }) => {
-  const selectedDate = date ? new Date(date) : new Date();
+  const selectedDate = date
+    ? new Date(
+        new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
+      )
+    : new Date(
+        new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000,
+      );
   const games = await getGamesByDate(selectedDate);
   const playerStats = await getPlayerStatsByGame(games);
   return <Table games={playerStats} />;
