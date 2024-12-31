@@ -2,7 +2,7 @@ import { supabase } from "./initSupabase";
 import type { Game } from "~/app/dashboard/teams";
 import { PLAYERS } from "~/app/dashboard/players";
 import type { Player } from "~/app/dashboard/players";
-import { getGamesByDate } from "~/app/dashboard/scoreboard";
+import type { getGamesByDate } from "~/app/dashboard/scoreboard";
 import type { Database } from "./supabase-types";
 import { leagues } from "~/app/dashboard/leagues";
 

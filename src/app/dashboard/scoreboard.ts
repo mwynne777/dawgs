@@ -45,7 +45,7 @@ export const getGamesByDate = async (date: Date) => {
         const teamValues = Object.values(teams);
         const firstTeamMatch = teamValues.find(t => t.id === parseInt(event.competitions[0]!.competitors[0]!.team.id));
         const secondTeamMatch = teamValues.find(t => t.id === parseInt(event.competitions[0]!.competitors[1]!.team.id));
-        return (firstTeamMatch && firstTeamMatch.leagueId == event.leagueId) || (secondTeamMatch && secondTeamMatch.leagueId == event.leagueId);
+        return firstTeamMatch?.leagueId == event.leagueId || secondTeamMatch?.leagueId == event.leagueId
     })
 
     return gamesIncludingTeamsOfInterest.map(g => ({
