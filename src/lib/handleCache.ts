@@ -4,9 +4,11 @@ import { PLAYERS } from "~/app/dashboard/players";
 import type { Player } from "~/app/dashboard/players";
 import { getGamesByDate } from "~/app/dashboard/scoreboard";
 import type { Database } from "./supabase-types";
+import { leagues } from "~/app/dashboard/leagues";
 
-const BOX_SCORE_BASE_URL =
-  `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}summary?region=us&lang=en&contentorigin=espn&event=`;
+const getBoxScoreUrl = (leagueAbbreviation: string, gameId: string) => {
+return `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}${leagueAbbreviation}/summary?region=us&lang=en&contentorigin=espn&event=${gameId}`;
+}
 
 export type GameRecord = {
     game: Game;
@@ -58,8 +60,10 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
 
     if(data === null || data.length === 0 || data.filter((r) => !r.final).length !== 0) {
         const players: { stats: string[]; player: Player }[] = [];
+        const leagueAbbreviation = Object.entries(leagues).find(([_, value]) => value.id === gameRecord.leagueId)?.[0];
+        if(!leagueAbbreviation) return [];
         const boxScoreResponse = await fetch(
-            `${BOX_SCORE_BASE_URL}${gameRecord.id}`,
+            `${getBoxScoreUrl(leagueAbbreviation, gameRecord.id)}`,
         );
         const boxScoreResponseParsed = await boxScoreResponse.json() as BoxscoreResponse;
 
