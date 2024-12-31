@@ -20,9 +20,7 @@ const DailySummaryLoader = async ({ date }: { date: string | undefined }) => {
     ? new Date(
         new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
       )
-    : new Date(
-        new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000,
-      );
+    : new Date();
   const games = await getGamesByDate(selectedDate);
   const playerStats = await getPlayerStatsByGame(games);
   return <Table games={playerStats} />;

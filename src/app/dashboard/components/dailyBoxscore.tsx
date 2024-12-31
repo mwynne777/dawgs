@@ -14,9 +14,7 @@ const DailySummary = ({ children, date }: DailySummaryProps) => {
       ? new Date(
           new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
         )
-      : new Date(
-          new Date().getTime() + new Date().getTimezoneOffset() * 60 * 1000,
-        ),
+      : new Date(),
   );
 
   const router = useRouter();
