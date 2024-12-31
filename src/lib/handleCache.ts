@@ -63,7 +63,7 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
         );
         const boxScoreResponseParsed = await boxScoreResponse.json() as BoxscoreResponse;
 
-        if (!("players" in boxScoreResponseParsed.boxscore)) return null;
+        if (!("players" in boxScoreResponseParsed.boxscore)) return [];
 
         boxScoreResponseParsed.boxscore.players.forEach((element) => {
             const athletes = element.statistics[0]!.athletes;
