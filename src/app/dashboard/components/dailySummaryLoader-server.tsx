@@ -1,7 +1,7 @@
 import { getPlayerStats } from "~/lib/handleCache";
 import type { GameRecord } from "~/lib/handleCache";
 import { getGamesByDate } from "../scoreboard";
-import Table from "./table";
+import Table from "./gameList";
 
 const getPlayerStatsByGame = async (
   gameRecords: Awaited<ReturnType<typeof getGamesByDate>>,

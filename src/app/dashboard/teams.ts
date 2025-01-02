@@ -31,30 +31,19 @@ export type TeamScheduleResponse = {
   }[];
 };
 
-export const getTeamSchedule = async (teamAbbrev: string) => {
-  const teamUrl = `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}teams/${teamAbbrev}/schedule?region=us&lang=en&seasontype=2`;
 
-  const response = await fetch(teamUrl);
-  const responseJson = await response.json() as TeamScheduleResponse;
-  const result = {
-    team: {
-      id: responseJson.team.id,
-      displayName: responseJson.team.displayName,
-      recordSummary: responseJson.team.recordSummary,
-      standingSummary: responseJson.team.standingSummary,
-      abbreviation: responseJson.team.abbreviation.toLowerCase()
-    },
-    games: responseJson.events.map((game) => ({
-      id: game.id,
-      date: new Date(game.date),
-      name: game.name,
-      teamIds: [game.competitions[0].competitors[0].id, game.competitions[0].competitors[1].id] as [string, string],
-      status: game.competitions[0].status.type.completed ? 'completed': game.competitions[0].status.type.detail
-    })),
-  };
-  return result;
-};
-
-export type TeamSchedule = Awaited<ReturnType<typeof getTeamSchedule>>;
-export type Game = TeamSchedule["games"][number];
-export type Team = TeamSchedule["team"];
+export type Team = {
+  id: string,
+  displayName: string,
+  recordSummary: string,
+  standingSummary: string,
+  abbreviation: string
+}
+export type Game = {
+  id: string,
+  date: Date,
+  name: string,
+  teamIds: [string, string],
+  status: string,
+  leagueId: number
+}
