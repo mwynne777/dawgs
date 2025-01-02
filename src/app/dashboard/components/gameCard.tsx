@@ -1,4 +1,4 @@
-import { GameRecord } from "~/lib/handleCache";
+import type { GameRecord } from "~/lib/handleCache";
 
 const GameCard = ({ gameRecord }: { gameRecord: GameRecord }) => {
   return (

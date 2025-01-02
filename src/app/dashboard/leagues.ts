@@ -1,4 +1,4 @@
-type LeagueAbbreviation = 'nba' | 'nba-development' /*| 'wnba'*/
+export type LeagueAbbreviation = 'nba' | 'nba-development' /*| 'wnba'*/
 
 export const leagues: Record<LeagueAbbreviation, {id: number, displayName: string}> = {
     nba: {id: 46, displayName: 'NBA'},
