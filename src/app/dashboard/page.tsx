@@ -15,8 +15,7 @@ export default async function DashboardPage({
 
     const [month, day, year] =
       easternTimeString.split(",")[0]?.split("/") ?? [];
-    date = `${year}-${month}-${day}`;
-    console.log("date", date);
+    date = `${year}-${month?.padStart(2, "0")}-${day?.padStart(2, "0")}`;
   }
 
   return (
