@@ -9,6 +9,7 @@ type DailySummaryProps = {
 };
 
 const DailySummary = ({ children, date }: DailySummaryProps) => {
+  console.log("date", date, new Date());
   const [selectedDate, setSelectedDate] = useState(
     date
       ? new Date(
