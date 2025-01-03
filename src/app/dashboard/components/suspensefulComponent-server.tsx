@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 type SuspensefulServerComponentProps = {
-  date: string | undefined;
+  date: string;
   children: React.ReactNode;
 };
 

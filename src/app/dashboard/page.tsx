@@ -7,7 +7,12 @@ export default async function DashboardPage({
 }: {
   searchParams: Promise<{ date: string }>;
 }) {
-  const { date } = await searchParams;
+  let { date } = await searchParams;
+  if (!date) {
+    const today = new Date();
+    date = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+  }
+
   return (
     <DailyBoxscore date={date}>
       <SuspensefulServerComponent date={date}>

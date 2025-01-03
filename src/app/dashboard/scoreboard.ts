@@ -27,16 +27,14 @@ type ScoreboardResponse = {
     }[]
 }
 
-const getScoreboardUrls = (date: Date) => {
-    const dateParam = date.getFullYear() +
-        String(date.getMonth() + 1).padStart(2, '0') +
-        String(date.getDate()).padStart(2, '0');
+const getScoreboardUrls = (date: string) => {
+    const dateParam = date.replace(/-/g, '');
     
     const urls = Object.keys(leagues).map(l => `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}${l}/scoreboard?region=us&lang=en&contentorigin=espn&limit=100&calendartype=offdays&includeModules=videos&dates=${dateParam}&tz=America%2FNew_York`);
     return urls;
 }
 
-export const getGamesByDate = async (date: Date) => {
+export const getGamesByDate = async (date: string) => {
     const urls = getScoreboardUrls(date);
     const scoreboardResponses = await Promise.all(urls.map(url => fetch(url)));
     const scoreboardResponseParsed = await Promise.all(scoreboardResponses.map(r => r.json() as Promise<ScoreboardResponse>))

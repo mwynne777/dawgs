@@ -5,17 +5,14 @@ import { useRouter } from "next/navigation";
 
 type DailySummaryProps = {
   children: React.ReactNode;
-  date: string | undefined;
+  date: string;
 };
 
 const DailySummary = ({ children, date }: DailySummaryProps) => {
-  console.log("date", date, new Date());
   const [selectedDate, setSelectedDate] = useState(
-    date
-      ? new Date(
-          new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
-        )
-      : new Date(),
+    new Date(
+      new Date(date).getTime() + new Date().getTimezoneOffset() * 60 * 1000,
+    ),
   );
 
   const router = useRouter();
