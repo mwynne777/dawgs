@@ -37,7 +37,7 @@ const rosterService = {
     }
     const response = await fetch(`${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}${leagueAbbreviation}/teams/${teamId}/roster`);
     const data = await response.json() as RosterResponse;
-    const colleges: Map<string, Database['public']['Tables']['colleges']['Insert']> = new Map();
+    const colleges: Map<string, Database['public']['Tables']['colleges']['Insert']> = new Map<string, Database['public']['Tables']['colleges']['Insert']>();
     const players: Database['public']['Tables']['players']['Insert'][] = data.athletes.map((athlete) => {
         const college = athlete.college;
         if(college) {
