@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
+/* eslint-disable @typescript-eslint/no-redundant-type-constituents, @typescript-eslint/consistent-indexed-object-style*/
 export type Json =
   | string
   | number
@@ -10,6 +10,51 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      colleges: {
+        Row: {
+          created_at: string
+          id: number
+          mascot: string
+          name: string
+          short_name: string
+        }
+        Insert: {
+          created_at?: string
+          id: number
+          mascot: string
+          name: string
+          short_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          mascot?: string
+          name?: string
+          short_name?: string
+        }
+        Relationships: []
+      }
+      leagues: {
+        Row: {
+          abbreviation: string
+          created_at: string | null
+          display_name: string
+          id: number
+        }
+        Insert: {
+          abbreviation: string
+          created_at?: string | null
+          display_name: string
+          id: number
+        }
+        Update: {
+          abbreviation?: string
+          created_at?: string | null
+          display_name?: string
+          id?: number
+        }
+        Relationships: []
+      }
       player_stats: {
         Row: {
           final: boolean
@@ -34,20 +79,46 @@ export type Database = {
         }
         Relationships: []
       }
+      players: {
+        Row: {
+          college_id: number | null
+          created_at: string
+          full_name: string
+          id: number
+          league_id: number | null
+          salary: number | null
+          team_id: number | null
+        }
+        Insert: {
+          college_id?: number | null
+          created_at?: string
+          full_name: string
+          id: number
+          league_id?: number | null
+          salary?: number | null
+          team_id?: number | null
+        }
+        Update: {
+          college_id?: number | null
+          created_at?: string
+          full_name?: string
+          id?: number
+          league_id?: number | null
+          salary?: number | null
+          team_id?: number | null
+        }
+        Relationships: []
+      }
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Views: {
       [_ in never]: never
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Functions: {
       [_ in never]: never
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     Enums: {
       [_ in never]: never
     }
-    // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
     CompositeTypes: {
       [_ in never]: never
     }

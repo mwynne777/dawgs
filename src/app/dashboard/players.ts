@@ -1,4 +1,6 @@
+import { supabase } from "~/lib/initSupabase";
 import type { TeamAbbreviation } from "./teams";
+import type { Database } from "~/lib/supabase-types";
 
 export type Player = {
     id: string;
@@ -29,5 +31,19 @@ export const getPlayerByTeamAbbreviation = (abbrev: TeamAbbreviation): Player =>
             return PLAYERS[3]!
         default:
             return PLAYERS[4]!
+    }
+}
+
+export const savePlayers = async (players: Database['public']['Tables']['players']['Insert'][]) => {
+    const {data, error} = await supabase.from('players').upsert(players);
+    if(error) {
+        console.error(error);
+    }
+}
+
+export const saveColleges = async (colleges: Database['public']['Tables']['colleges']['Insert'][]) => {
+    const {data, error} = await supabase.from('colleges').upsert(colleges);
+    if(error) {
+        console.error(error);
     }
 }
