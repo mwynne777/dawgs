@@ -1,4 +1,5 @@
 import { teams } from "~/app/dashboard/teams";
+import RecentGameCard from "~/app/where-are-they-now/[collegeId]/recent-game-card";
 import type { Database } from "~/lib/supabase-types";
 
 const PlayerCard = async ({
@@ -9,9 +10,9 @@ const PlayerCard = async ({
   return (
     <>
       <div className="flex justify-between">
-        <div className="flex gap-2">
+        <div className="flex flex-col">
           <div className="text-xl font-bold">{playerAndStats.full_name}</div>
-          <div className="self-end text-base">
+          <div className="text-base">
             {teams[playerAndStats.team_id]?.displayName}
           </div>
         </div>
@@ -27,13 +28,13 @@ const PlayerCard = async ({
         </div>
       </div>
       <div>
-        <div>Recent Games</div>
-        <div>
-          vs.{" "}
+        <div className="mb-2 mt-4">
           {playerAndStats?.opposing_team_id &&
-            teams[playerAndStats.opposing_team_id]?.displayName}
+            `Last seen vs. ${teams[playerAndStats.opposing_team_id]?.displayName} on ${new Date(playerAndStats.game_date).toLocaleDateString()}`}
         </div>
-        <div>{playerAndStats?.stat_line?.join(", ")}</div>
+        {playerAndStats.stat_line && (
+          <RecentGameCard stats={playerAndStats.stat_line} />
+        )}
       </div>
     </>
   );
