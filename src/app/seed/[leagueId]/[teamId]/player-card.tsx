@@ -5,7 +5,12 @@ const PlayerCard = ({ player }: { player: Player }) => {
   return (
     <>
       <div className="flex justify-between">
-        <div>{player.name}</div>
+        <div className="flex gap-2">
+          <div className="text-xl font-bold">{player.name}</div>
+          <div className="self-end text-base">
+            {teams[player.teamId]?.displayName}
+          </div>
+        </div>
         <div>
           {player.salary && player.salary > 0
             ? player.salary.toLocaleString("en-US", {
@@ -17,7 +22,6 @@ const PlayerCard = ({ player }: { player: Player }) => {
             : "unknown"}
         </div>
       </div>
-      <div>{teams[player.teamId]?.displayName}</div>
       <div>
         <div>Recent Games</div>
         <div>Some stats</div>
