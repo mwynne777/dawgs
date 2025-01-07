@@ -1,4 +1,4 @@
-import rosterService from "~/app/services/roster-service";
+import rosterService from "~/app/(services)/roster-service";
 
 export default async function Page({
   params,

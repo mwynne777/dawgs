@@ -41,8 +41,8 @@ export const getGamesByDate = async (date: string) => {
     
     const gamesIncludingTeamsOfInterest = scoreboardResponseParsed.flatMap(r => r.events.map(e => ({...e, leagueId: parseInt(r.leagues[0].id)}))).filter(event => {
         const teamValues = Object.values(teams);
-        const firstTeamMatch = teamValues.find(t => t.id === parseInt(event.competitions[0]!.competitors[0]!.team.id));
-        const secondTeamMatch = teamValues.find(t => t.id === parseInt(event.competitions[0]!.competitors[1]!.team.id));
+        const firstTeamMatch = teamValues[parseInt(event.competitions[0]!.competitors[0]!.team.id)];
+        const secondTeamMatch = teamValues[parseInt(event.competitions[0]!.competitors[1]!.team.id)];
         return firstTeamMatch?.leagueId == event.leagueId || secondTeamMatch?.leagueId == event.leagueId
     })
 

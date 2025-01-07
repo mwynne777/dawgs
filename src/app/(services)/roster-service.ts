@@ -21,7 +21,7 @@ type RosterResponse = {
         startDate: string;
         endDate: string;
       };
-    }[];
+    };
     // status?: {
     //   name: string;
     // }
@@ -51,7 +51,7 @@ const rosterService = {
         return {
             id: parseInt(athlete.id),
             full_name: athlete.fullName,
-            salary: athlete.contract?.[0]?.salary ?? null,
+            salary: athlete.contract?.salary ?? null,
             college_id: college ? parseInt(college?.id) : null,
             team_id: teamId,
             league_id: leagueId,
