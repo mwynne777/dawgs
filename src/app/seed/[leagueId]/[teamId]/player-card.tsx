@@ -1,4 +1,4 @@
-import { Player } from "~/app/dashboard/players";
+import type { Player } from "~/app/dashboard/players";
 import { teams } from "~/app/dashboard/teams";
 
 const PlayerCard = ({ player }: { player: Player }) => {
