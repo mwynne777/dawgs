@@ -1,19 +1,23 @@
-import type { Player } from "~/app/dashboard/players";
 import { teams } from "~/app/dashboard/teams";
+import { Database } from "~/lib/supabase-types";
 
-const PlayerCard = ({ player }: { player: Player }) => {
+const PlayerCard = async ({
+  playerAndStats,
+}: {
+  playerAndStats: Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number];
+}) => {
   return (
     <>
       <div className="flex justify-between">
         <div className="flex gap-2">
-          <div className="text-xl font-bold">{player.name}</div>
+          <div className="text-xl font-bold">{playerAndStats.full_name}</div>
           <div className="self-end text-base">
-            {teams[player.teamId]?.displayName}
+            {teams[playerAndStats.team_id]?.displayName}
           </div>
         </div>
         <div>
-          {player.salary && player.salary > 0
-            ? player.salary.toLocaleString("en-US", {
+          {playerAndStats.salary && playerAndStats.salary > 0
+            ? playerAndStats.salary.toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
                 minimumFractionDigits: 0,
@@ -24,7 +28,12 @@ const PlayerCard = ({ player }: { player: Player }) => {
       </div>
       <div>
         <div>Recent Games</div>
-        <div>Some stats</div>
+        <div>
+          vs.{" "}
+          {playerAndStats?.opposing_team_id &&
+            teams[playerAndStats.opposing_team_id]?.displayName}
+        </div>
+        <div>{playerAndStats?.stat_line?.join(", ")}</div>
       </div>
     </>
   );

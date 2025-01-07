@@ -1,4 +1,4 @@
-import { getPlayersByCollegeId } from "~/app/dashboard/players";
+import playerStatsService from "~/app/(services)/player-stats-service";
 import PlayerCard from "~/app/seed/[leagueId]/[teamId]/player-card";
 
 export default async function Page({
@@ -9,7 +9,13 @@ export default async function Page({
   const { collegeId: collegeIdString } = await params;
   const collegeId = parseInt(collegeIdString);
 
-  const players = await getPlayersByCollegeId(collegeId);
+  const players =
+    await playerStatsService.getPlayersAndMostRecentStatsByCollegeId(collegeId);
+
+  if (!players) {
+    return <div>No players found</div>;
+  }
+
   return (
     <div className="mx-auto max-w-3xl px-8">
       <div className="mb-8 text-2xl font-bold">
@@ -26,7 +32,7 @@ export default async function Page({
       {players.map((p) => {
         return (
           <div className="mb-8" key={p.id}>
-            <PlayerCard player={p} />
+            <PlayerCard playerAndStats={p} />
           </div>
         );
       })}

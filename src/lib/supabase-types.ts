@@ -60,6 +60,7 @@ export type Database = {
           final: boolean
           game_date: string | null
           game_id: number
+          opposing_team_id: number | null
           player_id: number
           stat_line: string[]
         }
@@ -67,15 +68,17 @@ export type Database = {
           final?: boolean
           game_date?: string | null
           game_id: number
+          opposing_team_id: number
           player_id: number
-          stat_line?: Json
+          stat_line: string[]
         }
         Update: {
           final?: boolean
           game_date?: string | null
           game_id?: number
+          opposing_team_id: number
           player_id?: number
-          stat_line?: Json
+          stat_line?: string[]
         }
         Relationships: []
       }
@@ -114,7 +117,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_most_recent_games: {
+        Args: {
+          collegeid: number
+        }
+        Returns: {
+          id: number
+          full_name: string
+          salary: number
+          league_id: number
+          team_id: number
+          college_id: number
+          created_at: string
+          player_id: number
+          game_id: number
+          game_date: string
+          stat_line: string[]
+          final: boolean
+          opposing_team_id: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

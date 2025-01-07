@@ -25,6 +25,7 @@ export const updateCache = async (gameRecords: GameRecord[]) => {
                 game_date: gameRecord.game.date.toISOString(),
                 stat_line: player.stats,
                 final: gameRecord.game.status.includes('Final'),
+                opposing_team_id: parseInt(gameRecord.game.teamIds.find((id) => parseInt(id) !== player.player.teamId)!)
             })
         })
     })
