@@ -1,5 +1,5 @@
 import { teams } from "~/app/dashboard/teams";
-import { Database } from "~/lib/supabase-types";
+import type { Database } from "~/lib/supabase-types";
 
 const PlayerCard = async ({
   playerAndStats,
