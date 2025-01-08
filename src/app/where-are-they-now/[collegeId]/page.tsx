@@ -1,3 +1,4 @@
+import collegesService from "~/app/(services)/colleges-service";
 import playerStatsService from "~/app/(services)/player-stats-service";
 import PlayerCard from "~/app/seed/[leagueId]/[teamId]/player-card";
 
@@ -9,17 +10,20 @@ export default async function Page({
   const { collegeId: collegeIdString } = await params;
   const collegeId = parseInt(collegeIdString);
 
-  const players =
-    await playerStatsService.getPlayersAndMostRecentStatsByCollegeId(collegeId);
+  const [college, players] = await Promise.all([
+    collegesService.getCollegeById(collegeId),
+    playerStatsService.getPlayersAndMostRecentStatsByCollegeId(collegeId),
+  ]);
 
   if (!players) {
     return <div>No players found</div>;
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-8">
+    <div className="mx-auto max-w-3xl px-8 pt-4">
       <div className="mb-8 text-2xl font-bold">
-        Total salary:{" "}
+        {`${college.name} ${college.mascot}`}
+        {/* Total salary:{" "}
         {players
           .reduce((acc, p) => acc + (p.salary ?? 0), 0)
           .toLocaleString("en-US", {
@@ -27,7 +31,7 @@ export default async function Page({
             currency: "USD",
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
-          })}
+          })} */}
       </div>
       {players.map((p) => {
         return (

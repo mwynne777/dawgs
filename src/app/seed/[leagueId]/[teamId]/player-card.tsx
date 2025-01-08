@@ -13,19 +13,18 @@ const PlayerCard = async ({
         <div className="flex flex-col">
           <div className="text-xl font-bold">{playerAndStats.full_name}</div>
           <div className="text-base">
-            {teams[playerAndStats.team_id]?.displayName}
+            Current Salary:{" "}
+            {playerAndStats.salary && playerAndStats.salary > 0
+              ? playerAndStats.salary.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })
+              : "unknown"}
           </div>
         </div>
-        <div>
-          {playerAndStats.salary && playerAndStats.salary > 0
-            ? playerAndStats.salary.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })
-            : "unknown"}
-        </div>
+        <div>{teams[playerAndStats.team_id]?.displayName}</div>
       </div>
       <div>
         <div className="mb-2 mt-4">
