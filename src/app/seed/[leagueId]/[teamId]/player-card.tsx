@@ -8,7 +8,7 @@ const PlayerCard = async ({
   playerAndStats: Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number];
 }) => {
   return (
-    <>
+    <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex justify-between">
         <div className="flex flex-col">
           <div className="text-xl font-bold">{playerAndStats.full_name}</div>
@@ -36,7 +36,7 @@ const PlayerCard = async ({
           <RecentGameCard stats={playerAndStats.stat_line} />
         )}
       </div>
-    </>
+    </div>
   );
 };
 
