@@ -2,6 +2,14 @@ import { teams } from "~/app/dashboard/teams";
 import RecentGameCard from "~/app/where-are-they-now/[collegeId]/recent-game-card";
 import type { Database } from "~/lib/supabase-types";
 
+const getLastSeenDate = (gameDate: string) => {
+  const easternTimeString = new Date(gameDate).toLocaleString("en-US", {
+    timeZone: "America/New_York",
+  });
+  const [month, day, year] = easternTimeString.split(",")[0]?.split("/") ?? [];
+  return `${month}/${day}/${year?.substring(2)}`;
+};
+
 const PlayerCard = async ({
   playerAndStats,
 }: {
@@ -29,7 +37,7 @@ const PlayerCard = async ({
       <div>
         <div className="mb-2 mt-4">
           {playerAndStats?.opposing_team_id &&
-            `Last seen vs. ${teams[playerAndStats.opposing_team_id]?.displayName} on ${new Date(playerAndStats.game_date).toLocaleDateString()}`}
+            `Last seen vs. ${teams[playerAndStats.opposing_team_id]?.displayName} on ${getLastSeenDate(playerAndStats.game_date)}`}
         </div>
         {playerAndStats.stat_line && (
           <RecentGameCard stats={playerAndStats.stat_line} />

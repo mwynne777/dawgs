@@ -19,6 +19,7 @@ export const updateCache = async (gameRecords: GameRecord[]) => {
     const dataToUpsert: Database['public']['Tables']['player_stats']['Insert'][] = []
     gameRecords.forEach((gameRecord) => {
         gameRecord.players.forEach((player) => {
+            if(player.stats.length === 0) return;
             dataToUpsert.push({
                 player_id: parseInt(player.player.id),
                 game_id: parseInt(gameRecord.game.id),
