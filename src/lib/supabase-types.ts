@@ -89,6 +89,7 @@ export type Database = {
           full_name: string
           id: number
           league_id: number | null
+          nat_stat_id: number | null
           salary: number | null
           team_id: number | null
         }
@@ -98,6 +99,7 @@ export type Database = {
           full_name: string
           id: number
           league_id?: number | null
+          nat_stat_id?: number | null
           salary?: number | null
           team_id?: number | null
         }
@@ -107,6 +109,7 @@ export type Database = {
           full_name?: string
           id?: number
           league_id?: number | null
+          nat_stat_id?: number | null
           salary?: number | null
           team_id?: number | null
         }
