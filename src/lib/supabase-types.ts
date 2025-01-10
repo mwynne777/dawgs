@@ -132,12 +132,28 @@ export type Database = {
           team_id: number
           college_id: number
           created_at: string
+          nat_stat_id: number
           player_id: number
           game_id: number
           game_date: string
           stat_line: string[]
           final: boolean
           opposing_team_id: number
+        }[]
+      }
+      get_players_by_similar_name: {
+        Args: {
+          names: string[]
+        }
+        Returns: {
+          college_id: number | null
+          created_at: string
+          full_name: string
+          id: number
+          league_id: number | null
+          nat_stat_id: number | null
+          salary: number | null
+          team_id: number | null
         }[]
       }
     }
