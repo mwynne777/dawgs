@@ -24,8 +24,13 @@ const PlayerCard = async ({
   return (
     <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex justify-between">
+        <div className="text-xl font-bold">{playerAndStats.full_name}</div>
+        <div className="text-right">
+          {teams[playerAndStats.team_id]?.displayName}
+        </div>
+      </div>
+      <div className="flex justify-between">
         <div className="flex flex-col">
-          <div className="text-xl font-bold">{playerAndStats.full_name}</div>
           <div className="text-base">
             Current Salary:{" "}
             {playerAndStats.salary && playerAndStats.salary > 0
@@ -37,38 +42,39 @@ const PlayerCard = async ({
                 })
               : "unknown"}
           </div>
-          <div className="stats-container">
-            <h3 className="my-1 text-lg font-semibold">Current Season Stats</h3>
-            <div className="flex gap-4">
-              <div className="stat text-center">
-                <p className="text-sm text-gray-600">MINS</p>
-                <p className="font-medium">
-                  {stats?.stat_mpg?.value ?? "unknown"}
-                </p>
-              </div>
-              <div className="stat text-center">
-                <p className="text-sm text-gray-600">PTS</p>
-                <p className="font-medium">
-                  {stats?.stat_ppg?.value ?? "unknown"}
-                </p>
-              </div>
-              <div className="stat text-center">
-                <p className="text-sm text-gray-600">REB</p>
-                <p className="font-medium">
-                  {stats?.stat_rpg?.value ?? "unknown"}
-                </p>
-              </div>
-              <div className="stat text-center">
-                <p className="text-sm text-gray-600">AST</p>
-                <p className="font-medium">
-                  {stats?.stat_apg?.value ?? "unknown"}
-                </p>
+          {stats && (
+            <div className="stats-container">
+              <h3 className="my-1 text-lg font-semibold">
+                Current Season Stats
+              </h3>
+              <div className="flex gap-4">
+                <div className="stat text-center">
+                  <p className="text-sm text-gray-600">MINS</p>
+                  <p className="font-medium">
+                    {stats?.stat_mpg?.value ?? "unknown"}
+                  </p>
+                </div>
+                <div className="stat text-center">
+                  <p className="text-sm text-gray-600">PTS</p>
+                  <p className="font-medium">
+                    {stats?.stat_ppg?.value ?? "unknown"}
+                  </p>
+                </div>
+                <div className="stat text-center">
+                  <p className="text-sm text-gray-600">REB</p>
+                  <p className="font-medium">
+                    {stats?.stat_rpg?.value ?? "unknown"}
+                  </p>
+                </div>
+                <div className="stat text-center">
+                  <p className="text-sm text-gray-600">AST</p>
+                  <p className="font-medium">
+                    {stats?.stat_apg?.value ?? "unknown"}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="text-right">
-          {teams[playerAndStats.team_id]?.displayName}
+          )}
         </div>
       </div>
       <div>
