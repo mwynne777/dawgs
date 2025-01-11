@@ -47,7 +47,9 @@ const PlayerCard = async ({
             </div>
           </div>
         </div>
-        <div>{teams[playerAndStats.team_id]?.displayName}</div>
+        <div className="text-right">
+          {teams[playerAndStats.team_id]?.displayName}
+        </div>
       </div>
       <div>
         <div className="mb-2 mt-4">
