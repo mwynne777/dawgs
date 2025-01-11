@@ -1,11 +1,29 @@
+/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
+import { teams } from "~/app/dashboard/teams";
 import { supabase } from "~/lib/initSupabase";
 
 type PlayerKey = `player_${number}`
+type SeasonKey = `season_${number}`
+type SeasonTeamKey = `seasonteam_${number}-${number}`
+
+type NatStatPlayerStats = {
+    stat_min: {
+        value: string
+    },
+    stat_pts: {
+        value: string
+    }
+}
 
 type NatStatPlayerResponse = {
     players: Record<PlayerKey, {
             code: string,
             name: string
+            seasons: Record<SeasonKey, {
+                [key in SeasonTeamKey]: {
+                    stats: NatStatPlayerStats
+                }
+            }>
         }>
 };
 
@@ -33,6 +51,17 @@ const playerService = {
         return null;
     });
     return realPlayers.filter(player => player !== null);
+  },
+  getPlayerStatsFromAPI: async (playerId: number, teamId: number) => {
+    const response = await fetch(
+        `${process.env.NEXT_PUBLIC_NAT_STAT_API_BASE_URL}players/NBA/${playerId}`,
+      );
+      const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
+      const player = natStatPlayer.players[`player_${playerId}`];
+      const season = player?.seasons.season_2025;
+      const natStatTeamId = teams[teamId]?.natStatId ?? 0;
+      const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
+      return seasonTeam?.stats;
   },
   getPlayerFromDB: async (player_name: string) => {
     const { data, error } = await supabase

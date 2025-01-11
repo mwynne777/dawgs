@@ -1,3 +1,4 @@
+import playerService from "~/app/(services)/nat-stat/player-service";
 import { teams } from "~/app/dashboard/teams";
 import RecentGameCard from "~/app/where-are-they-now/[collegeId]/recent-game-card";
 import type { Database } from "~/lib/supabase-types";
@@ -15,6 +16,11 @@ const PlayerCard = async ({
 }: {
   playerAndStats: Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number];
 }) => {
+  const stats = await playerService.getPlayerStatsFromAPI(
+    playerAndStats.nat_stat_id,
+    playerAndStats.team_id,
+  );
+
   return (
     <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex justify-between">
@@ -30,6 +36,15 @@ const PlayerCard = async ({
                   maximumFractionDigits: 0,
                 })
               : "unknown"}
+          </div>
+          <div className="stats-container">
+            <h3>Current season totals</h3>
+            <div className="stat">
+              <p>Minutes: {stats?.stat_min?.value ?? "unknown"}</p>
+            </div>
+            <div className="stat">
+              <p>Points: {stats?.stat_pts?.value ?? "unknown"}</p>
+            </div>
           </div>
         </div>
         <div>{teams[playerAndStats.team_id]?.displayName}</div>
