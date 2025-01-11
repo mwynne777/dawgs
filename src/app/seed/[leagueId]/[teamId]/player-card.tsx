@@ -38,12 +38,32 @@ const PlayerCard = async ({
               : "unknown"}
           </div>
           <div className="stats-container">
-            <h3>Current season totals</h3>
-            <div className="stat">
-              <p>Minutes: {stats?.stat_min?.value ?? "unknown"}</p>
-            </div>
-            <div className="stat">
-              <p>Points: {stats?.stat_pts?.value ?? "unknown"}</p>
+            <h3 className="my-1 text-lg font-semibold">Current Season Stats</h3>
+            <div className="flex gap-4">
+              <div className="stat text-center">
+                <p className="text-sm text-gray-600">MINS</p>
+                <p className="font-medium">
+                  {stats?.stat_mpg?.value ?? "unknown"}
+                </p>
+              </div>
+              <div className="stat text-center">
+                <p className="text-sm text-gray-600">PTS</p>
+                <p className="font-medium">
+                  {stats?.stat_ppg?.value ?? "unknown"}
+                </p>
+              </div>
+              <div className="stat text-center">
+                <p className="text-sm text-gray-600">REB</p>
+                <p className="font-medium">
+                  {stats?.stat_rpg?.value ?? "unknown"}
+                </p>
+              </div>
+              <div className="stat text-center">
+                <p className="text-sm text-gray-600">AST</p>
+                <p className="font-medium">
+                  {stats?.stat_apg?.value ?? "unknown"}
+                </p>
+              </div>
             </div>
           </div>
         </div>

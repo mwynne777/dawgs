@@ -12,6 +12,18 @@ type NatStatPlayerStats = {
     },
     stat_pts: {
         value: string
+    },
+    stat_mpg: {
+        value: string
+    },
+    stat_ppg: {
+        value: string
+    },
+    stat_rpg: {
+        value: string
+    },
+    stat_apg: {
+        value: string
     }
 }
 
