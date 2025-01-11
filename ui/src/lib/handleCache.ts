@@ -32,7 +32,6 @@ export const updateCache = async (gameRecords: GameRecord[]) => {
     })
 
     if(dataToUpsert.length === 0) {
-        console.log("No data to upsert");
         return;
     }
 
