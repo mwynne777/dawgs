@@ -42,14 +42,14 @@ type NatStatPlayerResponse = {
 const playerService = {
   getPlayerFromAPI: async (playerId: number) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_NAT_STAT_API_BASE_URL}players/NBA/${playerId}`,
+      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${playerId}`,
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     return {id: playerId, name: natStatPlayer.players[`player_${playerId}`]?.name ?? ''};
   },
   getPlayersFromAPI: async (rangeStart: number) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_NAT_STAT_API_BASE_URL}players/NBA/${rangeStart > 0 ? `_/${rangeStart}` : ''}`,
+      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${rangeStart > 0 ? `_/${rangeStart}` : ''}`,
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     const players = Object.values(natStatPlayer.players);
@@ -66,14 +66,21 @@ const playerService = {
   },
   getPlayerStatsFromAPI: async (playerId: number, teamId: number) => {
     const response = await fetch(
-        `${process.env.NEXT_PUBLIC_NAT_STAT_API_BASE_URL}players/NBA/${playerId}`,
-      );
-      const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
-      const player = natStatPlayer.players[`player_${playerId}`];
-      const season = player?.seasons.season_2025;
-      const natStatTeamId = teams[teamId]?.natStatId ?? 0;
-      const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
-      return seasonTeam?.stats;
+        `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${playerId}`,
+    );
+    const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
+    const player = natStatPlayer.players[`player_${playerId}`];
+    const season = player?.seasons.season_2025;
+    const natStatTeamId = teams[teamId]?.natStatId ?? 0;
+    const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
+    return {
+        stat_min: seasonTeam?.stats.stat_min, 
+        stat_pts: seasonTeam?.stats.stat_pts, 
+        stat_mpg: seasonTeam?.stats.stat_mpg, 
+        stat_ppg: seasonTeam?.stats.stat_ppg, 
+        stat_rpg: seasonTeam?.stats.stat_rpg, 
+        stat_apg: seasonTeam?.stats.stat_apg
+    };
   },
 //   getPlayerFromDB: async (player_name: string) => {
 //     const { data, error } = await supabase
