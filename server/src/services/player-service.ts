@@ -31,7 +31,7 @@ type NatStatPlayerResponse = {
     players: Record<PlayerKey, {
             code: string,
             name: string
-            seasons: Record<SeasonKey, {
+            seasons?: Record<SeasonKey, {
                 [key in SeasonTeamKey]: {
                     stats: NatStatPlayerStats
                 }
@@ -70,7 +70,7 @@ const playerService = {
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     const player = natStatPlayer.players[`player_${playerId}`];
-    const season = player?.seasons.season_2025;
+    const season = player?.seasons?.season_2025;
     const natStatTeamId = teams[teamId]?.natStatId ?? 0;
     const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
     return {
