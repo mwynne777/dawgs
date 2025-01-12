@@ -1,13 +1,34 @@
 import { teams } from "~/app/dashboard/teams";
 import RecentGameCard from "~/app/where-are-they-now/[collegeId]/recent-game-card";
 import type { Database } from "~/lib/supabase-types";
-import type { NatStatPlayerStats } from "../../../../../../server/src/services/player-service";
+
 const getLastSeenDate = (gameDate: string) => {
   const easternTimeString = new Date(gameDate).toLocaleString("en-US", {
     timeZone: "America/New_York",
   });
   const [month, day, year] = easternTimeString.split(",")[0]?.split("/") ?? [];
   return `${month}/${day}/${year?.substring(2)}`;
+};
+
+export type NatStatPlayerStats = {
+  stat_min: {
+    value: string;
+  };
+  stat_pts: {
+    value: string;
+  };
+  stat_mpg: {
+    value: string;
+  };
+  stat_ppg: {
+    value: string;
+  };
+  stat_rpg: {
+    value: string;
+  };
+  stat_apg: {
+    value: string;
+  };
 };
 
 const PlayerCard = async ({
