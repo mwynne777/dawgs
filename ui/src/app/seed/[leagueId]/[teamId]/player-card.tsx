@@ -1,8 +1,7 @@
-import playerService from "~/app/(services)/nat-stat/player-service";
 import { teams } from "~/app/dashboard/teams";
 import RecentGameCard from "~/app/where-are-they-now/[collegeId]/recent-game-card";
 import type { Database } from "~/lib/supabase-types";
-
+import type { NatStatPlayerStats } from "../../../../../../server/src/services/player-service";
 const getLastSeenDate = (gameDate: string) => {
   const easternTimeString = new Date(gameDate).toLocaleString("en-US", {
     timeZone: "America/New_York",
@@ -16,10 +15,10 @@ const PlayerCard = async ({
 }: {
   playerAndStats: Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number];
 }) => {
-  const stats = await playerService.getPlayerStatsFromAPI(
-    playerAndStats.nat_stat_id,
-    playerAndStats.team_id,
+  const statsResponse = await fetch(
+    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players/stats?player_id=${playerAndStats.nat_stat_id}&league_id=${playerAndStats.team_id}`,
   );
+  const stats = (await statsResponse.json()) as NatStatPlayerStats;
 
   return (
     <div className="rounded-lg border border-gray-200 p-4">

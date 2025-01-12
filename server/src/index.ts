@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { Player, PLAYERS } from "./players";
 import { leagues } from "./leagues";
 import { Game } from "./teams";
+import playerService from "./services/player-service";
 
 dotenv.config();
 
@@ -64,6 +65,11 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/players", async (req: Request, res: Response) => {
   const result = await getPlayers(req.query.id as string, parseInt(req.query.league_id as string));
+  res.status(200).json(result);
+});
+
+app.get("/players/stats", async (req: Request, res: Response) => {
+  const result = await playerService.getPlayerStatsFromAPI(parseInt(req.query.player_id as string), parseInt(req.query.league_id as string));
   res.status(200).json(result);
 });
 
