@@ -4,10 +4,9 @@ import { PLAYERS } from "~/app/dashboard/players";
 import type { Player } from "~/app/dashboard/players";
 import type { getGamesByDate } from "~/app/dashboard/scoreboard";
 import type { Database } from "./supabase-types";
-import { leagues } from "~/app/dashboard/leagues";
 
-const getBoxScoreUrl = (leagueAbbreviation: string, gameId: string) => {
-return `${process.env.NEXT_PUBLIC_STATS_API_BASE_URL}${leagueAbbreviation}/summary?region=us&lang=en&contentorigin=espn&event=${gameId}`;
+const getBoxScoreUrl = (id: string, league_id: number) => {
+    return `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players?id=${id}&league_id=${league_id}`;
 }
 
 export type GameRecord = {
@@ -41,18 +40,6 @@ export const updateCache = async (gameRecords: GameRecord[]) => {
     }
 }
 
-type BoxScoreStatistic = {
-    athletes: { athlete: { id: string }; stats: string[] }[]
-}
-
-type BoxscoreResponse = {
-    boxscore: {
-        players: {
-            statistics: BoxScoreStatistic[]
-        }[]
-    }
-}
-
 export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGamesByDate>>[number]) => {
     const { data, error } = await supabase.from('player_stats').select('*').eq('game_id', gameRecord.id);
     if (error) {
@@ -60,32 +47,9 @@ export const getPlayerStats = async (gameRecord: Awaited<ReturnType<typeof getGa
     }
 
     if(data === null || data.length === 0 || data.filter((r) => !r.final).length !== 0) {
-        const players: { stats: string[]; player: Player }[] = [];
-        const leagueAbbreviation = Object.entries(leagues).find(([_, value]) => value.id === gameRecord.leagueId)?.[0];
-        if(!leagueAbbreviation) return [];
-        const boxScoreResponse = await fetch(
-            `${getBoxScoreUrl(leagueAbbreviation, gameRecord.id)}`,
-        );
-        const boxScoreResponseParsed = await boxScoreResponse.json() as BoxscoreResponse;
-
-        if (!("players" in boxScoreResponseParsed.boxscore)) return [];
-
-        boxScoreResponseParsed.boxscore.players.forEach((element) => {
-            const athletes = element.statistics[0]!.athletes;
-            const uconnPlayerIds = Object.values(PLAYERS).map((p) => p.id);
-            const athletesOfInterest = athletes.filter(
-                (a: { athlete: { id: string } }) =>
-                uconnPlayerIds.includes(a.athlete.id),
-            );
-            athletesOfInterest.forEach(
-                (a: { athlete: { id: string }; stats: string[] }) => {
-                players.push({
-                    stats: a.stats,
-                    player: PLAYERS.find((p) => p.id === a.athlete.id)!,
-                });
-            },
-        );
-    });
+        const playersResponse = await fetch(getBoxScoreUrl(gameRecord.id, gameRecord.leagueId));
+        const players = await playersResponse.json() as { stats: string[]; player: Player }[];
+        
         void updateCache([{ game: gameRecord, players }]);
         return players;
     }
