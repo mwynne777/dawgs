@@ -25,6 +25,12 @@ export type NatStatPlayerStats = {
     },
     stat_apg: {
         value: string
+    },
+    stat_g: {
+        value: string
+    },
+    stat_gs: {
+        value: string
     }
 }
 
@@ -113,7 +119,9 @@ const playerService = {
             stat_mpg: seasonTeam?.stats.stat_mpg, 
             stat_ppg: seasonTeam?.stats.stat_ppg, 
             stat_rpg: seasonTeam?.stats.stat_rpg, 
-            stat_apg: seasonTeam?.stats.stat_apg
+            stat_apg: seasonTeam?.stats.stat_apg,
+            stat_g: seasonTeam?.stats.stat_g,
+            stat_gs: seasonTeam?.stats.stat_gs
         },
         playerPerfs: getMostRecentStatLines(seasonTeam?.playerperfs ?? {})
     };
