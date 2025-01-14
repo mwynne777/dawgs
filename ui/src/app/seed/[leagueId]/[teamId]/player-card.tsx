@@ -31,6 +31,17 @@ export type NatStatPlayerStats = {
   };
 };
 
+export type NatStatPlayerPerfs = {
+  id: string;
+  "game-code": string;
+  gameday: string;
+  opponent: string;
+  "opponent-team-code": string;
+  winorloss: string;
+  result: string;
+  statline: string;
+};
+
 const PlayerCard = async ({
   playerAndStats,
 }: {
@@ -39,7 +50,10 @@ const PlayerCard = async ({
   const statsResponse = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players/stats?player_id=${playerAndStats.nat_stat_id}&league_id=${playerAndStats.team_id}`,
   );
-  const stats = (await statsResponse.json()) as NatStatPlayerStats;
+  const { stats, playerPerfs } = (await statsResponse.json()) as {
+    stats: NatStatPlayerStats;
+    playerPerfs: NatStatPlayerPerfs[];
+  };
 
   return (
     <div className="rounded-lg border border-gray-200 p-4">
@@ -99,12 +113,9 @@ const PlayerCard = async ({
       </div>
       <div>
         <div className="mb-2 mt-4">
-          {playerAndStats?.opposing_team_id &&
-            `Last seen vs. ${teams[playerAndStats.opposing_team_id]?.displayName} on ${getLastSeenDate(playerAndStats.game_date)}`}
+          <h3 className="my-1 text-lg font-semibold">Recent Games</h3>
         </div>
-        {playerAndStats.stat_line && (
-          <RecentGameCard stats={playerAndStats.stat_line} />
-        )}
+        {playerPerfs && <RecentGameCard playerPerfs={playerPerfs} />}
       </div>
     </div>
   );

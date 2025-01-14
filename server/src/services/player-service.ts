@@ -5,6 +5,7 @@ import { teams } from "../teams";
 type PlayerKey = `player_${number}`
 type SeasonKey = `season_${number}`
 type SeasonTeamKey = `seasonteam_${number}-${number}`
+type GameKey = `game_${number}`
 
 export type NatStatPlayerStats = {
     stat_min: {
@@ -27,6 +28,17 @@ export type NatStatPlayerStats = {
     }
 }
 
+type NatStatPlayerPerfs = {
+    "id": string,
+    "game-code": string,
+    "gameday": string,
+    "opponent": string,
+    "opponent-team-code": string,
+    "winorloss": string,
+    "result": string,
+    "statline": string
+}
+
 type NatStatPlayerResponse = {
     players: Record<PlayerKey, {
             code: string,
@@ -34,10 +46,31 @@ type NatStatPlayerResponse = {
             seasons?: Record<SeasonKey, {
                 [key in SeasonTeamKey]: {
                     stats: NatStatPlayerStats
+                    playerperfs?: Record<GameKey, NatStatPlayerPerfs>
                 }
             }>
         }>
 };
+
+const getMostRecentStatLines = (playerPerfs: Record<GameKey, NatStatPlayerPerfs>) => {
+    const fiveMostRecent = Object.values(playerPerfs).sort((a, b) => new Date(b.gameday).getTime() - new Date(a.gameday).getTime()).slice(0, 5);
+    return fiveMostRecent.map(perf => {
+        const stats = perf.statline.split(' ').reduce((acc, stat) => {
+            const value = stat.slice(0, -1); // Remove last character
+            if (stat.endsWith('m')) acc.min = value;
+            if (stat.endsWith('p')) acc.pts = value;
+            if (stat.endsWith('r')) acc.reb = value;
+            if (stat.endsWith('a')) acc.ast = value;
+            if (stat.endsWith('b')) acc.blk = value;
+            return acc;
+        }, { min: '0', pts: '0', reb: '0', ast: '0', blk: '0' });
+
+        return {
+            ...perf, 
+            statline: [stats.min, undefined, undefined, undefined, undefined, undefined, stats.reb, stats.ast, undefined, stats.blk, undefined, undefined, undefined, stats.pts]
+        };
+    });
+}
 
 const playerService = {
   getPlayerFromAPI: async (playerId: number) => {
@@ -74,12 +107,15 @@ const playerService = {
     const natStatTeamId = teams[teamId]?.natStatId ?? 0;
     const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
     return {
-        stat_min: seasonTeam?.stats.stat_min, 
-        stat_pts: seasonTeam?.stats.stat_pts, 
-        stat_mpg: seasonTeam?.stats.stat_mpg, 
-        stat_ppg: seasonTeam?.stats.stat_ppg, 
-        stat_rpg: seasonTeam?.stats.stat_rpg, 
-        stat_apg: seasonTeam?.stats.stat_apg
+        stats: {
+            stat_min: seasonTeam?.stats.stat_min, 
+            stat_pts: seasonTeam?.stats.stat_pts, 
+            stat_mpg: seasonTeam?.stats.stat_mpg, 
+            stat_ppg: seasonTeam?.stats.stat_ppg, 
+            stat_rpg: seasonTeam?.stats.stat_rpg, 
+            stat_apg: seasonTeam?.stats.stat_apg
+        },
+        playerPerfs: getMostRecentStatLines(seasonTeam?.playerperfs ?? {})
     };
   },
 //   getPlayerFromDB: async (player_name: string) => {
