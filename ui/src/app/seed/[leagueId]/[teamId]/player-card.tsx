@@ -48,23 +48,21 @@ export type NatStatPlayerPerfs = {
   statline: string;
 };
 
+type PlayerAndStatsWithNatstat =
+  Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number] & {
+    natStatStats: NatStatPlayerStats | null;
+    natStatPerfs: NatStatPlayerPerfs[] | null;
+  };
+
 const PlayerCard = async ({
   playerAndStats,
 }: {
-  playerAndStats: Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number];
+  playerAndStats: PlayerAndStatsWithNatstat;
 }) => {
-  const statsResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players/stats?player_id=${playerAndStats.nat_stat_id}&league_id=${playerAndStats.team_id}`,
-  );
-  const { stats, playerPerfs } = (await statsResponse.json()) as {
-    stats: NatStatPlayerStats;
-    playerPerfs: NatStatPlayerPerfs[];
-  };
-
   return (
     <div className="rounded-lg border border-gray-200 p-4">
       <div className="flex justify-between pb-1.5">
-        <div className="text-xl font-bold">{playerAndStats.full_name}</div>
+        <div className="mr-4 text-xl font-bold">{playerAndStats.full_name}</div>
         <div className="text-right">
           {teams[playerAndStats.team_id]?.displayName}
         </div>
@@ -82,7 +80,7 @@ const PlayerCard = async ({
                 })
               : "unknown"}
           </div>
-          {stats && (
+          {playerAndStats.natStatStats && (
             <div className="stats-container">
               <h3 className="my-1 text-lg font-semibold">
                 Current Season Stats
@@ -91,33 +89,33 @@ const PlayerCard = async ({
                 <div className="stat text-center">
                   <p className="text-sm text-gray-600">MINS</p>
                   <p className="font-medium">
-                    {stats?.stat_mpg?.value ?? "unknown"}
+                    {playerAndStats.natStatStats?.stat_mpg?.value ?? "0.0"}
                   </p>
                 </div>
                 <div className="stat text-center">
                   <p className="text-sm text-gray-600">PTS</p>
                   <p className="font-medium">
-                    {stats?.stat_ppg?.value ?? "unknown"}
+                    {playerAndStats.natStatStats?.stat_ppg?.value ?? "0.0"}
                   </p>
                 </div>
                 <div className="stat text-center">
                   <p className="text-sm text-gray-600">REB</p>
                   <p className="font-medium">
-                    {stats?.stat_rpg?.value ?? "unknown"}
+                    {playerAndStats.natStatStats?.stat_rpg?.value ?? "0.0"}
                   </p>
                 </div>
                 <div className="stat text-center">
                   <p className="text-sm text-gray-600">AST</p>
                   <p className="font-medium">
-                    {stats?.stat_apg?.value ?? "unknown"}
+                    {playerAndStats.natStatStats?.stat_apg?.value ?? "0.0"}
                   </p>
                 </div>
               </div>
             </div>
           )}
           <p className="mt-0.5 text-gray-600">
-            * {stats?.stat_g?.value ?? 0} games played,{" "}
-            {stats?.stat_gs?.value ?? 0} starts
+            * {playerAndStats.natStatStats?.stat_g?.value ?? 0} games played,{" "}
+            {playerAndStats.natStatStats?.stat_gs?.value ?? 0} starts
           </p>
         </div>
       </div>
@@ -125,7 +123,9 @@ const PlayerCard = async ({
         <div className="mb-2 mt-2">
           <h3 className="my-1 text-lg font-semibold">Recent Games</h3>
         </div>
-        {playerPerfs && <RecentGameCard playerPerfs={playerPerfs} />}
+        {playerAndStats.natStatPerfs && (
+          <RecentGameCard playerPerfs={playerAndStats.natStatPerfs} />
+        )}
       </div>
     </div>
   );

@@ -1,6 +1,9 @@
 import collegesService from "~/app/(services)/colleges-service";
 import playerStatsService from "~/app/(services)/player-stats-service";
-import PlayerCard from "~/app/seed/[leagueId]/[teamId]/player-card";
+import PlayerCard, {
+  NatStatPlayerPerfs,
+  NatStatPlayerStats,
+} from "~/app/seed/[leagueId]/[teamId]/player-card";
 
 export default async function Page({
   params,
@@ -14,6 +17,34 @@ export default async function Page({
     collegesService.getCollegeById(collegeId),
     playerStatsService.getPlayersAndMostRecentStatsByCollegeId(collegeId),
   ]);
+
+  const statsResults = await Promise.allSettled(
+    players.map(async (player) => {
+      const statsResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players/stats?player_id=${player.nat_stat_id}&league_id=${player.team_id}`,
+      );
+      const { stats, playerPerfs } = (await statsResponse.json()) as {
+        stats: NatStatPlayerStats;
+        playerPerfs: NatStatPlayerPerfs[];
+      };
+      return {
+        ...player,
+        natStatStats: stats,
+        natStatPerfs: playerPerfs,
+      };
+    }),
+  );
+
+  const playersWithStats = statsResults.map((result, index) => {
+    if (result.status === "fulfilled") {
+      return result.value;
+    }
+    return {
+      ...players[index]!,
+      natStatStats: null,
+      natStatPerfs: null,
+    };
+  });
 
   if (!players) {
     return <div>No players found</div>;
@@ -33,7 +64,7 @@ export default async function Page({
             maximumFractionDigits: 0,
           })} */}
       </div>
-      {players.map((p) => {
+      {playersWithStats.map((p) => {
         return (
           <div className="mb-8" key={p.id}>
             <PlayerCard playerAndStats={p} />
