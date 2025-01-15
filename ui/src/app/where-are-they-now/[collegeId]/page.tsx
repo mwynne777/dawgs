@@ -23,28 +23,43 @@ export default async function Page({
       const statsResponse = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}players/stats?player_id=${player.nat_stat_id}&league_id=${player.team_id}`,
       );
-      const { stats, playerPerfs } = (await statsResponse.json()) as {
-        stats: NatStatPlayerStats;
-        playerPerfs: NatStatPlayerPerfs[];
-      };
+      const { stats, playerPerfs, lastSeenDate } =
+        (await statsResponse.json()) as {
+          stats: NatStatPlayerStats;
+          playerPerfs: NatStatPlayerPerfs[];
+          lastSeenDate: string;
+        };
       return {
         ...player,
         natStatStats: stats,
         natStatPerfs: playerPerfs,
+        lastSeenDate,
       };
     }),
   );
 
-  const playersWithStats = statsResults.map((result, index) => {
-    if (result.status === "fulfilled") {
-      return result.value;
-    }
-    return {
-      ...players[index]!,
-      natStatStats: null,
-      natStatPerfs: null,
-    };
-  });
+  const playersWithStats = statsResults
+    .map((result, index) => {
+      if (result.status === "fulfilled") {
+        return result.value;
+      }
+      return {
+        ...players[index]!,
+        natStatStats: null,
+        natStatPerfs: null,
+        lastSeenDate: null,
+      };
+    })
+    .sort((a, b) => {
+      // Sort by lastSeenDate in descending order (most recent first)
+      if (!a.lastSeenDate && !b.lastSeenDate) return 0;
+      if (!a.lastSeenDate) return 1;
+      if (!b.lastSeenDate) return -1;
+
+      return (
+        new Date(b.lastSeenDate).getTime() - new Date(a.lastSeenDate).getTime()
+      );
+    });
 
   if (!players) {
     return <div>No players found</div>;

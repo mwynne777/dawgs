@@ -41,17 +41,9 @@ const GameCard = ({ playerPerfs }: { playerPerfs: NatStatPlayerPerfs[] }) => {
             return (
               <tr key={perf.id} className="border-b text-center">
                 <td className="px-1 py-1">
-                  {new Date(perf.gameday)
-                    .toLocaleString("en-US", {
-                      timeZone: "America/New_York",
-                    })
-                    .split(",")[0]
-                    ?.split("/")
-                    .map((part, i) => {
-                      if (i === 2) return part.substring(2);
-                      return part.padStart(2, "0");
-                    })
-                    .join("/")}
+                  {perf.gameday.split("-").slice(1).join("/") +
+                    "/" +
+                    perf.gameday.slice(2, 4)}
                 </td>
                 <td className="px-1 py-1">{perf["opponent-team-code"]}</td>
                 <td className="px-1 py-1">{min}</td>

@@ -112,6 +112,8 @@ const playerService = {
     const season = player?.seasons?.season_2025;
     const natStatTeamId = teams[teamId]?.natStatId ?? 0;
     const seasonTeam = season?.[`seasonteam_${2025}-${natStatTeamId}`] 
+    const statLines = getMostRecentStatLines(seasonTeam?.playerperfs ?? {});
+    const lastSeenDate = statLines[0]?.gameday;
     return {
         stats: {
             stat_min: seasonTeam?.stats.stat_min, 
@@ -123,7 +125,8 @@ const playerService = {
             stat_g: seasonTeam?.stats.stat_g,
             stat_gs: seasonTeam?.stats.stat_gs
         },
-        playerPerfs: getMostRecentStatLines(seasonTeam?.playerperfs ?? {})
+        playerPerfs: statLines,
+        lastSeenDate
     };
   },
 //   getPlayerFromDB: async (player_name: string) => {
