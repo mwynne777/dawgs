@@ -49,7 +49,7 @@ export type NatStatPlayerPerfs = {
 };
 
 type PlayerAndStatsWithNatstat =
-  Database["public"]["Functions"]["get_most_recent_games"]["Returns"][number] & {
+  Database["public"]["Tables"]["players"]["Row"] & {
     natStatStats: NatStatPlayerStats | null;
     natStatPerfs: NatStatPlayerPerfs[] | null;
   };
@@ -64,7 +64,7 @@ const PlayerCard = async ({
       <div className="flex justify-between pb-1.5">
         <div className="mr-4 text-xl font-bold">{playerAndStats.full_name}</div>
         <div className="text-right">
-          {teams[playerAndStats.team_id]?.displayName}
+          {teams[playerAndStats.team_id ?? 0]?.displayName}
         </div>
       </div>
       <div className="flex justify-between">

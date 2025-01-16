@@ -1,4 +1,4 @@
-import { NatStatPlayerPerfs } from "~/app/seed/[leagueId]/[teamId]/player-card";
+import type { NatStatPlayerPerfs } from "~/app/seed/[leagueId]/[teamId]/player-card";
 
 const GameCard = ({ playerPerfs }: { playerPerfs: NatStatPlayerPerfs[] }) => {
   return (
