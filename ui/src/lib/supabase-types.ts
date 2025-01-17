@@ -174,27 +174,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      get_most_recent_games: {
-        Args: {
-          collegeid: number
-        }
-        Returns: {
-          id: number
-          full_name: string
-          salary: number
-          league_id: number
-          team_id: number
-          college_id: number
-          created_at: string
-          nat_stat_id: number
-          player_id: number
-          game_id: number
-          game_date: string
-          stat_line: Json
-          final: boolean
-          opposing_team_id: number
-        }[]
-      }
       get_players_by_similar_name: {
         Args: {
           names: string[]
