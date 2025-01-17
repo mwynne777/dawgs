@@ -4,15 +4,15 @@ import type { NatStatPlayerStats } from "../seed/[leagueId]/[teamId]/player-card
 import type { Database } from "~/lib/supabase-types";
 
 const playerStatsService = {
-  getPlayersAndMostRecentStatsByCollegeId: async (collegeId: number) => {
-    const { data, error } = await supabase.rpc("get_most_recent_games", {
-      collegeid: collegeId,
-    });
-    if (error) {
-      throw error;
-    }
-    return data;
-  },
+  // getPlayersAndMostRecentStatsByCollegeId: async (collegeId: number) => {
+  //   const { data, error } = await supabase.rpc("get_most_recent_games", {
+  //     collegeid: collegeId,
+  //   });
+  //   if (error) {
+  //     throw error;
+  //   }
+  //   return data;
+  // },
   getPlayersByCollegeId: async (collegeId: number) => {
     const { data, error } = await supabase
       .from("players")
