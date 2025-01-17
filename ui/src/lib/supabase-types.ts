@@ -57,28 +57,82 @@ export type Database = {
       }
       player_stats: {
         Row: {
-          final: boolean
-          game_date: string | null
+          assists: number | null
+          blocks: number | null
+          college_id: number | null
+          created_at: string
+          fg_a: number | null
+          fg_m: number | null
+          fouls: number | null
+          ft_a: number | null
+          ft_m: number | null
+          game_date: string
           game_id: number
-          opposing_team_id: number | null
+          id: number
+          minutes: number | null
+          opponent_id: number
           player_id: number
-          stat_line: string[]
+          points: number | null
+          rebounds: number | null
+          rebounds_off: number | null
+          started: boolean | null
+          steals: number | null
+          team_id: number
+          three_fg_a: number | null
+          three_fg_m: number | null
+          turnovers: number | null
         }
         Insert: {
-          final?: boolean
-          game_date?: string | null
+          assists?: number | null
+          blocks?: number | null
+          college_id?: number | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          game_date?: string
           game_id: number
-          opposing_team_id: number
+          id: number
+          minutes?: number | null
+          opponent_id: number
           player_id: number
-          stat_line: string[]
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          started?: boolean | null
+          steals?: number | null
+          team_id: number
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
         }
         Update: {
-          final?: boolean
-          game_date?: string | null
+          assists?: number | null
+          blocks?: number | null
+          college_id?: number | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          game_date?: string
           game_id?: number
-          opposing_team_id: number
+          id?: number
+          minutes?: number | null
+          opponent_id?: number
           player_id?: number
-          stat_line?: string[]
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          started?: boolean | null
+          steals?: number | null
+          team_id?: number
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
         }
         Relationships: []
       }
@@ -136,7 +190,7 @@ export type Database = {
           player_id: number
           game_id: number
           game_date: string
-          stat_line: string[]
+          stat_line: Json
           final: boolean
           opposing_team_id: number
         }[]
