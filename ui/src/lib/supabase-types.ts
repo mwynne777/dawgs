@@ -70,8 +70,8 @@ export type Database = {
           game_id: number
           id: number
           minutes: number | null
+          nat_stat_player_id: number
           opponent_id: number
-          player_id: number
           points: number | null
           rebounds: number | null
           rebounds_off: number | null
@@ -96,8 +96,8 @@ export type Database = {
           game_id: number
           id: number
           minutes?: number | null
+          nat_stat_player_id: number
           opponent_id: number
-          player_id: number
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null
@@ -122,8 +122,8 @@ export type Database = {
           game_id?: number
           id?: number
           minutes?: number | null
+          nat_stat_player_id?: number
           opponent_id?: number
-          player_id?: number
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null

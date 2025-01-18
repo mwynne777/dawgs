@@ -4,6 +4,7 @@ import { Player, PLAYERS } from "./players";
 import { leagues } from "./leagues";
 import { Game } from "./teams";
 import playerService from "./services/player-service";
+import playerStatsService from "./services/player-stats-service";
 
 dotenv.config();
 
@@ -71,6 +72,16 @@ app.get("/players", async (req: Request, res: Response) => {
 app.get("/players/stats", async (req: Request, res: Response) => {
   const result = await playerService.getPlayerStatsFromAPI(parseInt(req.query.player_id as string), parseInt(req.query.league_id as string));
   res.status(200).json(result);
+});
+
+app.get("/player-stats", async (req: Request, res: Response) => {
+  console.log('Hitting /player-stats', req.query);
+  try {
+    const result = await playerStatsService.getPlayerStats(parseInt(req.query.range_start as string));
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(port, () => {
