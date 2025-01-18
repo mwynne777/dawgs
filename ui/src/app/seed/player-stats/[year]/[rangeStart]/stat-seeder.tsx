@@ -19,7 +19,7 @@ export default async function StatSeeder({
 
   return (
     <div className="flex h-screen w-full items-center justify-center">
-      <div className="text-center">
+      <div className="max-h-screen overflow-y-auto p-4 text-center">
         <div>
           Saved {savedCount} player stats, {existingCount} already existed
         </div>
