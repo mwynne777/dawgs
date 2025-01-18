@@ -1,18 +1,19 @@
-export default async function Page({
+import SuspensefulServerComponent from "~/app/dashboard/components/suspensefulComponent-server";
+import StatSeeder from "./stat-seeder";
+
+const Page = async ({
   params,
 }: {
   params: Promise<{ year: string; rangeStart: string }>;
-}) {
+}) => {
   const { year, rangeStart } = await params;
-  const rangeStartNumber = parseInt(rangeStart);
+  const date = new Date().toISOString();
 
-  const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats?range_start=${rangeStartNumber}`,
-  );
-  console.log(result);
   return (
-    <div>
-      Getting 100 player_stats from {year}, starting from {rangeStartNumber}
-    </div>
+    <SuspensefulServerComponent date={date}>
+      <StatSeeder year={year} rangeStart={rangeStart} />
+    </SuspensefulServerComponent>
   );
-}
+};
+
+export default Page;

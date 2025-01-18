@@ -97,6 +97,12 @@ const playerStatsService = {
             throw error;
         }
         console.log(playerStatsToSave.length, 'player stats saved');
+
+        return {
+            savedCount: playerStatsToSave.length,
+            existingCount: existingPlayerStats.length,
+            existingIds: existingPlayerStats.map(playerStat => playerStat.id),
+        }
     }
 }
 
