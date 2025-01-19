@@ -69,19 +69,18 @@ app.get("/players", async (req: Request, res: Response) => {
   res.status(200).json(result);
 });
 
-app.get("/players/stats", async (req: Request, res: Response) => {
-  const result = await playerService.getPlayerStatsFromAPI(parseInt(req.query.player_id as string), parseInt(req.query.league_id as string));
-  res.status(200).json(result);
-});
-
-app.get("/player-stats", async (req: Request, res: Response) => {
-  console.log('Hitting /player-stats', req.query);
+app.get("/seed/player-stats", async (req: Request, res: Response) => {
   try {
     const result = await playerStatsService.getPlayerStats(parseInt(req.query.range_start as string));
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+app.get("/player-stats/college-id", async (req: Request, res: Response) => {
+  const result = await playerStatsService.getPlayerStatsByCollegeIDFromDB(parseInt(req.query.college_id as string));
+  res.status(200).json(result);
 });
 
 app.listen(port, () => {

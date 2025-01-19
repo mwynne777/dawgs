@@ -103,6 +103,13 @@ const playerStatsService = {
             existingCount: existingPlayerStats.length,
             existingIds: existingPlayerStats.map(playerStat => playerStat.id),
         }
+    },
+    getPlayerStatsByCollegeIDFromDB: async (collegeId: number) => {
+        const { data, error } = await supabase.from('player_stats').select('*, players(*)').eq('college_id', collegeId).order('game_date', { ascending: false });
+        if (error) {
+            throw error;
+        }
+        return data;
     }
 }
 

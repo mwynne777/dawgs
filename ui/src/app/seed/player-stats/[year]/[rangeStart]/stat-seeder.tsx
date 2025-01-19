@@ -8,7 +8,7 @@ export default async function StatSeeder({
   const rangeStartNumber = parseInt(rangeStart);
 
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats?range_start=${rangeStartNumber}`,
+    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}seed/player-stats?range_start=${rangeStartNumber}`,
   );
 
   const { savedCount, existingCount, existingIds } = (await result.json()) as {

@@ -134,7 +134,15 @@ export type Database = {
           three_fg_m?: number | null
           turnovers?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "player_stats_nat_stat_player_id_fkey"
+            columns: ["nat_stat_player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["nat_stat_id"]
+          },
+        ]
       }
       players: {
         Row: {
