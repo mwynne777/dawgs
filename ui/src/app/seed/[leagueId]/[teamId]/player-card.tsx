@@ -32,8 +32,17 @@ const PlayerCard = async ({
   playerAndStats: PlayerGroup;
 }) => {
   const player = playerAndStats.stats[0];
+  const teamAbbreviation = teams[player?.team_id ?? 0]?.abbreviation;
   return (
-    <div className="rounded-lg border border-gray-200 p-4">
+    <div
+      className="rounded-lg border border-gray-200 p-4"
+      style={{
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url(${process.env.NEXT_PUBLIC_IMAGE_STORE_BASE_URL}${teamAbbreviation}.png)`,
+        // backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <div className="flex justify-between pb-1.5">
         <div className="mr-4 text-xl font-bold">
           {player?.players?.full_name}
