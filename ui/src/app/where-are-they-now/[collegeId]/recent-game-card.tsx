@@ -21,9 +21,9 @@ const RecentGameCard = ({
     : playerPerfs.slice(0, 3);
 
   return (
-    <div>
+    <div className="w-full">
       <div className="overflow-x-auto">
-        <table className="border-collapse text-sm">
+        <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-t bg-gray-100 text-center">
               <th className="px-1 py-1">DATE</th>
@@ -37,7 +37,7 @@ const RecentGameCard = ({
               <th className="hidden px-1 py-1 sm:table-cell">FG</th>
               <th className="hidden px-1 py-1 sm:table-cell">3PT</th>
               <th className="hidden px-1 py-1 sm:table-cell">TO</th>
-              <th className="hidden px-1 py-1 sm:table-cell">+/-</th>
+              {/* <th className="hidden px-1 py-1 sm:table-cell">+/-</th> */}
             </tr>
           </thead>
           <tbody>
@@ -63,7 +63,7 @@ const RecentGameCard = ({
                   <td className="hidden px-1 py-1 sm:table-cell">
                     {perf.turnovers}
                   </td>
-                  <td className="hidden px-1 py-1 sm:table-cell"></td>
+                  {/* <td className="hidden px-1 py-1 sm:table-cell"></td> */}
                 </tr>
               );
             })}

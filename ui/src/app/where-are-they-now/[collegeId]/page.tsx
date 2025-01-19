@@ -3,6 +3,7 @@ import PlayerCard, {
   PlayerGroup,
 } from "~/app/seed/[leagueId]/[teamId]/player-card";
 import { PlayerWithStats } from "./recent-game-card";
+import CollegeCard from "./college-card";
 
 export default async function Page({
   params,
@@ -87,9 +88,7 @@ export default async function Page({
 
   return (
     <div className="mx-auto max-w-3xl px-8 pt-4">
-      <div className="mb-8 text-2xl font-bold">
-        {`${college.name} ${college.mascot}`}
-      </div>
+      <CollegeCard college={college} playersWithStats={sortedPlayers} />
       {sortedPlayers.map(({ stats, totals }) => {
         const player = stats[0];
         return (
