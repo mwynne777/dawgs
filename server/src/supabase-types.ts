@@ -197,6 +197,16 @@ export type Database = {
           team_id: number | null
         }[]
       }
+      getcollegestattotals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          college_id: number
+          total_minutes: number
+          total_points: number
+          total_rebounds: number
+          total_assists: number
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

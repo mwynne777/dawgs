@@ -13,11 +13,12 @@ export default async function Page({
   const { collegeId: collegeIdString } = await params;
   const collegeId = parseInt(collegeIdString);
 
-  const [college, playersWithStats] = await Promise.all([
+  const [college, playersWithStats, collegeStatTotals] = await Promise.all([
     collegesService.getCollegeById(collegeId),
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/college-id?college_id=${collegeId}`,
     ).then((res) => res.json() as Promise<PlayerWithStats[]>),
+    collegesService.getCollegeStatTotals(),
   ]);
 
   // Group players and calculate totals
@@ -88,7 +89,11 @@ export default async function Page({
 
   return (
     <div className="mx-auto max-w-3xl px-8 pt-4">
-      <CollegeCard college={college} playersWithStats={sortedPlayers} />
+      <CollegeCard
+        college={college}
+        allCollegeStatTotals={collegeStatTotals}
+        totalPlayersWithStats={playersWithStats.length}
+      />
       {sortedPlayers.map(({ stats, totals }) => {
         const player = stats[0];
         return (
