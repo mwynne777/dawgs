@@ -51,7 +51,7 @@ const CollegeCard = ({
               <p className="font-medium">
                 {collegeStatTotals?.total_minutes.toLocaleString()}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs">
                 {collegeStatTotals?.total_minutes_ranking &&
                   toOrdinal(collegeStatTotals.total_minutes_ranking)}
               </p>
@@ -61,7 +61,7 @@ const CollegeCard = ({
               <p className="font-medium">
                 {collegeStatTotals?.total_points.toLocaleString()}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs">
                 {collegeStatTotals?.total_points_ranking &&
                   toOrdinal(collegeStatTotals.total_points_ranking)}
               </p>
@@ -71,7 +71,7 @@ const CollegeCard = ({
               <p className="font-medium">
                 {collegeStatTotals?.total_rebounds.toLocaleString()}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs">
                 {collegeStatTotals?.total_rebounds_ranking &&
                   toOrdinal(collegeStatTotals.total_rebounds_ranking)}
               </p>
@@ -81,7 +81,7 @@ const CollegeCard = ({
               <p className="font-medium">
                 {collegeStatTotals?.total_assists.toLocaleString()}
               </p>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs">
                 {collegeStatTotals?.total_assists_ranking &&
                   toOrdinal(collegeStatTotals.total_assists_ranking)}
               </p>
