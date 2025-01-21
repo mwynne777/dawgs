@@ -1,3 +1,4 @@
+import { PlayerGroup } from "~/app/seed/[leagueId]/[teamId]/player-card";
 import { Database } from "~/lib/supabase-types";
 
 const toOrdinal = (n: number): string => {
@@ -9,7 +10,7 @@ const toOrdinal = (n: number): string => {
 const CollegeCard = ({
   college,
   allCollegeStatTotals,
-  totalPlayersWithStats,
+  playersWithStats,
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
   allCollegeStatTotals: {
@@ -23,11 +24,54 @@ const CollegeCard = ({
     total_rebounds_ranking: number;
     total_assists_ranking: number;
   }[];
-  totalPlayersWithStats: number;
+  playersWithStats: PlayerGroup[];
 }) => {
   const collegeStatTotals = allCollegeStatTotals.find(
     (c) => c.college_id === college.id,
   );
+
+  const minutesLeader = playersWithStats.reduce(
+    (max, player) =>
+      player.totals.minutes > (max?.totals.minutes ?? 0) ? player : max,
+    playersWithStats[0],
+  );
+
+  const pointsLeader = playersWithStats.reduce(
+    (max, player) =>
+      player.totals.points > (max?.totals.points ?? 0) ? player : max,
+    playersWithStats[0],
+  );
+
+  const reboundsLeader = playersWithStats.reduce(
+    (max, player) =>
+      player.totals.rebounds > (max?.totals.rebounds ?? 0) ? player : max,
+    playersWithStats[0],
+  );
+
+  const assistsLeader = playersWithStats.reduce(
+    (max, player) =>
+      player.totals.assists > (max?.totals.assists ?? 0) ? player : max,
+    playersWithStats[0],
+  );
+
+  const leaders = {
+    minutes: {
+      id: minutesLeader?.stats[0]?.players.id,
+      full_name: minutesLeader?.stats[0]?.players.full_name,
+    },
+    points: {
+      id: pointsLeader?.stats[0]?.players.id,
+      full_name: pointsLeader?.stats[0]?.players.full_name,
+    },
+    rebounds: {
+      id: reboundsLeader?.stats[0]?.players.id,
+      full_name: reboundsLeader?.stats[0]?.players.full_name,
+    },
+    assists: {
+      id: assistsLeader?.stats[0]?.players.id,
+      full_name: assistsLeader?.stats[0]?.players.full_name,
+    },
+  };
 
   return (
     <div className="mb-8 rounded-lg border border-gray-200">
@@ -40,7 +84,7 @@ const CollegeCard = ({
         }}
       >
         <div className="mt-3 text-center text-sm">
-          {totalPlayersWithStats} players have checked into an NBA game this
+          {playersWithStats.length} players have checked into an NBA game this
           season
         </div>
         <div className="mt-4 flex flex-col items-center">
@@ -55,6 +99,9 @@ const CollegeCard = ({
                 {collegeStatTotals?.total_minutes_ranking &&
                   toOrdinal(collegeStatTotals.total_minutes_ranking)}
               </p>
+              <p className="text-xs text-gray-500">
+                {leaders.minutes?.full_name}
+              </p>
             </div>
             <div className="stat text-center">
               <p className="text-sm text-gray-600">PTS</p>
@@ -64,6 +111,9 @@ const CollegeCard = ({
               <p className="text-xs">
                 {collegeStatTotals?.total_points_ranking &&
                   toOrdinal(collegeStatTotals.total_points_ranking)}
+              </p>
+              <p className="text-xs text-gray-500">
+                {leaders.points?.full_name}
               </p>
             </div>
             <div className="stat text-center">
@@ -75,6 +125,9 @@ const CollegeCard = ({
                 {collegeStatTotals?.total_rebounds_ranking &&
                   toOrdinal(collegeStatTotals.total_rebounds_ranking)}
               </p>
+              <p className="text-xs text-gray-500">
+                {leaders.rebounds?.full_name}
+              </p>
             </div>
             <div className="stat text-center">
               <p className="text-sm text-gray-600">AST</p>
@@ -84,6 +137,9 @@ const CollegeCard = ({
               <p className="text-xs">
                 {collegeStatTotals?.total_assists_ranking &&
                   toOrdinal(collegeStatTotals.total_assists_ranking)}
+              </p>
+              <p className="text-xs text-gray-500">
+                {leaders.assists?.full_name}
               </p>
             </div>
           </div>

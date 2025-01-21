@@ -92,7 +92,7 @@ export default async function Page({
       <CollegeCard
         college={college}
         allCollegeStatTotals={collegeStatTotals}
-        totalPlayersWithStats={sortedPlayers.length}
+        playersWithStats={sortedPlayers}
       />
       {sortedPlayers.map(({ stats, totals }) => {
         const player = stats[0];
