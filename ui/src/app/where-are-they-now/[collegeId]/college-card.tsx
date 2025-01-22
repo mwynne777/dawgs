@@ -88,60 +88,64 @@ const CollegeCard = ({
           season
         </div>
         <div className="mt-4 flex flex-col items-center">
-          <h3 className="text-lg font-semibold">Current Season Totals:</h3>
-          <div className="mt-2 flex gap-4">
-            <div className="stat text-center">
-              <p className="text-sm text-gray-600">MINS</p>
-              <p className="font-medium">
-                {collegeStatTotals?.total_minutes.toLocaleString()}
-              </p>
-              <p className="text-xs">
-                {collegeStatTotals?.total_minutes_ranking &&
-                  toOrdinal(collegeStatTotals.total_minutes_ranking)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {leaders.minutes?.full_name}
-              </p>
-            </div>
-            <div className="stat text-center">
-              <p className="text-sm text-gray-600">PTS</p>
-              <p className="font-medium">
-                {collegeStatTotals?.total_points.toLocaleString()}
-              </p>
-              <p className="text-xs">
-                {collegeStatTotals?.total_points_ranking &&
-                  toOrdinal(collegeStatTotals.total_points_ranking)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {leaders.points?.full_name}
-              </p>
-            </div>
-            <div className="stat text-center">
-              <p className="text-sm text-gray-600">REB</p>
-              <p className="font-medium">
-                {collegeStatTotals?.total_rebounds.toLocaleString()}
-              </p>
-              <p className="text-xs">
-                {collegeStatTotals?.total_rebounds_ranking &&
-                  toOrdinal(collegeStatTotals.total_rebounds_ranking)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {leaders.rebounds?.full_name}
-              </p>
-            </div>
-            <div className="stat text-center">
-              <p className="text-sm text-gray-600">AST</p>
-              <p className="font-medium">
-                {collegeStatTotals?.total_assists.toLocaleString()}
-              </p>
-              <p className="text-xs">
-                {collegeStatTotals?.total_assists_ranking &&
-                  toOrdinal(collegeStatTotals.total_assists_ranking)}
-              </p>
-              <p className="text-xs text-gray-500">
-                {leaders.assists?.full_name}
-              </p>
-            </div>
+          <h3 className="text-lg font-semibold">2024-2025 Season:</h3>
+          <div className="mt-2">
+            <table className="w-full [&_td]:px-2 [&_td]:py-1 [&_td]:text-center">
+              <tbody>
+                <tr>
+                  <td>Stat</td>
+                  <td>Total</td>
+                  <td>Rank</td>
+                  <td className="max-w-[80px] align-top sm:max-w-none">
+                    Leader
+                  </td>
+                </tr>
+                <tr>
+                  <td>MINS</td>
+                  <td>{collegeStatTotals?.total_minutes.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.total_minutes_ranking &&
+                      toOrdinal(collegeStatTotals.total_minutes_ranking)}
+                  </td>
+                  <td className="max-w-[80px] break-words text-xs leading-tight sm:max-w-none">
+                    {leaders.minutes?.full_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td>PTS</td>
+                  <td>{collegeStatTotals?.total_points.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.total_points_ranking &&
+                      toOrdinal(collegeStatTotals.total_points_ranking)}
+                  </td>
+                  <td className="max-w-[80px] break-words text-xs leading-tight">
+                    {leaders.points?.full_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td>REB</td>
+                  <td>{collegeStatTotals?.total_rebounds.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.total_rebounds_ranking &&
+                      toOrdinal(collegeStatTotals.total_rebounds_ranking)}
+                  </td>
+                  <td className="max-w-[80px] break-words text-xs leading-tight">
+                    {leaders.rebounds?.full_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td>AST</td>
+                  <td>{collegeStatTotals?.total_assists.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.total_assists_ranking &&
+                      toOrdinal(collegeStatTotals.total_assists_ranking)}
+                  </td>
+                  <td className="max-w-[80px] break-words text-xs leading-tight">
+                    {leaders.assists?.full_name}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
