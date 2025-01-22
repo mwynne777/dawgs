@@ -1,4 +1,4 @@
-import { teams } from "~/app/dashboard/teams";
+import { teams } from "~/app/(common)/teams";
 import RecentGameCard, {
   PlayerWithStats,
 } from "~/app/where-are-they-now/[collegeId]/recent-game-card";

@@ -1,4 +1,4 @@
-import { PlayerGroup } from "~/app/seed/[leagueId]/[teamId]/player-card";
+import { PlayerGroup } from "./player-card";
 import { Database } from "~/lib/supabase-types";
 
 const toOrdinal = (n: number): string => {

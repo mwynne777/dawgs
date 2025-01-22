@@ -1,7 +1,7 @@
 import type { Database } from "~/lib/supabase-types";
-import { saveColleges } from "../dashboard/players";
-import { savePlayers } from "../dashboard/players";
-import { leagues } from "../dashboard/leagues";
+import { saveColleges } from "../(common)/players";
+import { savePlayers } from "../(common)/players";
+import { leagues } from "../(common)/leagues";
 
 type college = {
   id: string;

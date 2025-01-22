@@ -1,7 +1,5 @@
 import collegesService from "~/app/(services)/colleges-service";
-import PlayerCard, {
-  PlayerGroup,
-} from "~/app/seed/[leagueId]/[teamId]/player-card";
+import PlayerCard, { PlayerGroup } from "./player-card";
 import { PlayerWithStats } from "./recent-game-card";
 import CollegeCard from "./college-card";
 

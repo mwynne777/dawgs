@@ -1,4 +1,4 @@
-import SuspensefulServerComponent from "~/app/dashboard/components/suspensefulComponent-server";
+import SuspensefulServerComponent from "~/app/(common)/components/suspensefulComponent-server";
 import StatSeeder from "./stat-seeder";
 
 const Page = async ({

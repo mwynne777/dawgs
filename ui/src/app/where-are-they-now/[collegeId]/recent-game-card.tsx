@@ -1,6 +1,6 @@
 "use client";
 
-import { teams } from "~/app/dashboard/teams";
+import { teams } from "~/app/(common)/teams";
 import type { Database } from "~/lib/supabase-types";
 import FormattedDate from "./formatted-date";
 import { useState } from "react";
