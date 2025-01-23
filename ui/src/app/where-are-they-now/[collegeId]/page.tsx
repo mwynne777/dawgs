@@ -16,7 +16,7 @@ export default async function Page({
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/college-id?college_id=${collegeId}`,
     ).then((res) => res.json() as Promise<PlayerWithStats[]>),
-    collegesService.getCollegeStatTotals(),
+    collegesService.getCollegeStatTotalsWithRankings(),
   ]);
 
   // Group players and calculate totals

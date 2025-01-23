@@ -1,6 +1,13 @@
 import { supabase } from "~/lib/initSupabase";
 
 const collegesService = {
+  getColleges: async () => {
+    const { data, error } = await supabase.from("colleges").select("*");
+    if (error) {
+      throw error;
+    }
+    return data;
+  },
   getCollegeById: async (collegeId: number) => {
     const { data, error } = await supabase
       .from("colleges")
@@ -21,6 +28,10 @@ const collegesService = {
       throw error;
     }
 
+    return data;
+  },
+  getCollegeStatTotalsWithRankings: async () => {
+    const data = await collegesService.getCollegeStatTotals();
     // Create ranking maps for each category
     const minutesRankings = new Map(
       data

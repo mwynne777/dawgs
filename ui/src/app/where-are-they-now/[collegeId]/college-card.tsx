@@ -1,5 +1,6 @@
 import { PlayerGroup } from "./player-card";
 import { Database } from "~/lib/supabase-types";
+import Link from "next/link";
 
 const toOrdinal = (n: number): string => {
   const s = ["th", "st", "nd", "rd"];
@@ -104,8 +105,13 @@ const CollegeCard = ({
                   <td>MINS</td>
                   <td>{collegeStatTotals?.total_minutes.toLocaleString()}</td>
                   <td>
-                    {collegeStatTotals?.total_minutes_ranking &&
-                      toOrdinal(collegeStatTotals.total_minutes_ranking)}
+                    <Link
+                      href={`/stat-rankings?stat=total_minutes&selectedCollegeId=${college.id}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      {collegeStatTotals?.total_minutes_ranking &&
+                        toOrdinal(collegeStatTotals.total_minutes_ranking)}
+                    </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight sm:max-w-none">
                     {leaders.minutes?.full_name}
@@ -115,8 +121,13 @@ const CollegeCard = ({
                   <td>PTS</td>
                   <td>{collegeStatTotals?.total_points.toLocaleString()}</td>
                   <td>
-                    {collegeStatTotals?.total_points_ranking &&
-                      toOrdinal(collegeStatTotals.total_points_ranking)}
+                    <Link
+                      href={`/stat-rankings?stat=total_points&selectedCollegeId=${college.id}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      {collegeStatTotals?.total_points_ranking &&
+                        toOrdinal(collegeStatTotals.total_points_ranking)}
+                    </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
                     {leaders.points?.full_name}
@@ -126,8 +137,13 @@ const CollegeCard = ({
                   <td>REB</td>
                   <td>{collegeStatTotals?.total_rebounds.toLocaleString()}</td>
                   <td>
-                    {collegeStatTotals?.total_rebounds_ranking &&
-                      toOrdinal(collegeStatTotals.total_rebounds_ranking)}
+                    <Link
+                      href={`/stat-rankings?stat=total_rebounds&selectedCollegeId=${college.id}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      {collegeStatTotals?.total_rebounds_ranking &&
+                        toOrdinal(collegeStatTotals.total_rebounds_ranking)}
+                    </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
                     {leaders.rebounds?.full_name}
@@ -137,8 +153,13 @@ const CollegeCard = ({
                   <td>AST</td>
                   <td>{collegeStatTotals?.total_assists.toLocaleString()}</td>
                   <td>
-                    {collegeStatTotals?.total_assists_ranking &&
-                      toOrdinal(collegeStatTotals.total_assists_ranking)}
+                    <Link
+                      href={`/stat-rankings?stat=total_assists&selectedCollegeId=${college.id}`}
+                      className="text-blue-600 hover:text-blue-800 hover:underline"
+                    >
+                      {collegeStatTotals?.total_assists_ranking &&
+                        toOrdinal(collegeStatTotals.total_assists_ranking)}
+                    </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
                     {leaders.assists?.full_name}
