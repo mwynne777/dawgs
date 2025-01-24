@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import collegesService from "../(services)/colleges-service";
+import type collegesService from "../(services)/colleges-service";
 import { useState } from "react";
 import StatTabs from "./stat-tabs";
 import Link from "next/link";
