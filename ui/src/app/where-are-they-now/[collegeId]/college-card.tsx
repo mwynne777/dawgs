@@ -85,8 +85,9 @@ const CollegeCard = ({
         }}
       >
         <div className="mt-3 text-center text-sm">
-          {playersWithStats.length} players have checked into an NBA game this
-          season
+          {playersWithStats.length} player
+          {playersWithStats.length === 1 ? " has" : "s have"} checked into an
+          NBA game this season
         </div>
         <div className="mt-4 flex flex-col items-center">
           <h3 className="text-lg font-semibold">2024-2025 Season:</h3>
@@ -96,7 +97,7 @@ const CollegeCard = ({
                 <tr>
                   <td>Stat</td>
                   <td>Total</td>
-                  <td>Rank</td>
+                  <td>College Rank</td>
                   <td className="max-w-[80px] align-top sm:max-w-none">
                     Leader
                   </td>

@@ -58,8 +58,8 @@ const RecentGameCard = ({
                     {perf.steals}
                   </td>
                   <td className="px-1 py-1">{perf.blocks}</td>
-                  <td className="hidden px-1 py-1 sm:table-cell">{`${perf.fg_a} - ${perf.fg_m}`}</td>
-                  <td className="hidden px-1 py-1 sm:table-cell">{`${perf.three_fg_a} - ${perf.three_fg_m}`}</td>
+                  <td className="hidden px-1 py-1 sm:table-cell">{`${perf.fg_m} - ${perf.fg_a}`}</td>
+                  <td className="hidden px-1 py-1 sm:table-cell">{`${perf.three_fg_m} - ${perf.three_fg_a}`}</td>
                   <td className="hidden px-1 py-1 sm:table-cell">
                     {perf.turnovers}
                   </td>

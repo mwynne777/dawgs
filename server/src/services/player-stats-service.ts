@@ -94,6 +94,7 @@ const playerStatsService = {
 
         const { error } = await supabase.from('player_stats').upsert(playerStatsToSave);
         if (error) {
+            console.error(error);
             throw error;
         }
         console.log(playerStatsToSave.length, 'player stats saved');
