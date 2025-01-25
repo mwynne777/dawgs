@@ -19,10 +19,10 @@ const ClientComponent = ({
     .slice(0, 5); // Limit to 5 suggestions
 
   return (
-    <div className="relative w-full max-w-xl">
+    <div className="relative w-full md:w-[500px] lg:w-[600px]">
       <input
         type="text"
-        className="w-full rounded-lg border border-gray-300 bg-white p-4 text-black"
+        className="w-full rounded-lg border border-gray-300 bg-white p-4 text-black md:w-[500px] lg:w-[600px]"
         placeholder="Enter a college name..."
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
