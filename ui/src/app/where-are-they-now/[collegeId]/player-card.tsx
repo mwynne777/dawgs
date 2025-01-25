@@ -35,15 +35,22 @@ const PlayerCard = async ({
   const teamAbbreviation = teams[player?.team_id ?? 0]?.abbreviation;
   return (
     <div
-      className="rounded-lg border border-gray-200 p-4"
+      className="rounded-lg border p-4"
       style={{
         backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), url(${process.env.NEXT_PUBLIC_NBA_IMAGE_STORE_BASE_URL}${teamAbbreviation}.png)`,
         // backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
+        borderColor: teams[player?.team_id ?? 0]?.color,
       }}
     >
-      <div className="flex justify-between pb-1.5">
+      <div
+        className="-mx-4 -mt-4 mb-4 flex justify-between rounded-t-lg px-4 pb-1.5 pt-1.5"
+        style={{
+          backgroundColor: teams[player?.team_id ?? 0]?.color,
+          color: "white",
+        }}
+      >
         <div className="mr-4 text-xl font-bold">
           {player?.players?.full_name}
         </div>
@@ -69,7 +76,7 @@ const PlayerCard = async ({
             <div className="flex gap-4">
               <div className="stat text-center">
                 <p className="text-sm text-gray-600">MINS</p>
-                <p className="font-medium">
+                <p className="text-lg font-medium">
                   {(
                     playerAndStats.totals?.minutes /
                     playerAndStats.totals?.games_played
@@ -78,7 +85,7 @@ const PlayerCard = async ({
               </div>
               <div className="stat text-center">
                 <p className="text-sm text-gray-600">PTS</p>
-                <p className="font-medium">
+                <p className="text-lg font-medium">
                   {(
                     playerAndStats.totals?.points /
                     playerAndStats.totals?.games_played
@@ -87,7 +94,7 @@ const PlayerCard = async ({
               </div>
               <div className="stat text-center">
                 <p className="text-sm text-gray-600">REB</p>
-                <p className="font-medium">
+                <p className="text-lg font-medium">
                   {(
                     playerAndStats.totals?.rebounds /
                     playerAndStats.totals?.games_played
@@ -96,7 +103,7 @@ const PlayerCard = async ({
               </div>
               <div className="stat text-center">
                 <p className="text-sm text-gray-600">AST</p>
-                <p className="font-medium">
+                <p className="text-lg font-medium">
                   {(
                     playerAndStats.totals?.assists /
                     playerAndStats.totals?.games_played
@@ -105,8 +112,8 @@ const PlayerCard = async ({
               </div>
             </div>
           </div>
-          <p className="mt-0.5 text-gray-600">
-            * {playerAndStats.totals?.games_played ?? 0} games played,{" "}
+          <p className="mt-0.5">
+            {playerAndStats.totals?.games_played ?? 0} games played,{" "}
             {playerAndStats.totals?.games_started ?? 0} starts
           </p>
         </div>
