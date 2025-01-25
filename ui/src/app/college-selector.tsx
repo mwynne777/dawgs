@@ -28,6 +28,7 @@ const ClientComponent = ({
         onChange={(e) => setInputValue(e.target.value)}
         onFocus={() => setShowSuggestions(true)}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+        autoFocus
       />
 
       {showSuggestions && inputValue && (
