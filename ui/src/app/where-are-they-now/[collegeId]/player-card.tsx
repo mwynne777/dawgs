@@ -37,7 +37,7 @@ const PlayerCard = async ({
     <div
       className="rounded-lg border p-4"
       style={{
-        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.96)), url(${process.env.NEXT_PUBLIC_NBA_IMAGE_STORE_BASE_URL}${teamAbbreviation}.png)`,
+        backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)), url(${process.env.NEXT_PUBLIC_NBA_IMAGE_STORE_BASE_URL}${teamAbbreviation}.png)`,
         // backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -51,11 +51,22 @@ const PlayerCard = async ({
           color: "white",
         }}
       >
-        <div className="mr-4 text-xl font-bold">
-          {player?.players?.full_name}
+        <div className="mr-4 flex items-center text-xl font-bold">
+          <pre className="font-bold">
+            {player?.players?.full_name?.split(" ")[0] +
+              "\n" +
+              player?.players?.full_name?.split(" ")[1]}
+          </pre>
         </div>
-        <div className="text-right">
-          {teams[player?.team_id ?? 0]?.displayName}
+        <div className="flex items-center text-right">
+          <pre className="font-bold">
+            {teams[player?.team_id ?? 0]?.displayName ===
+            "Portland Trail Blazers"
+              ? "Portland \nTrail Blazers"
+              : teams[player?.team_id ?? 0]?.displayName
+                  .split(/(?= [^ ]*$)/)
+                  .join("\n")}
+          </pre>
         </div>
       </div>
       <div className="flex justify-between">
