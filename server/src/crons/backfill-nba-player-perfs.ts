@@ -10,11 +10,13 @@ const main = async (rangeStart: number) => {
   }
 
   const result = await playerStatsService.getPlayerStats(rangeStart);
-  console.log('rangeStart', rangeStart, result);
+  console.log('rangeStart', rangeStart, 'savedCount', result.savedCount, 'existingCount', result.existingCount);
 
   if (result.existingCount < 100) {
     console.log(`existingCount: ${result.existingCount} is less than 100, continuing with rangeStart ${rangeStart + 100}`);
     main(rangeStart + 100);
+  } else {
+    console.log(`existingCount: ${result.existingCount}, stopping`);
   }
 };
 
