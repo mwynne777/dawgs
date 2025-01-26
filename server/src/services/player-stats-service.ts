@@ -39,6 +39,8 @@ type PlayerStatsResponse = {
   }
 }
 
+const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658']
+
 const playerStatsService = {
     getPlayerStatsByIds: async (ids: number[]) => {
         const { data, error } = await supabase
@@ -88,19 +90,21 @@ const playerStatsService = {
             };
         }));
 
-        const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(playerStatsToSave.map(playerStat => playerStat.id));
+        const sanitizedPlayerStatsToSave = playerStatsToSave.filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
 
-        console.log(`${existingPlayerStats.length} existing player stats, ${JSON.stringify(existingPlayerStats)}`);
+        const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id));
 
-        const { error } = await supabase.from('player_stats').upsert(playerStatsToSave);
+        // console.log(`${existingPlayerStats.length} existing player stats, ${JSON.stringify(existingPlayerStats)}`);
+
+        const { error } = await supabase.from('player_stats').upsert(sanitizedPlayerStatsToSave);
         if (error) {
             console.error(error);
             throw error;
         }
-        console.log(playerStatsToSave.length, 'player stats saved');
+        console.log(sanitizedPlayerStatsToSave.length, 'player stats saved');
 
         return {
-            savedCount: playerStatsToSave.length,
+            savedCount: sanitizedPlayerStatsToSave.length,
             existingCount: existingPlayerStats.length,
             existingIds: existingPlayerStats.map(playerStat => playerStat.id),
         }
