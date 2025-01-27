@@ -11,30 +11,51 @@ type StatRankingsClientComponentProps = {
     ReturnType<typeof collegesService.getCollegeStatTotals>
   >;
   colleges: Awaited<ReturnType<typeof collegesService.getColleges>>;
+  collegeSalaryTotals: Awaited<
+    ReturnType<typeof collegesService.getCollegeSalaryTotals>
+  >;
 };
 
 const StatRankingsClientComponent = ({
   collegeStatTotals,
   colleges,
+  collegeSalaryTotals,
 }: StatRankingsClientComponentProps) => {
   const searchParams = useSearchParams();
   const [stat, setStat] = useState(searchParams.get("stat") ?? "total_minutes");
   const selectedCollegeId = searchParams.get("selectedCollegeId");
 
-  // Sort colleges by the selected stat
-  const sortedColleges = collegeStatTotals
+  const sortedCollegesBySalary = collegeSalaryTotals
+    .filter(
+      (college) => college.total_salary !== null && college.total_salary > 0,
+    )
     .map((college) => {
       const collegeData = colleges.find((c) => c.id === college.college_id);
       return {
         ...college,
         display_name: `${collegeData?.name} ${collegeData?.mascot}`,
       };
-    })
-    .sort(
-      (a, b) =>
-        (b[stat as keyof typeof b] as number) -
-        (a[stat as keyof typeof a] as number),
-    );
+    });
+
+  // Sort colleges by the selected stat
+  const sortedColleges =
+    stat === "total_salary"
+      ? sortedCollegesBySalary
+      : collegeStatTotals
+          .map((college) => {
+            const collegeData = colleges.find(
+              (c) => c.id === college.college_id,
+            );
+            return {
+              ...college,
+              display_name: `${collegeData?.name} ${collegeData?.mascot}`,
+            };
+          })
+          .sort(
+            (a, b) =>
+              (b[stat as keyof typeof b] as number) -
+              (a[stat as keyof typeof a] as number),
+          );
   return (
     <div className="container mx-auto py-6">
       <StatTabs stat={stat} setStat={setStat} />
@@ -66,7 +87,10 @@ const StatRankingsClientComponent = ({
                 </Link>
               </td>
               <td className="px-4 py-2 text-right">
-                {college[stat as keyof typeof college]?.toLocaleString() || 0}
+                {stat === "total_salary"
+                  ? `$${college[stat as keyof typeof college]?.toLocaleString() || 0}`
+                  : college[stat as keyof typeof college]?.toLocaleString() ||
+                    0}
               </td>
             </tr>
           ))}

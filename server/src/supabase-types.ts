@@ -197,6 +197,13 @@ export type Database = {
           team_id: number | null
         }[]
       }
+      getcollegesalarytotals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          college_id: number
+          total_salary: number
+        }[]
+      }
       getcollegestattotals: {
         Args: Record<PropertyKey, never>
         Returns: {

@@ -12,6 +12,7 @@ const CollegeCard = ({
   college,
   allCollegeStatTotals,
   playersWithStats,
+  collegeSalaryTotals,
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
   allCollegeStatTotals: {
@@ -26,6 +27,10 @@ const CollegeCard = ({
     total_assists_ranking: number;
   }[];
   playersWithStats: PlayerGroup[];
+  collegeSalaryTotals: {
+    college_id: number;
+    total_salary: number;
+  }[];
 }) => {
   const collegeStatTotals = allCollegeStatTotals.find(
     (c) => c.college_id === college.id,
@@ -55,6 +60,19 @@ const CollegeCard = ({
     playersWithStats[0],
   );
 
+  const totalSalary = playersWithStats.reduce((sum, player) => {
+    return sum + (player.stats[0]?.players.salary ?? 0);
+  }, 0);
+
+  const salaryLeader = playersWithStats.reduce(
+    (max, player) =>
+      (player.stats[0]?.players.salary ?? 0) >
+      (max?.stats[0]?.players.salary ?? 0)
+        ? player
+        : max,
+    playersWithStats[0],
+  );
+
   const leaders = {
     minutes: {
       id: minutesLeader?.stats[0]?.players.id,
@@ -72,7 +90,19 @@ const CollegeCard = ({
       id: assistsLeader?.stats[0]?.players.id,
       full_name: assistsLeader?.stats[0]?.players.full_name,
     },
+    salary: {
+      id: salaryLeader?.stats[0]?.players.id,
+      full_name: salaryLeader?.stats[0]?.players.full_name,
+    },
   };
+
+  const nonNullSalaryTotals = collegeSalaryTotals.filter(
+    (c) => c.total_salary !== null,
+  );
+
+  const salaryRanking = nonNullSalaryTotals.findIndex(
+    (c) => c.college_id === college.id,
+  );
 
   return (
     <div className="mb-8 rounded-lg border border-gray-200">
@@ -98,9 +128,7 @@ const CollegeCard = ({
                   <td>Stat</td>
                   <td>Total</td>
                   <td>College Rank</td>
-                  <td className="max-w-[80px] align-top sm:max-w-none">
-                    Leader
-                  </td>
+                  <td className="max-w-[80px] sm:max-w-none">Leader</td>
                 </tr>
                 <tr>
                   <td>MINS</td>
@@ -164,6 +192,25 @@ const CollegeCard = ({
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
                     {leaders.assists?.full_name}
+                  </td>
+                </tr>
+                <tr>
+                  <td>SALARY</td>
+                  <td>${totalSalary.toLocaleString()}</td>
+                  <td>
+                    {salaryRanking ? (
+                      <Link
+                        href={`/stat-rankings?stat=total_salary&selectedCollegeId=${college.id}`}
+                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {toOrdinal(salaryRanking)}
+                      </Link>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                  <td className="max-w-[80px] break-words text-xs leading-tight">
+                    {leaders.salary?.full_name}
                   </td>
                 </tr>
               </tbody>

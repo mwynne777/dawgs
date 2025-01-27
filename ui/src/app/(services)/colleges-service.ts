@@ -71,7 +71,14 @@ const collegesService = {
     }));
 
     return withRankings;
-  }
+  },
+  getCollegeSalaryTotals: async () => {
+    const { data, error } = await supabase.rpc("getcollegesalarytotals");
+    if (error) {
+      throw error;
+    }
+    return data;
+  },
 };
 
 export default collegesService;

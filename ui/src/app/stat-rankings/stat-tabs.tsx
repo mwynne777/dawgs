@@ -3,10 +3,11 @@
 import { useSearchParams } from "next/navigation";
 
 const statOptions = [
-  { id: "total_minutes", label: "Minutes" },
-  { id: "total_points", label: "Points" },
-  { id: "total_rebounds", label: "Rebounds" },
-  { id: "total_assists", label: "Assists" },
+  { id: "total_minutes", label: "MIN" },
+  { id: "total_points", label: "PTS" },
+  { id: "total_rebounds", label: "REB" },
+  { id: "total_assists", label: "AST" },
+  { id: "total_salary", label: "SALARY" },
 ];
 
 const StatTabs = ({
