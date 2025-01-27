@@ -10,7 +10,8 @@ const main = async (rangeStart: number) => {
   }
 
   const result = await playerStatsService.getPlayerStats(rangeStart);
-  console.log('rangeStart', rangeStart, 'savedCount', result.savedCount, 'existingCount', result.existingCount);
+  const easternTime = new Date().toLocaleString("en-US", { timeZone: "America/New_York" });
+  console.log('rangeStart', rangeStart, 'savedCount', result.savedCount, 'existingCount', result.existingCount, 'easternTime', easternTime);
 
   if (result.existingCount < 100) {
     console.log(`existingCount: ${result.existingCount} is less than 100, continuing with rangeStart ${rangeStart + 100}`);
