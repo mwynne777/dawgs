@@ -159,7 +159,7 @@ export type Database = {
           college_id?: number | null
           created_at?: string
           full_name: string
-          id: number
+          id?: number
           league_id?: number | null
           nat_stat_id?: number | null
           salary?: number | null

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
+import { supabase } from "../initSupabase";
 import { teams } from "../teams";
-// import { supabase } from "../initSupabase";
 
 type PlayerKey = `player_${number}`
 type SeasonKey = `season_${number}`
@@ -86,9 +86,9 @@ const playerService = {
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     return {id: playerId, name: natStatPlayer.players[`player_${playerId}`]?.name ?? ''};
   },
-  getPlayersFromAPI: async (rangeStart: number) => {
+  getPlayersFromAPI: async (rangeStart: number, year: number = 2025) => {
     const response = await fetch(
-      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${rangeStart > 0 ? `_/${rangeStart}` : ''}`,
+      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${year}/${rangeStart > 0 ? `_/${rangeStart}` : ''}`,
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     const players = Object.values(natStatPlayer.players);
@@ -139,11 +139,11 @@ const playerService = {
 //     }
 //     return null;
 //   },
-//   getPlayersFromDB: async (playerNames: string[]) => {
-//     const likePlayerNames = playerNames.map(name => `%${name}%`);
-//     const { data, error } = await supabase.rpc('get_players_by_similar_name', {names: likePlayerNames});
-//     return data;
-//   },
+    getPlayersFromDB: async (playerNames: string[]) => {
+        const likePlayerNames = playerNames.map(name => `%${name}%`);
+        const { data, error } = await supabase.rpc('get_players_by_similar_name', {names: likePlayerNames});
+        return data;
+    },
 //   mapNatStatPlayerToDB: async (natStatPlayerId: number) => { 
 //     const natStatPlayer = await playerService.getPlayerFromAPI(natStatPlayerId);
 //     const playerFromDB = await playerService.getPlayerFromDB(natStatPlayer.name);
@@ -160,36 +160,45 @@ const playerService = {
 //     }
 //     console.log(`Player ${natStatPlayer.name} not found in DB, doing nothing`);
 //   },
-//   mapNatStatPlayersToDB: async (rangeStart: number) => { 
-//     const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart);
-//     const natStatPlayerNames = natStatPlayers.map(player => player.name);
-//     const playersFromDB = await playerService.getPlayersFromDB(natStatPlayerNames);
-//     if(playersFromDB) {
-//         // We found some players in the DB, so we can update the nat_stat_id
-//         const matchedPlayers = playersFromDB.map(player => {
-//             const natStatPlayer = natStatPlayers.find(nsp => player.full_name.includes(nsp.name));
-//             if(natStatPlayer) {
-//                 return { 
-//                     ...player,
-//                     nat_stat_id: parseInt(natStatPlayer.code)
-//                 }
-//             }
-//         })
-//         const unmatchedPlayers = natStatPlayers.filter(player => !playersFromDB.some(p => p.full_name.includes(player.name)));
-//         console.log(`Found ${playersFromDB.length} of ${natStatPlayers.length} players in the DB, unmatched players:`);
-//         console.log(unmatchedPlayers);
-//         const { data, error } = await supabase
-//         .from("players")
-//         .upsert(matchedPlayers.filter(player => player !== undefined));
-//         if(error) {
-//             console.error(error);
-//         }
-//         return data;
-//     } else {
-//         console.log(`No players found in the DB`);
-//     }
-//     // console.log(`Player ${natStatPlayer.name} not found in DB, doing nothing`);
-//   }
+  mapNatStatPlayersToDB: async (rangeStart: number, year: number = 2025) => { 
+    const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart, year);
+    const natStatPlayerNames = natStatPlayers.map(player => player.name);
+    const playersFromDB = await playerService.getPlayersFromDB(natStatPlayerNames);
+    if(playersFromDB) {
+        // We found some players in the DB, so we can update the nat_stat_id
+        const matchedPlayers = playersFromDB.map(player => {
+            const natStatPlayer = natStatPlayers.find(nsp => player.full_name.includes(nsp.name));
+            if(natStatPlayer) {
+                return { 
+                    ...player,
+                    nat_stat_id: parseInt(natStatPlayer.code)
+                }
+            }
+        })
+        const unmatchedPlayers = natStatPlayers.filter(player => !playersFromDB.some(p => p.full_name.includes(player.name)));
+
+        console.log(`Found ${playersFromDB.length} of ${natStatPlayers.length} players in the DB, unmatched players:`);
+        console.log('unmatchedPlayers', unmatchedPlayers);
+
+        const unmatchedPlayersToInsert = unmatchedPlayers.map(player => ({
+            full_name: player.name,
+            nat_stat_id: parseInt(player.code),
+
+        }));
+        
+        const { data, error } = await supabase
+        .from("players")
+        .upsert(unmatchedPlayersToInsert.filter(player => player !== undefined));
+
+        if(error) {
+            console.error(error);
+        }
+        return data;
+    } else {
+        console.log(`No players found in the DB`);
+    }
+    // console.log(`Player ${natStatPlayer.name} not found in DB, doing nothing`);
+  }
 };
 
 export default playerService;
