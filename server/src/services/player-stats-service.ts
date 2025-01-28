@@ -39,7 +39,7 @@ type PlayerStatsResponse = {
   }
 }
 
-const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658']
+const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658', '12193210']
 
 const playerStatsService = {
     getPlayerStatsByIds: async (ids: number[]) => {
