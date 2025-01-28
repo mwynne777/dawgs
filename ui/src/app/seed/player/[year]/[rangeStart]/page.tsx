@@ -10,7 +10,7 @@ export default async function Page({
   const result = await fetch(
     `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}seed/players?range_start=${rangeStartNumber}&year=${yearNumber}`,
   );
-  const data = await result.json();
+  const data = (await result.json()) as null;
   console.log("data", data);
 
   return <div>Getting 100 players, starting from {rangeStartNumber}</div>;
