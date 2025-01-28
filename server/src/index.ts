@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import playerStatsService from "./services/player-stats-service";
 import playerService from "./services/player-service";
+import collegeService from "./services/college-service";
 
 dotenv.config();
 
@@ -13,9 +14,17 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.get("/seed/players", async (req: Request, res: Response) => {
-  console.log('This is the endpoint')
   try {
     const result = await playerService.mapNatStatPlayersToDB(parseInt(req.query.range_start as string), parseInt(req.query.year as string));
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/seed/colleges", async (req: Request, res: Response) => {
+  try {
+    const result = await collegeService.mapCollegesToDB(parseInt(req.query.range_start as string));
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
