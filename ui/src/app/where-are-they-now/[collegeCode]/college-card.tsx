@@ -100,9 +100,8 @@ const CollegeCard = ({
     (c) => c.total_salary !== null,
   );
 
-  const salaryRanking = nonNullSalaryTotals.findIndex(
-    (c) => c.college_code === college.code,
-  );
+  const salaryRanking =
+    nonNullSalaryTotals.findIndex((c) => c.college_code === college.code) + 1;
 
   return (
     <div className="mb-8 rounded-lg border border-gray-200">
