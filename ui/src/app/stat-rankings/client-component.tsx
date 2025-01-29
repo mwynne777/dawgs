@@ -23,7 +23,7 @@ const StatRankingsClientComponent = ({
 }: StatRankingsClientComponentProps) => {
   const searchParams = useSearchParams();
   const [stat, setStat] = useState(searchParams.get("stat") ?? "total_minutes");
-  const selectedCollegeId = searchParams.get("selectedCollegeId");
+  const selectedCollegeCode = searchParams.get("selectedCollegeCode");
 
   const sortedCollegesBySalary = collegeSalaryTotals
     .filter(
@@ -72,7 +72,7 @@ const StatRankingsClientComponent = ({
             <tr
               key={college.college_code}
               className={`border-t ${
-                college.college_code === selectedCollegeId ? "bg-blue-50" : ""
+                college.college_code === selectedCollegeCode ? "bg-blue-50" : ""
               }`}
             >
               <td className="px-4 py-2">{index + 1}</td>

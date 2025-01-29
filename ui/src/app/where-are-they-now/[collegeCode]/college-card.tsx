@@ -135,7 +135,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_minutes.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_minutes&selectedCollegeId=${college.id}`}
+                      href={`/stat-rankings?stat=total_minutes&selectedCollegeCode=${college.code}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_minutes_ranking &&
@@ -151,7 +151,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_points.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_points&selectedCollegeId=${college.id}`}
+                      href={`/stat-rankings?stat=total_points&selectedCollegeCode=${college.code}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_points_ranking &&
@@ -167,7 +167,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_rebounds.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_rebounds&selectedCollegeId=${college.id}`}
+                      href={`/stat-rankings?stat=total_rebounds&selectedCollegeCode=${college.code}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_rebounds_ranking &&
@@ -183,7 +183,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_assists.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_assists&selectedCollegeId=${college.id}`}
+                      href={`/stat-rankings?stat=total_assists&selectedCollegeCode=${college.code}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_assists_ranking &&
@@ -200,7 +200,7 @@ const CollegeCard = ({
                   <td>
                     {salaryRanking ? (
                       <Link
-                        href={`/stat-rankings?stat=total_salary&selectedCollegeId=${college.id}`}
+                        href={`/stat-rankings?stat=total_salary&selectedCollegeCode=${college.code}`}
                         className="text-blue-600 hover:text-blue-800 hover:underline"
                       >
                         {toOrdinal(salaryRanking)}
