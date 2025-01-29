@@ -6,16 +6,15 @@ import CollegeCard from "./college-card";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ collegeId: string }>;
+  params: Promise<{ collegeCode: string }>;
 }) {
-  const { collegeId: collegeIdString } = await params;
-  const collegeId = parseInt(collegeIdString);
+  const { collegeCode } = await params;
 
   const [college, playersWithStats, collegeStatTotals, collegeSalaryTotals] =
     await Promise.all([
-      collegesService.getCollegeById(collegeId),
+      collegesService.getCollegeByCode(collegeCode),
       fetch(
-        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/college-id?college_id=${collegeId}`,
+        `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/college-code?college_code=${collegeCode}`,
       ).then((res) => res.json() as Promise<PlayerWithStats[]>),
       collegesService.getCollegeStatTotalsWithRankings(),
       collegesService.getCollegeSalaryTotals(),

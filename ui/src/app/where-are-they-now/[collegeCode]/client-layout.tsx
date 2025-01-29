@@ -7,23 +7,21 @@ import { Pencil2Icon, Cross1Icon } from "@radix-ui/react-icons";
 
 const ClientLayout = ({
   colleges,
-  collegeId,
+  collegeCode,
   children,
 }: {
   colleges: Awaited<ReturnType<typeof collegesService.getColleges>>;
-  collegeId: number;
+  collegeCode: string;
   children: React.ReactNode;
 }) => {
-  const college = colleges.find((college) => college.id === collegeId)!;
+  const college = colleges.find((college) => college.code === collegeCode)!;
   const [showSelector, setShowSelector] = useState(false);
 
   return (
     <div>
       <div className="sticky top-0 z-20 bg-white p-4 shadow-md">
         <h1 className="flex items-center justify-center gap-2 text-center text-xl font-bold">
-          <span>
-            {college.name} {college.mascot}
-          </span>
+          <span>{college.name}</span>
           <div
             className="cursor-pointer rounded-full p-2 hover:bg-gray-100"
             onClick={() => setShowSelector(!showSelector)}

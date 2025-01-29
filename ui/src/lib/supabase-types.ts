@@ -12,6 +12,27 @@ export type Database = {
     Tables: {
       colleges: {
         Row: {
+          code: string
+          created_at: string
+          id: number
+          name: string
+        }
+        Insert: {
+          code: string
+          created_at?: string
+          id?: number
+          name: string
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      colleges_deprecated: {
+        Row: {
           created_at: string
           id: number
           mascot: string
@@ -59,6 +80,7 @@ export type Database = {
         Row: {
           assists: number | null
           blocks: number | null
+          college_code: string | null
           college_id: number | null
           created_at: string
           fg_a: number | null
@@ -85,6 +107,7 @@ export type Database = {
         Insert: {
           assists?: number | null
           blocks?: number | null
+          college_code?: string | null
           college_id?: number | null
           created_at?: string
           fg_a?: number | null
@@ -111,6 +134,7 @@ export type Database = {
         Update: {
           assists?: number | null
           blocks?: number | null
+          college_code?: string | null
           college_id?: number | null
           created_at?: string
           fg_a?: number | null
@@ -136,6 +160,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "player_stats_college_code_fkey"
+            columns: ["college_code"]
+            isOneToOne: false
+            referencedRelation: "colleges"
+            referencedColumns: ["code"]
+          },
+          {
             foreignKeyName: "player_stats_nat_stat_player_id_fkey"
             columns: ["nat_stat_player_id"]
             isOneToOne: false
@@ -146,6 +177,7 @@ export type Database = {
       }
       players: {
         Row: {
+          college_code: string | null
           college_id: number | null
           created_at: string
           full_name: string
@@ -156,6 +188,7 @@ export type Database = {
           team_id: number | null
         }
         Insert: {
+          college_code?: string | null
           college_id?: number | null
           created_at?: string
           full_name: string
@@ -166,6 +199,7 @@ export type Database = {
           team_id?: number | null
         }
         Update: {
+          college_code?: string | null
           college_id?: number | null
           created_at?: string
           full_name?: string
@@ -175,28 +209,15 @@ export type Database = {
           salary?: number | null
           team_id?: number | null
         }
-        Relationships: []
-      }
-      schools: {
-        Row: {
-          code: string
-          created_at: string
-          id: number
-          name: string
-        }
-        Insert: {
-          code: string
-          created_at?: string
-          id?: number
-          name: string
-        }
-        Update: {
-          code?: string
-          created_at?: string
-          id?: number
-          name?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "players_college_code_fkey"
+            columns: ["college_code"]
+            isOneToOne: false
+            referencedRelation: "colleges"
+            referencedColumns: ["code"]
+          },
+        ]
       }
     }
     Views: {
@@ -208,6 +229,7 @@ export type Database = {
           names: string[]
         }
         Returns: {
+          college_code: string | null
           college_id: number | null
           created_at: string
           full_name: string
@@ -221,14 +243,14 @@ export type Database = {
       getcollegesalarytotals: {
         Args: Record<PropertyKey, never>
         Returns: {
-          college_id: number
+          college_code: string
           total_salary: number
         }[]
       }
       getcollegestattotals: {
         Args: Record<PropertyKey, never>
         Returns: {
-          college_id: number
+          college_code: string
           total_minutes: number
           total_points: number
           total_rebounds: number

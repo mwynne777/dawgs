@@ -16,7 +16,7 @@ const CollegeCard = ({
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
   allCollegeStatTotals: {
-    college_id: number;
+    college_code: string;
     total_minutes: number;
     total_points: number;
     total_rebounds: number;
@@ -28,12 +28,12 @@ const CollegeCard = ({
   }[];
   playersWithStats: PlayerGroup[];
   collegeSalaryTotals: {
-    college_id: number;
+    college_code: string;
     total_salary: number;
   }[];
 }) => {
   const collegeStatTotals = allCollegeStatTotals.find(
-    (c) => c.college_id === college.id,
+    (c) => c.college_code === college.code,
   );
 
   const minutesLeader = playersWithStats.reduce(
@@ -101,7 +101,7 @@ const CollegeCard = ({
   );
 
   const salaryRanking = nonNullSalaryTotals.findIndex(
-    (c) => c.college_id === college.id,
+    (c) => c.college_code === college.code,
   );
 
   return (

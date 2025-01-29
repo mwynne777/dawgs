@@ -60,7 +60,7 @@ const playerStatsService = {
         
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
-            const college = await supabase.from('players').select('college_id').eq('nat_stat_id', parseInt(data.performances[key]['player-code'])).single();
+            const college = await supabase.from('players').select('college_id, college_code').eq('nat_stat_id', parseInt(data.performances[key]['player-code'])).single();
             const performance = data.performances[key];
             return {
                 id: parseInt(performance.id),
@@ -87,6 +87,7 @@ const playerStatsService = {
                 turnovers: parseInt(performance.to),
                 fouls: parseInt(performance.pf),
                 created_at: new Date().toISOString(),
+                college_code: college.data?.college_code ?? null,
             };
         }));
 
@@ -109,8 +110,8 @@ const playerStatsService = {
             existingIds: existingPlayerStats.map(playerStat => playerStat.id),
         }
     },
-    getPlayerStatsByCollegeIDFromDB: async (collegeId: number) => {
-        const { data, error } = await supabase.from('player_stats').select('*, players(*)').eq('college_id', collegeId).order('game_date', { ascending: false });
+    getPlayerStatsByCollegeCodeFromDB: async (collegeCode: string) => {
+        const { data, error } = await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).order('game_date', { ascending: false });
         if (error) {
             throw error;
         }

@@ -30,10 +30,10 @@ const StatRankingsClientComponent = ({
       (college) => college.total_salary !== null && college.total_salary > 0,
     )
     .map((college) => {
-      const collegeData = colleges.find((c) => c.id === college.college_id);
+      const collegeData = colleges.find((c) => c.code === college.college_code);
       return {
         ...college,
-        display_name: `${collegeData?.name} ${collegeData?.mascot}`,
+        display_name: collegeData?.name,
       };
     });
 
@@ -44,11 +44,11 @@ const StatRankingsClientComponent = ({
       : collegeStatTotals
           .map((college) => {
             const collegeData = colleges.find(
-              (c) => c.id === college.college_id,
+              (c) => c.code === college.college_code,
             );
             return {
               ...college,
-              display_name: `${collegeData?.name} ${collegeData?.mascot}`,
+              display_name: collegeData?.name,
             };
           })
           .sort(
@@ -70,17 +70,15 @@ const StatRankingsClientComponent = ({
         <tbody>
           {sortedColleges.map((college, index) => (
             <tr
-              key={college.college_id}
+              key={college.college_code}
               className={`border-t ${
-                college.college_id === parseInt(selectedCollegeId ?? "0")
-                  ? "bg-blue-50"
-                  : ""
+                college.college_code === selectedCollegeId ? "bg-blue-50" : ""
               }`}
             >
               <td className="px-4 py-2">{index + 1}</td>
               <td className="px-4 py-2">
                 <Link
-                  href={`/where-are-they-now/${college.college_id}`}
+                  href={`/where-are-they-now/${college.college_code}`}
                   className="text-blue-700 hover:text-blue-900 hover:underline"
                 >
                   {college.display_name}
@@ -88,9 +86,9 @@ const StatRankingsClientComponent = ({
               </td>
               <td className="px-4 py-2 text-right">
                 {stat === "total_salary"
-                  ? `$${college[stat as keyof typeof college]?.toLocaleString() || 0}`
-                  : college[stat as keyof typeof college]?.toLocaleString() ||
-                    0}
+                  ? `$${college[stat as keyof typeof college]?.toLocaleString() ?? 0}`
+                  : (college[stat as keyof typeof college]?.toLocaleString() ??
+                    0)}
               </td>
             </tr>
           ))}

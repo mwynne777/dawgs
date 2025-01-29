@@ -1,7 +1,5 @@
 import { teams } from "~/app/(common)/teams";
-import RecentGameCard, {
-  PlayerWithStats,
-} from "~/app/where-are-they-now/[collegeId]/recent-game-card";
+import RecentGameCard, { PlayerWithStats } from "./recent-game-card";
 
 export type PlayerGroup = {
   stats: PlayerWithStats[];

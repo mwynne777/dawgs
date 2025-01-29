@@ -15,7 +15,7 @@ const collegeService = {
     },
     mapCollegesToDB: async (rangeStart: number) => {
         const collegesToInsert = await collegeService.getCollegesFromAPI(rangeStart);
-        const { data, error } = await supabase.from('schools').upsert(collegesToInsert);
+        const { data, error } = await supabase.from('colleges').upsert(collegesToInsert);
         if (error) {
             console.error('Error inserting colleges into database', error);
             throw error;

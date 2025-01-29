@@ -6,14 +6,13 @@ const Layout = async ({
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ collegeId: string }>;
+  params: Promise<{ collegeCode: string }>;
 }) => {
-  const { collegeId: collegeIdString } = await params;
-  const collegeId = parseInt(collegeIdString);
+  const { collegeCode } = await params;
   const colleges = await collegesService.getColleges();
 
   return (
-    <ClientLayout colleges={colleges} collegeId={collegeId}>
+    <ClientLayout colleges={colleges} collegeCode={collegeCode}>
       {children}
     </ClientLayout>
   );

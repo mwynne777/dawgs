@@ -8,11 +8,11 @@ const collegesService = {
     }
     return data;
   },
-  getCollegeById: async (collegeId: number) => {
+  getCollegeByCode: async (collegeCode: string) => {
     const { data, error } = await supabase
       .from("colleges")
       .select("*")
-      .eq("id", collegeId)
+      .eq("code", collegeCode)
       .single();
 
     if (error) {
