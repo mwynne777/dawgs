@@ -8,7 +8,9 @@ const Layout = async ({
   children: React.ReactNode;
   params: Promise<{ collegeCode: string }>;
 }) => {
-  const { collegeCode } = await params;
+  const { collegeCode: collegeCodeBeforeCaps } = await params;
+  const collegeCode = collegeCodeBeforeCaps.toUpperCase();
+
   const colleges = await collegesService.getColleges();
 
   return (

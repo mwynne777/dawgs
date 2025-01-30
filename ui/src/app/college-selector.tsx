@@ -40,7 +40,9 @@ const ClientComponent = ({
               onClick={() => {
                 setInputValue(college.name);
                 setShowSuggestions(false);
-                router.push(`/where-are-they-now/${college.id}`);
+                router.push(
+                  `/where-are-they-now/${college.code.toUpperCase()}`,
+                );
               }}
             >
               {college.name}

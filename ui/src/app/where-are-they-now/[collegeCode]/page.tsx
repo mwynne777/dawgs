@@ -8,8 +8,8 @@ export default async function Page({
 }: {
   params: Promise<{ collegeCode: string }>;
 }) {
-  const { collegeCode } = await params;
-
+  const { collegeCode: collegeCodeBeforeCaps } = await params;
+  const collegeCode = collegeCodeBeforeCaps.toUpperCase();
   const [college, playersWithStats, collegeStatTotals, collegeSalaryTotals] =
     await Promise.all([
       collegesService.getCollegeByCode(collegeCode),

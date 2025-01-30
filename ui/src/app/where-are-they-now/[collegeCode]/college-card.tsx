@@ -105,14 +105,7 @@ const CollegeCard = ({
 
   return (
     <div className="mb-8 rounded-lg border border-gray-200">
-      <div
-        className="flex flex-col items-center justify-center rounded-lg p-4 pt-0"
-        style={{
-          backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url(${process.env.NEXT_PUBLIC_NCAA_IMAGE_STORE_BASE_URL}${college.id}.png)`,
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
+      <div className="flex flex-col items-center justify-center rounded-lg p-4 pt-0">
         <div className="mt-3 text-center text-sm">
           {playersWithStats.length} player
           {playersWithStats.length === 1 ? " has" : "s have"} checked into an
