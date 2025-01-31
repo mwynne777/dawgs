@@ -117,8 +117,10 @@ const playerStatsService = {
             existingIds: existingPlayerStats.map(playerStat => playerStat.id),
         }
     },
-    getPlayerStatsByCollegeCodeFromDB: async (collegeCode: string) => {
-        const { data, error } = await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).order('game_date', { ascending: false });
+    getPlayerStatsByCollegeCodeFromDB: async (collegeCode: string, year?: number) => {
+        const { data, error } = year ? 
+            await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).eq('season', year).order('game_date', { ascending: false }) 
+            : await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).order('game_date', { ascending: false });
         if (error) {
             throw error;
         }

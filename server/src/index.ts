@@ -41,7 +41,7 @@ app.get("/seed/player-stats", async (req: Request, res: Response) => {
 });
 
 app.get("/player-stats/college-code", async (req: Request, res: Response) => {
-  const result = await playerStatsService.getPlayerStatsByCollegeCodeFromDB(req.query.college_code as string);
+  const result = await playerStatsService.getPlayerStatsByCollegeCodeFromDB(req.query.college_code as string, req.query.year ? parseInt(req.query.year as string) : undefined);
   res.status(200).json(result);
 });
 

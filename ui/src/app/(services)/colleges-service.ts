@@ -21,8 +21,10 @@ const collegesService = {
 
     return data;
   },
-  getCollegeStatTotals: async () => {
-    const { data, error } = await supabase.rpc("getcollegestattotals");
+  getCollegeStatTotals: async (year?: number) => {
+    const { data, error } = await supabase.rpc("getcollegestattotals", {
+      year_param: year,
+    })
     
     if (error) {
       throw error;
@@ -30,8 +32,8 @@ const collegesService = {
 
     return data;
   },
-  getCollegeStatTotalsWithRankings: async () => {
-    const data = await collegesService.getCollegeStatTotals();
+  getCollegeStatTotalsWithRankings: async (year?: number) => {
+    const data = await collegesService.getCollegeStatTotals(year)
     // Create ranking maps for each category
     const minutesRankings = new Map(
       data

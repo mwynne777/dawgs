@@ -251,7 +251,9 @@ export type Database = {
         }[]
       }
       getcollegestattotals: {
-        Args: Record<PropertyKey, never>
+        Args: {
+          year_param?: number
+        }
         Returns: {
           college_code: string
           total_minutes: number
