@@ -88,7 +88,7 @@ const playerService = {
   },
   getPlayersFromAPI: async (rangeStart: number, year: number = 2025) => {
     const response = await fetch(
-      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${year}/${rangeStart > 0 ? `_/${rangeStart}` : ''}`,
+      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${year}/${rangeStart > 0 ? `${rangeStart}` : ''}`,
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     const players = Object.values(natStatPlayer.players);
@@ -160,7 +160,7 @@ const playerService = {
 //     }
 //     console.log(`Player ${natStatPlayer.name} not found in DB, doing nothing`);
 //   },
-  mapNatStatPlayersToDB: async (rangeStart: number, year: number = 2025) => { 
+  mapNatStatPlayersToDB: async (rangeStart: number, year: number = 2025) => {
     const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart, year);
     const natStatPlayerNames = natStatPlayers.map(player => player.name);
     const playersFromDB = await playerService.getPlayersFromDB(natStatPlayerNames);

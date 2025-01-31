@@ -97,6 +97,7 @@ export type Database = {
           points: number | null
           rebounds: number | null
           rebounds_off: number | null
+          season: number
           started: boolean | null
           steals: number | null
           team_id: number
@@ -124,6 +125,7 @@ export type Database = {
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null
+          season?: number
           started?: boolean | null
           steals?: number | null
           team_id: number
@@ -151,6 +153,7 @@ export type Database = {
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null
+          season?: number
           started?: boolean | null
           steals?: number | null
           team_id?: number

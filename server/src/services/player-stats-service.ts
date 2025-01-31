@@ -41,6 +41,11 @@ type PlayerStatsResponse = {
 
 const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658', '12193210']
 
+const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
+    '119696': '58075879', // Derrick Jones Jr.
+    '538727': '3134324', // Daniel Theis
+}
+
 const playerStatsService = {
     getPlayerStatsByIds: async (ids: number[]) => {
         const { data, error } = await supabase
@@ -54,8 +59,9 @@ const playerStatsService = {
         
         return data;
       },
-    getPlayerStats: async (rangeStart: number) => {
-        const response = await fetch(`${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/2025/${rangeStart}`);
+    getPlayerStats: async (rangeStart: number, year: number = 2025) => {
+        console.log('Hitting', `${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/${year}/${rangeStart}`)
+        const response = await fetch(`${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/${year}/${rangeStart}`);
         const data = await response.json() as PlayerStatsResponse;
         
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
@@ -64,7 +70,7 @@ const playerStatsService = {
             const performance = data.performances[key];
             return {
                 id: parseInt(performance.id),
-                nat_stat_player_id: parseInt(performance['player-code']),
+                nat_stat_player_id: parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code']),
                 college_id: college.data?.college_id ?? null,
                 game_id: parseInt(performance.game.code),
                 game_date: performance.game.gameday,
@@ -88,6 +94,7 @@ const playerStatsService = {
                 fouls: parseInt(performance.pf),
                 created_at: new Date().toISOString(),
                 college_code: college.data?.college_code ?? null,
+                season: year,
             };
         }));
 

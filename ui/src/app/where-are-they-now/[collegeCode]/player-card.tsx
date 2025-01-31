@@ -51,7 +51,7 @@ const PlayerCard = async ({
           <pre className="font-bold">
             {teams[player?.team_id ?? 0]?.displayName ===
             "Portland Trail Blazers"
-              ? "Portland \nTrail Blazers"
+              ? "Portland\nTrail Blazers"
               : teams[player?.team_id ?? 0]?.displayName
                   .split(/(?= [^ ]*$)/)
                   .join("\n")}
