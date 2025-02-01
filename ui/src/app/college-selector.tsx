@@ -1,57 +1,83 @@
 "use client";
-import { useState } from "react";
-import type collegesService from "./(services)/colleges-service";
+
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+
+import { cn } from "../lib/utils";
+import { Button } from "../components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../components/ui/popover";
+import collegesService from "./(services)/colleges-service";
 import { useRouter } from "next/navigation";
 
-const ClientComponent = ({
+const CollegeSelector = ({
   colleges,
 }: {
   colleges: Awaited<ReturnType<typeof collegesService.getColleges>>;
 }) => {
-  const [inputValue, setInputValue] = useState("");
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
   const router = useRouter();
 
-  const filteredColleges = colleges
-    .filter((college) =>
-      college.name.toLowerCase().includes(inputValue.toLowerCase()),
-    )
-    .slice(0, 5); // Limit to 5 suggestions
-
   return (
-    <div className="relative w-full md:w-[500px] lg:w-[600px]">
-      <input
-        type="text"
-        className="w-full rounded-lg border border-gray-300 bg-white p-4 text-black md:w-[500px] lg:w-[600px]"
-        placeholder="Enter a college name..."
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onFocus={() => setShowSuggestions(true)}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-        autoFocus
-      />
-
-      {showSuggestions && inputValue && (
-        <ul className="absolute z-10 mt-1 w-full rounded-lg border border-gray-300 bg-white shadow-lg">
-          {filteredColleges.map((college) => (
-            <li
-              key={college.id}
-              className="cursor-pointer px-4 py-2 text-black hover:bg-gray-100"
-              onClick={() => {
-                setInputValue(college.name);
-                setShowSuggestions(false);
-                router.push(
-                  `/where-are-they-now/${college.code.toUpperCase()}`,
-                );
-              }}
-            >
-              {college.name}
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-[230px] justify-between sm:w-72"
+        >
+          {value
+            ? colleges.find((college) => college.name === value)?.name
+            : "Select college..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[230px] p-0 sm:w-72">
+        <Command>
+          <CommandInput placeholder="Select college..." />
+          <CommandList>
+            <CommandEmpty>No college found.</CommandEmpty>
+            <CommandGroup>
+              {colleges.map((college) => (
+                <CommandItem
+                  key={college.code}
+                  value={college.name}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue);
+                    setOpen(false);
+                    router.push(
+                      `/where-are-they-now/${college.code.toUpperCase()}`,
+                    );
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === college.name ? "opacity-100" : "opacity-0",
+                    )}
+                  />
+                  {college.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>
   );
 };
 
-export default ClientComponent;
+export default CollegeSelector;
