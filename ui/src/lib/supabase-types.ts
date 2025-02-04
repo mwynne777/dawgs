@@ -55,6 +55,44 @@ export type Database = {
         }
         Relationships: []
       }
+      draft_picks: {
+        Row: {
+          created_at: string
+          id: number
+          pick_number: number
+          player_id: number
+          team_abbreviation: string
+          traded_to_team_abbreviation: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          pick_number: number
+          player_id: number
+          team_abbreviation: string
+          traded_to_team_abbreviation?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          pick_number?: number
+          player_id?: number
+          team_abbreviation?: string
+          traded_to_team_abbreviation?: string | null
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "draft_picks_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leagues: {
         Row: {
           abbreviation: string

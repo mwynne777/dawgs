@@ -44,6 +44,12 @@ const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658'
 const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '119696': '58075879', // Derrick Jones Jr.
     '538727': '3134324', // Daniel Theis
+    '538998': '58075619', // Bogdan Bogdanovic
+    '586': '58075621', // Clint Capela
+    '52566256': '58075620', // Kobe Bufkin
+    '54022359': '58076129', // Mason Jones
+    '56876648': '58119281', // Jaylen Nowell
+    '0': '40737320', // David Duke, but probably need to comment out
 }
 
 const playerStatsService = {
