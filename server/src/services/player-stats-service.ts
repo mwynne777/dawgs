@@ -125,9 +125,10 @@ const playerStatsService = {
     },
     getPlayerStatsByCollegeCodeFromDB: async (collegeCode: string, year?: number) => {
         const { data, error } = year ? 
-            await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).eq('season', year).order('game_date', { ascending: false }) 
-            : await supabase.from('player_stats').select('*, players(*)').eq('college_code', collegeCode).order('game_date', { ascending: false });
+            await supabase.from('players').select('*, player_stats(*), draft_picks(team_abbreviation, traded_to_team_abbreviation, pick_number, year)').eq('college_code', collegeCode).eq('player_stats.season', year).order('game_date', { referencedTable: 'player_stats', ascending: false }) 
+            : await supabase.from('players').select('*, player_stats(*), draft_picks(team_abbreviation, traded_to_team_abbreviation, pick_number, year)').eq('college_code', collegeCode).order('game_date', { referencedTable: 'player_stats', ascending: false });
         if (error) {
+            console.error(error);
             throw error;
         }
         return data;

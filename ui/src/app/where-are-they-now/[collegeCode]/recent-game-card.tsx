@@ -5,15 +5,15 @@ import type { Database } from "~/lib/supabase-types";
 import FormattedDate from "./formatted-date";
 import { useState } from "react";
 
-export type PlayerWithStats =
-  Database["public"]["Tables"]["player_stats"]["Row"] & {
-    players: Database["public"]["Tables"]["players"]["Row"];
-  };
+export type PlayerWithStats = Database["public"]["Tables"]["players"]["Row"] & {
+  player_stats: Database["public"]["Tables"]["player_stats"]["Row"][];
+  draft_picks: Database["public"]["Tables"]["draft_picks"]["Row"][];
+};
 
 const RecentGameCard = ({
   playerPerfs,
 }: {
-  playerPerfs: PlayerWithStats[];
+  playerPerfs: Database["public"]["Tables"]["player_stats"]["Row"][];
 }) => {
   const [showAll, setShowAll] = useState(false);
   const displayedGames = showAll

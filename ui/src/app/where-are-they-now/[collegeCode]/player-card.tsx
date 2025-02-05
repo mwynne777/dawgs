@@ -1,8 +1,8 @@
 import { teams } from "~/app/(common)/teams";
 import RecentGameCard, { PlayerWithStats } from "./recent-game-card";
+import { toOrdinal } from "~/lib/utils";
 
-export type PlayerGroup = {
-  stats: PlayerWithStats[];
+export type PlayerGroup = PlayerWithStats & {
   totals: {
     minutes: number;
     points: number;
@@ -29,7 +29,8 @@ const PlayerCard = async ({
 }: {
   playerAndStats: PlayerGroup;
 }) => {
-  const player = playerAndStats.stats[0];
+  const player = playerAndStats;
+  const draftPick = player.draft_picks[0];
 
   return (
     <div className="rounded-lg border p-4">
@@ -42,9 +43,9 @@ const PlayerCard = async ({
       >
         <div className="mr-4 flex items-center text-xl font-bold">
           <pre className="font-bold">
-            {player?.players?.full_name?.split(" ")[0] +
+            {player?.full_name?.split(" ")[0] +
               "\n" +
-              player?.players?.full_name?.split(" ")[1]}
+              player?.full_name?.split(" ")[1]}
           </pre>
         </div>
         <div className="flex items-center text-right">
@@ -61,9 +62,29 @@ const PlayerCard = async ({
       <div className="flex justify-between">
         <div className="flex flex-col">
           <div className="text-base">
+            {draftPick && (
+              <>
+                Draft Info:{" "}
+                <span className="font-semibold">{draftPick.year}</span>,{" "}
+                <span className="font-semibold">
+                  {toOrdinal(draftPick.pick_number)}
+                </span>{" "}
+                overall pick,{" "}
+                <span className="font-semibold">
+                  {Object.values(teams)
+                    .find(
+                      (team) =>
+                        team.abbreviation === draftPick.team_abbreviation,
+                    )
+                    ?.abbreviation.toUpperCase()}
+                </span>
+              </>
+            )}
+          </div>
+          <div className="text-base">
             Current Salary:{" "}
-            {player?.players?.salary && player?.players?.salary > 0
-              ? player?.players?.salary.toLocaleString("en-US", {
+            {player?.salary && player?.salary > 0
+              ? player?.salary.toLocaleString("en-US", {
                   style: "currency",
                   currency: "USD",
                   minimumFractionDigits: 0,
@@ -122,8 +143,8 @@ const PlayerCard = async ({
         <div className="mb-2 mt-2">
           <h3 className="my-1 text-lg font-semibold">Recent Games</h3>
         </div>
-        {playerAndStats.stats && (
-          <RecentGameCard playerPerfs={playerAndStats.stats} />
+        {playerAndStats.player_stats && (
+          <RecentGameCard playerPerfs={playerAndStats.player_stats} />
         )}
       </div>
     </div>

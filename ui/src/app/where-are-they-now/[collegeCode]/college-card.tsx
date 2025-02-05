@@ -1,12 +1,7 @@
 import { PlayerGroup } from "./player-card";
 import { Database } from "~/lib/supabase-types";
 import Link from "next/link";
-
-const toOrdinal = (n: number): string => {
-  const s = ["th", "st", "nd", "rd"];
-  const v = n % 100;
-  return n + (s[(v - 20) % 10]! || s[v]! || s[0]!);
-};
+import { toOrdinal } from "~/lib/utils";
 
 const CollegeCard = ({
   college,
@@ -61,38 +56,34 @@ const CollegeCard = ({
   );
 
   const totalSalary = playersWithStats.reduce((sum, player) => {
-    return sum + (player.stats[0]?.players.salary ?? 0);
+    return sum + (player.salary ?? 0);
   }, 0);
 
   const salaryLeader = playersWithStats.reduce(
-    (max, player) =>
-      (player.stats[0]?.players.salary ?? 0) >
-      (max?.stats[0]?.players.salary ?? 0)
-        ? player
-        : max,
+    (max, player) => ((player.salary ?? 0) > (max?.salary ?? 0) ? player : max),
     playersWithStats[0],
   );
 
   const leaders = {
     minutes: {
-      id: minutesLeader?.stats[0]?.players.id,
-      full_name: minutesLeader?.stats[0]?.players.full_name,
+      id: minutesLeader?.id,
+      full_name: minutesLeader?.full_name,
     },
     points: {
-      id: pointsLeader?.stats[0]?.players.id,
-      full_name: pointsLeader?.stats[0]?.players.full_name,
+      id: pointsLeader?.id,
+      full_name: pointsLeader?.full_name,
     },
     rebounds: {
-      id: reboundsLeader?.stats[0]?.players.id,
-      full_name: reboundsLeader?.stats[0]?.players.full_name,
+      id: reboundsLeader?.id,
+      full_name: reboundsLeader?.full_name,
     },
     assists: {
-      id: assistsLeader?.stats[0]?.players.id,
-      full_name: assistsLeader?.stats[0]?.players.full_name,
+      id: assistsLeader?.id,
+      full_name: assistsLeader?.full_name,
     },
     salary: {
-      id: salaryLeader?.stats[0]?.players.id,
-      full_name: salaryLeader?.stats[0]?.players.full_name,
+      id: salaryLeader?.id,
+      full_name: salaryLeader?.full_name,
     },
   };
 

@@ -21,14 +21,33 @@ export default async function Page({
       collegesService.getCollegeSalaryTotals(),
     ]);
 
-  // Group players and calculate totals
-  const groupedPlayers = playersWithStats.reduce(
-    (acc, player) => {
-      const key = player.nat_stat_player_id;
-      if (!acc[key]) {
-        acc[key] = {
-          stats: [],
-          totals: {
+  const playersWithStatsAndTotals = playersWithStats
+    .filter((player) => player.player_stats.length > 0)
+    .map((player) => {
+      return {
+        ...player,
+        totals: player.player_stats.reduce(
+          (acc, stat) => {
+            acc.minutes += stat.minutes ?? 0;
+            acc.points += stat.points ?? 0;
+            acc.field_goals_made += stat.fg_m ?? 0;
+            acc.field_goals_attempted += stat.fg_a ?? 0;
+            acc.three_points_made += stat.three_fg_m ?? 0;
+            acc.three_points_attempted += stat.three_fg_a ?? 0;
+            acc.free_throws_made += stat.ft_m ?? 0;
+            acc.free_throws_attempted += stat.ft_a ?? 0;
+            acc.offensive_rebounds += stat.rebounds_off ?? 0;
+            acc.rebounds += stat.rebounds ?? 0;
+            acc.assists += stat.assists ?? 0;
+            acc.steals += stat.steals ?? 0;
+            acc.blocks += stat.blocks ?? 0;
+            acc.turnovers += stat.turnovers ?? 0;
+            acc.personal_fouls += stat.fouls ?? 0;
+            acc.games_played += 1; // Increment games played for each record
+            acc.games_started += stat.started ? 1 : 0;
+            return acc;
+          },
+          {
             minutes: 0,
             points: 0,
             field_goals_made: 0,
@@ -47,39 +66,14 @@ export default async function Page({
             games_played: 0,
             games_started: 0,
           },
-        };
-      }
+        ),
+      };
+    });
 
-      // Add stats to array
-      acc[key].stats.push(player);
-
-      // Update totals
-      acc[key].totals.minutes += player.minutes ?? 0;
-      acc[key].totals.points += player.points ?? 0;
-      acc[key].totals.field_goals_made += player.fg_m ?? 0;
-      acc[key].totals.field_goals_attempted += player.fg_a ?? 0;
-      acc[key].totals.three_points_made += player.three_fg_m ?? 0;
-      acc[key].totals.three_points_attempted += player.three_fg_a ?? 0;
-      acc[key].totals.free_throws_made += player.ft_m ?? 0;
-      acc[key].totals.free_throws_attempted += player.ft_a ?? 0;
-      acc[key].totals.offensive_rebounds += player.rebounds_off ?? 0;
-      acc[key].totals.rebounds += player.rebounds ?? 0;
-      acc[key].totals.assists += player.assists ?? 0;
-      acc[key].totals.steals += player.steals ?? 0;
-      acc[key].totals.blocks += player.blocks ?? 0;
-      acc[key].totals.turnovers += player.turnovers ?? 0;
-      acc[key].totals.personal_fouls += player.fouls ?? 0;
-      acc[key].totals.games_played += 1; // Increment games played for each record
-      acc[key].totals.games_started += player.started ? 1 : 0;
-      return acc;
-    },
-    {} as Record<string, PlayerGroup>,
-  );
-
-  const sortedPlayers = Object.values(groupedPlayers).sort((a, b) => {
+  playersWithStatsAndTotals.sort((a, b) => {
     return (
-      new Date(b.stats[0]?.game_date ?? "").getTime() -
-      new Date(a.stats[0]?.game_date ?? "").getTime()
+      new Date(b.player_stats[0]?.game_date ?? "").getTime() -
+      new Date(a.player_stats[0]?.game_date ?? "").getTime()
     );
   });
 
@@ -92,19 +86,13 @@ export default async function Page({
       <CollegeCard
         college={college}
         allCollegeStatTotals={collegeStatTotals}
-        playersWithStats={sortedPlayers}
+        playersWithStats={playersWithStatsAndTotals}
         collegeSalaryTotals={collegeSalaryTotals}
       />
-      {sortedPlayers.map(({ stats, totals }) => {
-        const player = stats[0];
+      {playersWithStatsAndTotals.map((player) => {
         return (
           <div className="mb-8" key={player?.id}>
-            <PlayerCard
-              playerAndStats={{
-                stats,
-                totals,
-              }}
-            />
+            <PlayerCard playerAndStats={player} />
           </div>
         );
       })}
