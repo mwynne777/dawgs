@@ -66,7 +66,6 @@ const playerStatsService = {
         return data;
       },
     getPlayerStats: async (rangeStart: number, year: number = 2025) => {
-        console.log('Hitting', `${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/${year}/${rangeStart}`)
         const response = await fetch(`${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/${year}/${rangeStart}`);
         const data = await response.json() as PlayerStatsResponse;
         
@@ -108,14 +107,11 @@ const playerStatsService = {
 
         const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id));
 
-        // console.log(`${existingPlayerStats.length} existing player stats, ${JSON.stringify(existingPlayerStats)}`);
-
         const { error } = await supabase.from('player_stats').upsert(sanitizedPlayerStatsToSave);
         if (error) {
             console.error(error);
             throw error;
         }
-        console.log(sanitizedPlayerStatsToSave.length, 'player stats saved');
 
         return {
             savedCount: sanitizedPlayerStatsToSave.length,
