@@ -37,7 +37,7 @@ const PlayerCard = async ({
       <div
         className="-mx-4 -mt-4 mb-4 flex justify-between rounded-t-lg px-4 pb-1.5 pt-1.5"
         style={{
-          backgroundColor: teams[player?.team_id ?? 0]?.color,
+          backgroundColor: teams[player?.player_stats[0]?.team_id ?? 0]?.color,
           color: "white",
         }}
       >
@@ -50,10 +50,10 @@ const PlayerCard = async ({
         </div>
         <div className="flex items-center text-right">
           <pre className="font-bold">
-            {teams[player?.team_id ?? 0]?.displayName ===
+            {teams[player?.player_stats[0]?.team_id ?? 0]?.displayName ===
             "Portland Trail Blazers"
               ? "Portland\nTrail Blazers"
-              : teams[player?.team_id ?? 0]?.displayName
+              : teams[player?.player_stats[0]?.team_id ?? 0]?.displayName
                   .split(/(?= [^ ]*$)/)
                   .join("\n")}
           </pre>
