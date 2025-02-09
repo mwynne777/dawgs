@@ -72,7 +72,7 @@ export type Database = {
           player_id: number
           team_abbreviation: string
           traded_to_team_abbreviation?: string | null
-          year: number
+          year?: number
         }
         Update: {
           created_at?: string
@@ -222,6 +222,7 @@ export type Database = {
           college_id: number | null
           created_at: string
           full_name: string
+          gl_nat_stat_id: number | null
           id: number
           league_id: number | null
           nat_stat_id: number | null
@@ -233,6 +234,7 @@ export type Database = {
           college_id?: number | null
           created_at?: string
           full_name: string
+          gl_nat_stat_id?: number | null
           id?: number
           league_id?: number | null
           nat_stat_id?: number | null
@@ -244,6 +246,7 @@ export type Database = {
           college_id?: number | null
           created_at?: string
           full_name?: string
+          gl_nat_stat_id?: number | null
           id?: number
           league_id?: number | null
           nat_stat_id?: number | null
@@ -274,6 +277,7 @@ export type Database = {
           college_id: number | null
           created_at: string
           full_name: string
+          gl_nat_stat_id: number | null
           id: number
           league_id: number | null
           nat_stat_id: number | null

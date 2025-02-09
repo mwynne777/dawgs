@@ -15,7 +15,7 @@ app.get("/", (req: Request, res: Response) => {
 
 app.get("/seed/players", async (req: Request, res: Response) => {
   try {
-    const result = await playerService.mapNatStatPlayersToDB(parseInt(req.query.range_start as string), parseInt(req.query.year as string));
+    const result = await playerService.mapNatStatPlayersToDB(parseInt(req.query.range_start as string), parseInt(req.query.year as string), req.query.league_id as string);
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });

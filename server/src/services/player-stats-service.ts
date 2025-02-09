@@ -49,7 +49,8 @@ const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '52566256': '58075620', // Kobe Bufkin
     '54022359': '58076129', // Mason Jones
     '56876648': '58119281', // Jaylen Nowell
-    '0': '40737320', // David Duke, but probably need to comment out
+    // '0': '40737320', // David Duke, but probably need to comment out
+    '74847619': '58320784', // Terrence Shannon Jr.
 }
 
 const playerStatsService = {
@@ -127,6 +128,7 @@ const playerStatsService = {
             console.error(error);
             throw error;
         }
+        console.log(data)
         return data;
     }
 }

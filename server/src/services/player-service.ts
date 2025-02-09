@@ -65,9 +65,9 @@ const playerService = {
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     return {id: playerId, name: natStatPlayer.players[`player_${playerId}`]?.name ?? ''};
   },
-  getPlayersFromAPI: async (rangeStart: number, year: number = 2025) => {
+  getPlayersFromAPI: async (rangeStart: number, year: number = 2025, league_id: string = 'NBA') => {
     const response = await fetch(
-      `${process.env.NAT_STAT_API_BASE_URL}players/NBA/${year}/${rangeStart > 0 ? `${rangeStart}` : ''}`,
+      `${process.env.NAT_STAT_API_BASE_URL}players/${league_id}/${year}/${rangeStart > 0 ? `${rangeStart}` : ''}`,
     );
     const natStatPlayer = (await response.json()) as NatStatPlayerResponse;
     const players = Object.values(natStatPlayer.players);
@@ -87,8 +87,8 @@ const playerService = {
     const { data, error } = await supabase.rpc('get_players_by_similar_name', {names: likePlayerNames});
         return data;
   },
-  mapNatStatPlayersToDB: async (rangeStart: number, year: number = 2025) => {
-    const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart, year);
+  mapNatStatPlayersToDB: async (rangeStart: number, year: number = 2025, league_id: string = 'NBA') => {
+    const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart, year, league_id);
     const natStatPlayerNames = natStatPlayers.map(player => player.name);
     const playersFromDB = await playerService.getPlayersFromDB(natStatPlayerNames);
     if(playersFromDB) {
