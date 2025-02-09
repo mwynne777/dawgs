@@ -81,7 +81,7 @@ const PlayerCard = async ({
               </>
             )}
           </div>
-          <div className="text-base">
+          <div className="mt-1 text-base">
             Current Salary:{" "}
             {player?.salary && player?.salary > 0
               ? player?.salary.toLocaleString("en-US", {
@@ -92,9 +92,15 @@ const PlayerCard = async ({
                 })
               : "unknown"}
           </div>
-          <div className="stats-container">
-            <h3 className="my-1 text-lg font-semibold">Current Season Stats</h3>
-            <div className="flex gap-4">
+        </div>
+      </div>
+      <div className="stats-container my-4 max-w-xs">
+        <div className="rounded-lg border border-gray-200 bg-gray-50">
+          <div className="border-b border-gray-200 px-3 py-1">
+            <h3 className="text-lg font-semibold">Current Season Stats</h3>
+          </div>
+          <div className="p-2">
+            <div className="grid grid-cols-4 gap-2">
               <div className="stat text-center">
                 <p className="text-sm text-gray-600">MINS</p>
                 <p className="text-lg font-medium">
@@ -132,11 +138,11 @@ const PlayerCard = async ({
                 </p>
               </div>
             </div>
+            <div className="mt-1.5 border-t border-gray-200 pt-1.5 text-center text-sm text-gray-600">
+              {playerAndStats.totals?.games_played ?? 0} games played (
+              {playerAndStats.totals?.games_started ?? 0} starts)
+            </div>
           </div>
-          <p className="mt-0.5">
-            {playerAndStats.totals?.games_played ?? 0} games played,{" "}
-            {playerAndStats.totals?.games_started ?? 0} starts
-          </p>
         </div>
       </div>
       <div>
