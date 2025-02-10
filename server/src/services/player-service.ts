@@ -91,6 +91,7 @@ const playerService = {
     const natStatPlayers = await playerService.getPlayersFromAPI(rangeStart, year, league_id);
     const natStatPlayerNames = natStatPlayers.map(player => player.name);
     const playersFromDB = await playerService.getPlayersFromDB(natStatPlayerNames);
+    
     if(playersFromDB) {
         // We found some players in the DB, so we can update the nat_stat_id
         const matchedPlayers = playersFromDB.map(player => {
@@ -98,7 +99,8 @@ const playerService = {
             if(natStatPlayer) {
                 return { 
                     ...player,
-                    nat_stat_id: parseInt(natStatPlayer.code)
+                    ...(league_id.toLowerCase() === 'nba' ? { nat_stat_id: parseInt(natStatPlayer.code) } : {}),
+                    ...(league_id.toLowerCase() === 'gl' ? { gl_nat_stat_id: parseInt(natStatPlayer.code) } : {})
                 }
             }
         })
@@ -109,13 +111,19 @@ const playerService = {
 
         const unmatchedPlayersToInsert = unmatchedPlayers.map(player => ({
             full_name: player.name,
-            nat_stat_id: parseInt(player.code),
-
+            ...(league_id.toLowerCase() === 'nba' ? { nat_stat_id: parseInt(player.code) } : {}),
+            ...(league_id.toLowerCase() === 'gl' ? { gl_nat_stat_id: parseInt(player.code) } : {})
         }));
-        
+
+        console.log('matchedPlayers', matchedPlayers);
+
+        const {data: insertedPlayers, error: insertedPlayersError} = await supabase
+        .from("players")
+        .insert(unmatchedPlayersToInsert.filter(player => player !== undefined));
+
         const { data, error } = await supabase
         .from("players")
-        .upsert(unmatchedPlayersToInsert.filter(player => player !== undefined));
+        .upsert(matchedPlayers.filter(player => player !== undefined));
 
         if(error) {
             console.error(error);
@@ -124,7 +132,6 @@ const playerService = {
     } else {
         console.log(`No players found in the DB`);
     }
-    // console.log(`Player ${natStatPlayer.name} not found in DB, doing nothing`);
   }
 };
 
