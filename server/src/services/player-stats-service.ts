@@ -39,7 +39,15 @@ type PlayerStatsResponse = {
   }
 }
 
-const BAD_PERF_IDS = ['12186469', '12155870', '12155536', '12154957', '12154658', '12193210']
+const BAD_PERF_IDS = [
+    '12186469',
+    '12155870',
+    '12155536',
+    '12154957',
+    '12154658',
+    '12193210', 
+    '12234587' // Damion Baugh
+]
 
 const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '119696': '58075879', // Derrick Jones Jr.
