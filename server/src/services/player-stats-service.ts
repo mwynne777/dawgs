@@ -80,12 +80,12 @@ const playerStatsService = {
         
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
-            const college = await supabase.from('players').select('college_id, college_code').eq('nat_stat_id', parseInt(data.performances[key]['player-code'])).single();
+            const player = await supabase.from('players').select('id, college_id, college_code').eq('nat_stat_id', parseInt(data.performances[key]['player-code'])).single();
             const performance = data.performances[key];
             return {
                 id: parseInt(performance.id),
                 nat_stat_player_id: parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code']),
-                college_id: college.data?.college_id ?? null,
+                college_id: player.data?.college_id ?? null,
                 game_id: parseInt(performance.game.code),
                 game_date: performance.game.gameday,
                 team_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.team.code)?.[0]! as unknown as number,
@@ -107,8 +107,9 @@ const playerStatsService = {
                 turnovers: parseInt(performance.to),
                 fouls: parseInt(performance.pf),
                 created_at: new Date().toISOString(),
-                college_code: college.data?.college_code ?? null,
+                college_code: player.data?.college_code ?? null,
                 season: year,
+                player_id: player.data?.id ?? -1,
             };
         }));
 

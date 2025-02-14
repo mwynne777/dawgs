@@ -132,6 +132,7 @@ export type Database = {
           minutes: number | null
           nat_stat_player_id: number
           opponent_id: number
+          player_id: number
           points: number | null
           rebounds: number | null
           rebounds_off: number | null
@@ -160,6 +161,7 @@ export type Database = {
           minutes?: number | null
           nat_stat_player_id: number
           opponent_id: number
+          player_id: number
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null
@@ -188,6 +190,7 @@ export type Database = {
           minutes?: number | null
           nat_stat_player_id?: number
           opponent_id?: number
+          player_id?: number
           points?: number | null
           rebounds?: number | null
           rebounds_off?: number | null
@@ -208,11 +211,11 @@ export type Database = {
             referencedColumns: ["code"]
           },
           {
-            foreignKeyName: "player_stats_nat_stat_player_id_fkey"
-            columns: ["nat_stat_player_id"]
+            foreignKeyName: "player_stats_player_id_fkey"
+            columns: ["player_id"]
             isOneToOne: false
             referencedRelation: "players"
-            referencedColumns: ["nat_stat_id"]
+            referencedColumns: ["id"]
           },
         ]
       }
