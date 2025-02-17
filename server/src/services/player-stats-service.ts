@@ -59,6 +59,7 @@ const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '56876648': '58119281', // Jaylen Nowell
     // '0': '40737320', // David Duke, but probably need to comment out
     '74847619': '58320784', // Terrence Shannon Jr.
+    '75526696': '68666972', // DaRon Holmes II
 }
 
 const playerStatsService = {
@@ -80,8 +81,12 @@ const playerStatsService = {
         
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
-            const player = await supabase.from('players').select('id, college_id, college_code').eq('nat_stat_id', parseInt(data.performances[key]['player-code'])).single();
             const performance = data.performances[key];
+            const player = await supabase.from('players').select('id, college_id, college_code').eq('nat_stat_id', parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code'])).single();
+            if(player.data?.id === undefined) {
+                console.error('player.data?.id is undefined', performance);
+                return
+            }
             return {
                 id: parseInt(performance.id),
                 nat_stat_player_id: parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code']),
@@ -113,7 +118,7 @@ const playerStatsService = {
             };
         }));
 
-        const sanitizedPlayerStatsToSave = playerStatsToSave.filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
+        const sanitizedPlayerStatsToSave = playerStatsToSave.filter(e => e !== undefined).filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
 
         const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id));
 
