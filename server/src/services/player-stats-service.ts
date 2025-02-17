@@ -49,7 +49,7 @@ const BAD_PERF_IDS = [
     '12234587' // Damion Baugh
 ]
 
-const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
+const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '119696': '58075879', // Derrick Jones Jr.
     '538727': '3134324', // Daniel Theis
     '538998': '58075619', // Bogdan Bogdanovic
@@ -60,6 +60,24 @@ const ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     // '0': '40737320', // David Duke, but probably need to comment out
     '74847619': '58320784', // Terrence Shannon Jr.
     '75526696': '68666972', // DaRon Holmes II
+}
+
+const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {}
+
+const getPlayerByNatStatId = async (natStatId: string, leagueId: 'NBA' | 'GL') => {
+    const natStatIdToUse = leagueId === 'NBA' ? 
+        parseInt(NBA_ALTERNATE_PLAYER_ID_MAP[natStatId] ?? natStatId) : 
+        parseInt(GL_ALTERNATE_PLAYER_ID_MAP[natStatId] ?? natStatId)
+    const { data, error } = await supabase
+        .from('players')
+        .select('id, college_id, college_code')
+        .eq(leagueId === 'NBA' ? 'nat_stat_id' : 'gl_nat_stat_id', natStatIdToUse)
+        .single();
+    if (error) {
+        console.error(error);
+        throw error;
+    }
+    return data;
 }
 
 const playerStatsService = {
@@ -75,22 +93,22 @@ const playerStatsService = {
         
         return data;
       },
-    getPlayerStats: async (rangeStart: number, year: number = 2025) => {
-        const response = await fetch(`${process.env.NAT_STAT_API_BASE_URL}playerperfs/nba/${year}/${rangeStart}`);
+    getPlayerStats: async (rangeStart: number, year: number = 2025, leagueId: 'NBA' | 'GL' = 'NBA') => {
+        const response = await fetch(`${process.env.NAT_STAT_API_BASE_URL}playerperfs/${leagueId}/${year}/${rangeStart}`);
         const data = await response.json() as PlayerStatsResponse;
         
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
             const performance = data.performances[key];
-            const player = await supabase.from('players').select('id, college_id, college_code').eq('nat_stat_id', parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code'])).single();
-            if(player.data?.id === undefined) {
+            const player = await getPlayerByNatStatId(performance['player-code'], leagueId);
+            if(player.id === undefined) {
                 console.error('player.data?.id is undefined', performance);
                 return
             }
             return {
                 id: parseInt(performance.id),
-                nat_stat_player_id: parseInt(ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code']),
-                college_id: player.data?.college_id ?? null,
+                nat_stat_player_id: parseInt(NBA_ALTERNATE_PLAYER_ID_MAP[performance['player-code']] ?? performance['player-code']),
+                college_id: player.college_id ?? null,
                 game_id: parseInt(performance.game.code),
                 game_date: performance.game.gameday,
                 team_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.team.code)?.[0]! as unknown as number,
@@ -112,9 +130,9 @@ const playerStatsService = {
                 turnovers: parseInt(performance.to),
                 fouls: parseInt(performance.pf),
                 created_at: new Date().toISOString(),
-                college_code: player.data?.college_code ?? null,
+                college_code: player.college_code ?? null,
                 season: year,
-                player_id: player.data?.id ?? -1,
+                player_id: player.id ?? -1,
             };
         }));
 

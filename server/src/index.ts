@@ -33,7 +33,7 @@ app.get("/seed/colleges", async (req: Request, res: Response) => {
 
 app.get("/seed/player-stats", async (req: Request, res: Response) => {
   try {
-    const result = await playerStatsService.getPlayerStats(parseInt(req.query.range_start as string), parseInt(req.query.year as string));
+    const result = await playerStatsService.getPlayerStats(parseInt(req.query.range_start as string), parseInt(req.query.year as string), req.query.league_id as 'NBA' | 'GL');
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
