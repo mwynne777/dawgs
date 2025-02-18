@@ -1,6 +1,6 @@
 export type TeamAbbreviation = 'no' | 'mil' | 'por' | 'sa' | 'mem' | 'bkn'
 
-export const teams: Record<number, {abbreviation: string, displayName: string, leagueId: number, natStatId: number, color: string}> = {
+export const teams: Record<number, {abbreviation: string, displayName: string, leagueId: number, natStatId: number, color: string, affiliateCode?: string}> = {
     1: {abbreviation: 'atl', displayName: 'Atlanta Hawks', leagueId: 46, natStatId: 6, color: '#C8102E' },
     2: {abbreviation: 'bos', displayName: 'Boston Celtics', leagueId: 46, natStatId: 5, color: '#007A33' },
     3: { abbreviation: 'no', displayName: 'New Orleans Pelicans', leagueId: 46, natStatId: 38, color: '#0C2340' },
@@ -31,7 +31,37 @@ export const teams: Record<number, {abbreviation: string, displayName: string, l
     28: { abbreviation: 'tor', displayName: 'Toronto Raptors', leagueId: 46, natStatId: 10, color: '#CE1141' },
     29: { abbreviation: 'mem', displayName: 'Memphis Grizzlies', leagueId: 46, natStatId: 31, color: '#5D76A9' },
     30: {abbreviation: 'cha', displayName: 'Charlotte Hornets', leagueId: 46, natStatId: 3, color: '#1d1160' },
-
+    31: { abbreviation: 'aus', displayName: 'Austin Spurs', leagueId: 69, natStatId: 1702, color: '#000000', affiliateCode: 'sa'},
+    32: { abbreviation: 'bhm', displayName: 'Birmingham Squadron', leagueId: 69, natStatId: 16673, color: '#0C2340', affiliateCode: 'no'},
+    33: { abbreviation: 'cap', displayName: 'Capital City Go-Go', leagueId: 69, natStatId: 7451, color: '#002B5C', affiliateCode: 'wsh' },
+    34: { abbreviation: 'cle', displayName: 'Cleveland Charge', leagueId: 69, natStatId: 1703, color: '#860038', affiliateCode: 'cle' },
+    35: { abbreviation: 'cpk', displayName: 'College Park Skyhawks', leagueId: 69, natStatId: 7531, color: '#C8102E', affiliateCode: 'atl' },
+    36: { abbreviation: 'del', displayName: 'Delaware Blue Coats', leagueId: 69, natStatId: 1704, color: '#006bb6', affiliateCode: 'phi' },
+    37: { abbreviation: 'grg', displayName: 'Grand Rapids Gold', leagueId: 69, natStatId: 16674, color: '#0E2240', affiliateCode: 'den' },
+    38: { abbreviation: 'gbo', displayName: 'Greensboro Swarm', leagueId: 69, natStatId: 1711, color: '#1d1160', affiliateCode: 'cha' },
+    39: { abbreviation: 'ind', displayName: 'Indiana Mad Ants', leagueId: 69, natStatId: 1708, color: '#002D62', affiliateCode: 'ind'},
+    40: { abbreviation: 'iow', displayName: 'Iowa Wolves', leagueId: 69, natStatId: 1713, color: '#0C2340', affiliateCode: 'min' },
+    41: { abbreviation: 'lin', displayName: 'Long Island Nets', leagueId: 69, natStatId: 1714, color: '#003DA5', affiliateCode: 'bkn' },
+    42: { abbreviation: 'mrc', displayName: 'Maine Celtics', leagueId: 69, natStatId: 1716, color: '#007A33', affiliateCode: 'bos' },
+    43: { abbreviation: 'mem', displayName: 'Memphis Hustle', leagueId: 69, natStatId: 3673, color: '#DA291C', affiliateCode: 'mem' },
+    44: { abbreviation: 'mex', displayName: 'Mexico City Capitanes', leagueId: 69, natStatId: 16675, color: '#1D4289' },
+    45: { abbreviation: 'mcc', displayName: 'Motor City Cruise', leagueId: 69, natStatId: 1710, color: '#C8102E', affiliateCode: 'det' },
+    46: { abbreviation: 'okb', displayName: 'Oklahoma City Blue', leagueId: 69, natStatId: 1719, color: '#007ac1', affiliateCode: 'okc' },
+    47: { abbreviation: 'osc', displayName: 'Osceola Magic', leagueId: 69, natStatId: 3674, color: '#0077c0', affiliateCode: 'orl' },
+    48: { abbreviation: 'osr', displayName: 'Raptors 905', leagueId: 69, natStatId: 1720, color: '#CE1141', affiliateCode: 'tor' },
+    49: { abbreviation: 'rgv', displayName: 'Rio Grande Valley Vipers', leagueId: 69, natStatId: 1722, color: '#CE1141', affiliateCode: 'hou' },
+    50: { abbreviation: 'rip', displayName: 'Rip City Remix', leagueId: 69, natStatId: 1731, color: '#C8102E', affiliateCode: 'por' },
+    51: { abbreviation: 'slc', displayName: 'Salt Lake City Stars', leagueId: 69, natStatId: 1724, color: '#002B5C', affiliateCode: 'utah' },
+    52: { abbreviation: 'sdc', displayName: 'San Diego Clippers', leagueId: 69, natStatId: 3676, color: '#c8102E', affiliateCode: 'lac' },
+    53: { abbreviation: 'scw', displayName: 'Santa Cruz Warriors', leagueId: 69, natStatId: 1725, color: '#1D428A', affiliateCode: 'gsw' },
+    54: { abbreviation: 'sfs', displayName: 'Sioux Falls Skyforce', leagueId: 69, natStatId: 1726, color: '#98002E', affiliateCode: 'mia' },
+    55: { abbreviation: 'sbl', displayName: 'South Bay Lakers', leagueId: 69, natStatId: 1715, color: '#552583', affiliateCode: 'lal' },
+    56: { abbreviation: 'sto', displayName: 'Stockton Kings', leagueId: 69, natStatId: 1721, color: '#5a2d81', affiliateCode: 'sac' },
+    57: { abbreviation: 'tex', displayName: 'Texas Legends', leagueId: 69, natStatId: 1727, color: '#00538C', affiliateCode: 'dal' },
+    58: { abbreviation: 'val', displayName: 'Valley Suns', leagueId: 69, natStatId: 2038901, color: '#1D1160', affiliateCode: 'phx' },
+    59: { abbreviation: 'wes', displayName: 'Westchester Knicks', leagueId: 69, natStatId: 1728, color: '#006BB6', affiliateCode: 'nyk' },
+    60: { abbreviation: 'wcb', displayName: 'Windy City Bulls', leagueId: 69, natStatId: 1729, color: '#CE1141', affiliateCode: 'chi' },
+    61: { abbreviation: 'wis', displayName: 'Wisconsin Herd', leagueId: 69, natStatId: 3675, color: '#00471B', affiliateCode: 'mil' }
 } as const;
 
 export type TeamScheduleResponse = {
