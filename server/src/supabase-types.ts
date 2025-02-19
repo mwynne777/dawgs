@@ -129,6 +129,7 @@ export type Database = {
           game_date: string
           game_id: number
           id: number
+          league_id: number
           minutes: number | null
           nat_stat_player_id: number
           opponent_id: number
@@ -158,6 +159,7 @@ export type Database = {
           game_date?: string
           game_id: number
           id: number
+          league_id?: number
           minutes?: number | null
           nat_stat_player_id: number
           opponent_id: number
@@ -187,6 +189,7 @@ export type Database = {
           game_date?: string
           game_id?: number
           id?: number
+          league_id?: number
           minutes?: number | null
           nat_stat_player_id?: number
           opponent_id?: number
