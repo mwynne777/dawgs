@@ -21,4 +21,4 @@ const main = async (rangeStart: number, year: number, leagueId: 'NBA' | 'GL') =>
   }
 };
 
-main(0, 2025, 'NBA' as 'NBA' | 'GL');
+main(0, 2025, 'GL' as 'NBA' | 'GL');
