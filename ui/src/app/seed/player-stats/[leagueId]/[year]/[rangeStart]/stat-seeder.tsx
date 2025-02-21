@@ -1,15 +1,17 @@
 export default async function StatSeeder({
   year,
   rangeStart,
+  leagueId,
 }: {
   year: string;
   rangeStart: string;
+  leagueId: string;
 }) {
   const rangeStartNumber = parseInt(rangeStart);
   const yearNumber = parseInt(year);
 
   const result = await fetch(
-    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}seed/player-stats?range_start=${rangeStartNumber}&year=${yearNumber}`,
+    `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}seed/player-stats?range_start=${rangeStartNumber}&year=${yearNumber}&league_id=${leagueId}`,
   );
 
   const { savedCount, existingCount, existingIds } = (await result.json()) as {
@@ -30,7 +32,7 @@ export default async function StatSeeder({
         {result.status === 200 ? (
           <div className="mt-4">
             <a
-              href={`/seed/player-stats/${yearNumber}/${rangeStartNumber + 100}`}
+              href={`/seed/player-stats/${leagueId}/${yearNumber}/${rangeStartNumber + 100}`}
               className="text-blue-500 underline hover:text-blue-700"
             >
               Get next 100 - starting from {rangeStartNumber + 100}

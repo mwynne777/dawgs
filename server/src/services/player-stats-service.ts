@@ -62,7 +62,14 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '75526696': '68666972', // DaRon Holmes II
 }
 
-const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {}
+const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
+    '58269444': '58269397', // Cormac Ryan
+    '65574961': '65562216', // Jordan Wright
+    '58269514': '58269446', // Shakur Daniel
+    '73500987': '73500950', // Olisa Akonobi
+    '58163752': '58163736', // Nick Muszynski
+
+}
 
 const getPlayerByNatStatId = async (natStatId: string, leagueId: 'NBA' | 'GL') => {
     const natStatIdToUse = leagueId === 'NBA' ? 
@@ -74,7 +81,7 @@ const getPlayerByNatStatId = async (natStatId: string, leagueId: 'NBA' | 'GL') =
         .eq(leagueId === 'NBA' ? 'nat_stat_id' : 'gl_nat_stat_id', natStatIdToUse)
         .single();
     if (error) {
-        console.error(error);
+        console.error(error, 'for player', natStatId);
         throw error;
     }
     return data;
@@ -133,6 +140,7 @@ const playerStatsService = {
                 college_code: player.college_code ?? null,
                 season: year,
                 player_id: player.id ?? -1,
+                league_id: leagueId === 'NBA' ? 46 : 69,
             };
         }));
 
