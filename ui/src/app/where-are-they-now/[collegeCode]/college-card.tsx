@@ -1,5 +1,5 @@
-import { PlayerGroup } from "./player-card";
-import { Database } from "~/lib/supabase-types";
+import type { PlayerGroup } from "./player-card";
+import type { Database } from "~/lib/supabase-types";
 import Link from "next/link";
 import { toOrdinal } from "~/lib/utils";
 

@@ -18,7 +18,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../components/ui/popover";
-import collegesService from "./(services)/colleges-service";
+import type collegesService from "./(services)/colleges-service";
 import { useRouter } from "next/navigation";
 
 const CollegeSelector = ({

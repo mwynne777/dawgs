@@ -24,11 +24,7 @@ export type PlayerGroup = PlayerWithStats & {
   };
 };
 
-const PlayerCard = async ({
-  playerAndStats,
-}: {
-  playerAndStats: PlayerGroup;
-}) => {
+const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
   const player = playerAndStats;
   const draftPick = player.draft_picks[0];
 
