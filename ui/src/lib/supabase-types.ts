@@ -305,9 +305,17 @@ export type Database = {
         Returns: {
           college_code: string
           total_minutes: number
+          gl_total_minutes: number
+          nba_total_minutes: number
           total_points: number
+          gl_total_points: number
+          nba_total_points: number
           total_rebounds: number
+          gl_total_rebounds: number
+          nba_total_rebounds: number
           total_assists: number
+          gl_total_assists: number
+          nba_total_assists: number
         }[]
       }
     }
