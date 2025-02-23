@@ -8,6 +8,7 @@ const CollegeCard = ({
   allCollegeStatTotals,
   playersWithStats,
   collegeSalaryTotals,
+  selectedLeague,
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
   allCollegeStatTotals: {
@@ -26,6 +27,7 @@ const CollegeCard = ({
     college_code: string;
     total_salary: number;
   }[];
+  selectedLeague: "nba" | "gl" | "all";
 }) => {
   const collegeStatTotals = allCollegeStatTotals.find(
     (c) => c.college_code === college.code,
@@ -99,8 +101,13 @@ const CollegeCard = ({
       <div className="flex flex-col items-center justify-center rounded-lg p-4 pt-0">
         <div className="mt-3 text-center text-sm">
           {playersWithStats.length} player
-          {playersWithStats.length === 1 ? " has" : "s have"} checked into an
-          NBA game this season
+          {playersWithStats.length === 1 ? " has" : "s have"} checked into{" "}
+          {selectedLeague === "nba"
+            ? "an NBA game"
+            : selectedLeague === "gl"
+              ? "a G League game"
+              : "an NBA or G League game"}{" "}
+          this season
         </div>
         <div className="mt-4 flex flex-col items-center">
           <h3 className="text-lg font-semibold">2024-2025 Season:</h3>

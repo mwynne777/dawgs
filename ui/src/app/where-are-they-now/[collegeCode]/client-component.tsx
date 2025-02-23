@@ -4,6 +4,9 @@ import type collegesService from "~/app/(services)/colleges-service";
 import CollegeCard from "./college-card";
 import PlayerCard from "./player-card";
 import type { PlayerWithStats } from "./recent-game-card";
+import { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { leagues } from "~/app/(common)/leagues";
 
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
@@ -22,8 +25,33 @@ export default function WhereAreTheyNowClientComponent({
   collegeStatTotals,
   collegeSalaryTotals,
 }: WhereAreTheyNowClientComponentProps) {
+  const searchParams = useSearchParams();
+  const [selectedLeague, setSelectedLeague] = useState<"nba" | "gl" | "all">(
+    (searchParams.get("league")?.toLowerCase() as "nba" | "gl" | "all") ??
+      "all",
+  );
+
   const playersWithStatsAndTotals = playersWithStats
     .filter((player) => player.player_stats.length > 0)
+    .filter((player) => {
+      return player.player_stats.some((stat) => {
+        return (
+          selectedLeague === "all" ||
+          stat.league_id === leagues[selectedLeague].id
+        );
+      });
+    })
+    .map((player) => {
+      return {
+        ...player,
+        player_stats: player.player_stats.filter((stat) => {
+          return (
+            selectedLeague === "all" ||
+            stat.league_id === leagues[selectedLeague].id
+          );
+        }),
+      };
+    })
     .map((player) => {
       return {
         ...player,
@@ -89,6 +117,7 @@ export default function WhereAreTheyNowClientComponent({
         allCollegeStatTotals={collegeStatTotals}
         playersWithStats={playersWithStatsAndTotals}
         collegeSalaryTotals={collegeSalaryTotals}
+        selectedLeague={selectedLeague}
       />
       {playersWithStatsAndTotals.map((player) => {
         return (
