@@ -60,6 +60,7 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     // '0': '40737320', // David Duke, but probably need to comment out
     '74847619': '58320784', // Terrence Shannon Jr.
     '75526696': '68666972', // DaRon Holmes II
+    '76273415': '329856', // Markelle Fultz
 }
 
 const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
