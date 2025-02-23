@@ -7,6 +7,7 @@ import type { PlayerWithStats } from "./recent-game-card";
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { leagues } from "~/app/(common)/leagues";
+import LeagueSelect from "./league-select";
 
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
@@ -112,6 +113,10 @@ export default function WhereAreTheyNowClientComponent({
 
   return (
     <div className="mx-auto max-w-3xl px-8 pt-4">
+      <LeagueSelect
+        selectedLeague={selectedLeague}
+        setSelectedLeague={setSelectedLeague}
+      />
       <CollegeCard
         college={college}
         allCollegeStatTotals={collegeStatTotals}
