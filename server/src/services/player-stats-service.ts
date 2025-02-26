@@ -61,6 +61,7 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '74847619': '58320784', // Terrence Shannon Jr.
     '75526696': '68666972', // DaRon Holmes II
     '76273415': '329856', // Markelle Fultz
+    '80411197': '1251771', // Jalen McDaniels
 }
 
 const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {

@@ -98,7 +98,7 @@ const StatRankingsClientComponent = ({
               <td className="px-4 py-2">{index + 1}</td>
               <td className="px-4 py-2">
                 <Link
-                  href={`/where-are-they-now/${college.college_code}`}
+                  href={`/where-are-they-now/${college.college_code}?league=${selectedLeague}`}
                   className="text-blue-700 hover:text-blue-900 hover:underline"
                 >
                   {college.display_name}

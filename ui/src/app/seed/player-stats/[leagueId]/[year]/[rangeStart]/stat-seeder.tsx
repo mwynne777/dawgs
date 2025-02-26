@@ -26,9 +26,9 @@ export default async function StatSeeder({
         <div>
           Saved {savedCount} player stats, {existingCount} already existed
         </div>
-        {existingIds.map((id) => (
+        {/* {existingIds.map((id) => (
           <div key={id}>{id}</div>
-        ))}
+        ))} */}
         {result.status === 200 ? (
           <div className="mt-4">
             <a
