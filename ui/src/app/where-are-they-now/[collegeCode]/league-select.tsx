@@ -27,7 +27,7 @@ const LeagueSelect = ({
         <SelectValue placeholder="Select a league" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All</SelectItem>
+        <SelectItem value="all">All - NBA & G League</SelectItem>
         <SelectItem value="nba">NBA</SelectItem>
         <SelectItem value="gl">G League</SelectItem>
       </SelectContent>

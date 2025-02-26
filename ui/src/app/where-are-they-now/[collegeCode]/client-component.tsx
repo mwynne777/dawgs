@@ -115,7 +115,16 @@ export default function WhereAreTheyNowClientComponent({
     <div className="mx-auto max-w-3xl px-8 pt-4">
       <LeagueSelect
         selectedLeague={selectedLeague}
-        setSelectedLeague={setSelectedLeague}
+        setSelectedLeague={(league) => {
+          setSelectedLeague(league);
+          const params = new URLSearchParams(searchParams);
+          params.set("league", league);
+          window.history.replaceState(
+            null,
+            "",
+            `/where-are-they-now/${college.code}?${params.toString()}`,
+          );
+        }}
       />
       <CollegeCard
         college={college}

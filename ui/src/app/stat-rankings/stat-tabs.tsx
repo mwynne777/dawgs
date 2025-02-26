@@ -13,9 +13,11 @@ const statOptions = [
 const StatTabs = ({
   stat,
   setStat,
+  selectedLeague,
 }: {
   stat: string;
   setStat: (stat: string) => void;
+  selectedLeague: "nba" | "gl" | "all";
 }) => {
   const searchParams = useSearchParams();
 
@@ -30,10 +32,15 @@ const StatTabs = ({
     );
   };
 
+  const filteredStatOptions = statOptions.filter((option) => {
+    if (selectedLeague === "gl" && option.id === "total_salary") return false;
+    return true;
+  });
+
   return (
     <div className="mb-6">
       <div className="flex rounded-lg bg-gray-100 p-1">
-        {statOptions.map((option) => (
+        {filteredStatOptions.map((option) => (
           <button
             key={option.id}
             className={`relative flex-1 cursor-pointer rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 sm:px-6 ${

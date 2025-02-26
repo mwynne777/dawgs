@@ -125,7 +125,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_minutes.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_minutes&selectedCollegeCode=${college.code}`}
+                      href={`/stat-rankings?stat=total_minutes&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_minutes_ranking &&
@@ -141,7 +141,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_points.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_points&selectedCollegeCode=${college.code}`}
+                      href={`/stat-rankings?stat=total_points&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_points_ranking &&
@@ -157,7 +157,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_rebounds.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_rebounds&selectedCollegeCode=${college.code}`}
+                      href={`/stat-rankings?stat=total_rebounds&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_rebounds_ranking &&
@@ -173,7 +173,7 @@ const CollegeCard = ({
                   <td>{collegeStatTotals?.total_assists.toLocaleString()}</td>
                   <td>
                     <Link
-                      href={`/stat-rankings?stat=total_assists&selectedCollegeCode=${college.code}`}
+                      href={`/stat-rankings?stat=total_assists&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.total_assists_ranking &&
@@ -184,25 +184,27 @@ const CollegeCard = ({
                     {leaders.assists?.full_name}
                   </td>
                 </tr>
-                <tr>
-                  <td>SALARY</td>
-                  <td>${totalSalary.toLocaleString()}</td>
-                  <td>
-                    {salaryRanking ? (
-                      <Link
-                        href={`/stat-rankings?stat=total_salary&selectedCollegeCode=${college.code}`}
-                        className="text-blue-600 hover:text-blue-800 hover:underline"
-                      >
-                        {toOrdinal(salaryRanking)}
-                      </Link>
-                    ) : (
-                      "-"
-                    )}
-                  </td>
-                  <td className="max-w-[80px] break-words text-xs leading-tight">
-                    {leaders.salary?.full_name}
-                  </td>
-                </tr>
+                {selectedLeague !== "gl" && (
+                  <tr>
+                    <td>SALARY</td>
+                    <td>${totalSalary.toLocaleString()}</td>
+                    <td>
+                      {salaryRanking ? (
+                        <Link
+                          href={`/stat-rankings?stat=total_salary&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
+                          className="text-blue-600 hover:text-blue-800 hover:underline"
+                        >
+                          {toOrdinal(salaryRanking)}
+                        </Link>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className="max-w-[80px] break-words text-xs leading-tight">
+                      {leaders.salary?.full_name}
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
