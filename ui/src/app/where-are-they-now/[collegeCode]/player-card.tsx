@@ -24,6 +24,20 @@ export type PlayerGroup = PlayerWithStats & {
   };
 };
 
+const formatTeamDisplayName = (displayName: string) => {
+  const twoWordTeamIds = [
+    "Portland Trail Blazers",
+    "Delaware Blue Coats",
+    "Indiana Mad Ants",
+  ];
+
+  if (twoWordTeamIds.includes(displayName)) {
+    return displayName.replace(/^(.*?) ([^ ]+ [^ ]+)$/, "$1\n$2");
+  }
+
+  return displayName.split(/(?= [^ ]*$)/).join("\n");
+};
+
 const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
   const player = playerAndStats;
   const draftPick = player.draft_picks[0];
@@ -46,12 +60,9 @@ const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
         </div>
         <div className="flex items-center text-right">
           <pre className="font-bold">
-            {teams[player?.player_stats[0]?.team_id ?? 0]?.displayName ===
-            "Portland Trail Blazers"
-              ? "Portland\nTrail Blazers"
-              : teams[player?.player_stats[0]?.team_id ?? 0]?.displayName
-                  .split(/(?= [^ ]*$)/)
-                  .join("\n")}
+            {formatTeamDisplayName(
+              teams[player?.player_stats[0]?.team_id ?? 0]?.displayName!,
+            )}
           </pre>
         </div>
       </div>

@@ -1,5 +1,3 @@
-export type TeamAbbreviation = 'no' | 'mil' | 'por' | 'sa' | 'mem' | 'bkn'
-
 export const teams: Record<number, {abbreviation: string, displayName: string, leagueId: number, natStatId: number, color: string, affiliateCode?: string}> = {
     1: {abbreviation: 'atl', displayName: 'Atlanta Hawks', leagueId: 46, natStatId: 6, color: '#C8102E' },
     2: {abbreviation: 'bos', displayName: 'Boston Celtics', leagueId: 46, natStatId: 5, color: '#007A33' },

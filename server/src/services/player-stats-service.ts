@@ -69,6 +69,7 @@ const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '58269514': '58269446', // Shakur Daniel
     '73500987': '73500950', // Olisa Akonobi
     '58163752': '58163736', // Nick Muszynski
+    '79780744': '79778000', // Will Brown
 
 }
 
@@ -119,8 +120,8 @@ const playerStatsService = {
                 college_id: player.college_id ?? null,
                 game_id: parseInt(performance.game.code),
                 game_date: performance.game.gameday,
-                team_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.team.code)?.[0]! as unknown as number,
-                opponent_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.opponent.code)?.[0]! as unknown as number,
+                team_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.team.code && value.leagueId === (leagueId === 'NBA' ? 46 : 69))?.[0]! as unknown as number,
+                opponent_id: Object.entries(teams).find(([_key, value]) => value.natStatAbbreviation === performance.opponent.code && value.leagueId === (leagueId === 'NBA' ? 46 : 69))?.[0]! as unknown as number,
                 started: performance.starter === 'Y',
                 minutes: parseInt(performance.min),
                 points: parseInt(performance.pts),
