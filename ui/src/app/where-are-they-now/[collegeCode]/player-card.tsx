@@ -61,7 +61,7 @@ const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
         <div className="flex items-center text-right">
           <pre className="font-bold">
             {formatTeamDisplayName(
-              teams[player?.player_stats[0]?.team_id ?? 0]?.displayName!,
+              teams[player?.player_stats[0]?.team_id ?? 0]?.displayName ?? "",
             )}
           </pre>
         </div>
