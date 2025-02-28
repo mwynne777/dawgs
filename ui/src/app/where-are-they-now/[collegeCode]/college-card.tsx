@@ -2,6 +2,19 @@ import type { PlayerGroup } from "./player-card";
 import type { Database } from "~/lib/supabase-types";
 import Link from "next/link";
 import { toOrdinal } from "~/lib/utils";
+import collegesService from "~/app/(services)/colleges-service";
+
+type StatName = keyof Omit<
+  Awaited<
+    ReturnType<typeof collegesService.getCollegeStatTotalsWithRankings>
+  >[number],
+  "college_code"
+>;
+
+const getStatName = (stat: string, league: "nba" | "gl" | "all"): StatName => {
+  if (league === "all") return stat as StatName;
+  return `${league}_${stat}` as StatName;
+};
 
 const CollegeCard = ({
   college,
@@ -11,22 +24,13 @@ const CollegeCard = ({
   selectedLeague,
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
-  allCollegeStatTotals: {
-    college_code: string;
-    total_minutes: number;
-    total_points: number;
-    total_rebounds: number;
-    total_assists: number;
-    total_minutes_ranking: number;
-    total_points_ranking: number;
-    total_rebounds_ranking: number;
-    total_assists_ranking: number;
-  }[];
+  allCollegeStatTotals: Awaited<
+    ReturnType<typeof collegesService.getCollegeStatTotalsWithRankings>
+  >;
   playersWithStats: PlayerGroup[];
-  collegeSalaryTotals: {
-    college_code: string;
-    total_salary: number;
-  }[];
+  collegeSalaryTotals: Awaited<
+    ReturnType<typeof collegesService.getCollegeSalaryTotals>
+  >;
   selectedLeague: "nba" | "gl" | "all";
 }) => {
   const collegeStatTotals = allCollegeStatTotals.find(
@@ -122,14 +126,24 @@ const CollegeCard = ({
                 </tr>
                 <tr>
                   <td>MINS</td>
-                  <td>{collegeStatTotals?.total_minutes.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.[
+                      getStatName("total_minutes", selectedLeague)
+                    ].toLocaleString()}
+                  </td>
                   <td>
                     <Link
                       href={`/stat-rankings?stat=total_minutes&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
-                      {collegeStatTotals?.total_minutes_ranking &&
-                        toOrdinal(collegeStatTotals.total_minutes_ranking)}
+                      {collegeStatTotals?.[
+                        getStatName("total_minutes_ranking", selectedLeague)
+                      ] &&
+                        toOrdinal(
+                          collegeStatTotals[
+                            getStatName("total_minutes_ranking", selectedLeague)
+                          ],
+                        )}
                     </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight sm:max-w-none">
@@ -138,14 +152,24 @@ const CollegeCard = ({
                 </tr>
                 <tr>
                   <td>PTS</td>
-                  <td>{collegeStatTotals?.total_points.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.[
+                      getStatName("total_points", selectedLeague)
+                    ].toLocaleString()}
+                  </td>
                   <td>
                     <Link
                       href={`/stat-rankings?stat=total_points&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
-                      {collegeStatTotals?.total_points_ranking &&
-                        toOrdinal(collegeStatTotals.total_points_ranking)}
+                      {collegeStatTotals?.[
+                        getStatName("total_points_ranking", selectedLeague)
+                      ] &&
+                        toOrdinal(
+                          collegeStatTotals[
+                            getStatName("total_points_ranking", selectedLeague)
+                          ],
+                        )}
                     </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
@@ -154,14 +178,27 @@ const CollegeCard = ({
                 </tr>
                 <tr>
                   <td>REB</td>
-                  <td>{collegeStatTotals?.total_rebounds.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.[
+                      getStatName("total_rebounds", selectedLeague)
+                    ].toLocaleString()}
+                  </td>
                   <td>
                     <Link
                       href={`/stat-rankings?stat=total_rebounds&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
-                      {collegeStatTotals?.total_rebounds_ranking &&
-                        toOrdinal(collegeStatTotals.total_rebounds_ranking)}
+                      {collegeStatTotals?.[
+                        getStatName("total_rebounds_ranking", selectedLeague)
+                      ] &&
+                        toOrdinal(
+                          collegeStatTotals[
+                            getStatName(
+                              "total_rebounds_ranking",
+                              selectedLeague,
+                            )
+                          ],
+                        )}
                     </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
@@ -170,14 +207,24 @@ const CollegeCard = ({
                 </tr>
                 <tr>
                   <td>AST</td>
-                  <td>{collegeStatTotals?.total_assists.toLocaleString()}</td>
+                  <td>
+                    {collegeStatTotals?.[
+                      getStatName("total_assists", selectedLeague)
+                    ].toLocaleString()}
+                  </td>
                   <td>
                     <Link
                       href={`/stat-rankings?stat=total_assists&selectedCollegeCode=${college.code}&league=${selectedLeague}`}
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
-                      {collegeStatTotals?.total_assists_ranking &&
-                        toOrdinal(collegeStatTotals.total_assists_ranking)}
+                      {collegeStatTotals?.[
+                        getStatName("total_assists_ranking", selectedLeague)
+                      ] &&
+                        toOrdinal(
+                          collegeStatTotals[
+                            getStatName("total_assists_ranking", selectedLeague)
+                          ],
+                        )}
                     </Link>
                   </td>
                   <td className="max-w-[80px] break-words text-xs leading-tight">
