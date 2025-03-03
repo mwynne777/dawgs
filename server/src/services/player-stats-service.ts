@@ -62,6 +62,9 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '75526696': '68666972', // DaRon Holmes II
     '76273415': '329856', // Markelle Fultz
     '80411197': '1251771', // Jalen McDaniels
+    '53469389': '62965654', // Tosan Evbuomwan
+    '44851434': '58136275', // Matt Ryan
+    '52566284': '58310626', // Isaiah Wong
 }
 
 const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
@@ -171,7 +174,7 @@ const playerStatsService = {
             console.error(error);
             throw error;
         }
-        console.log(data)
+        // console.log(data)
         return data;
     }
 }
