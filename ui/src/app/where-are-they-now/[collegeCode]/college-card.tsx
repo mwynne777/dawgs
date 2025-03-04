@@ -2,7 +2,7 @@ import type { PlayerGroup } from "./player-card";
 import type { Database } from "~/lib/supabase-types";
 import Link from "next/link";
 import { toOrdinal } from "~/lib/utils";
-import collegesService from "~/app/(services)/colleges-service";
+import type collegesService from "~/app/(services)/colleges-service";
 
 type StatName = keyof Omit<
   Awaited<

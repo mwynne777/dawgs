@@ -45,6 +45,11 @@ app.get("/player-stats/college-code", async (req: Request, res: Response) => {
   res.status(200).json(result);
 });
 
+app.get("/player-stats/player-id/:playerId", async (req: Request, res: Response) => {
+  const result = await playerStatsService.getPlayerStatsByIdFromDB(parseInt(req.params.playerId));
+  res.status(200).json(result);
+});
+
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
 });

@@ -1,6 +1,7 @@
 import { teams } from "~/app/(common)/teams";
 import RecentGameCard, { PlayerWithStats } from "./recent-game-card";
 import { toOrdinal } from "~/lib/utils";
+import type { Database } from "~/lib/supabase-types";
 
 export type PlayerGroup = PlayerWithStats & {
   totals: {
@@ -38,7 +39,13 @@ const formatTeamDisplayName = (displayName: string) => {
   return displayName.split(/(?= [^ ]*$)/).join("\n");
 };
 
-const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
+const PlayerCard = ({
+  playerAndStats,
+  college,
+}: {
+  playerAndStats: PlayerGroup;
+  college?: Database["public"]["Tables"]["colleges"]["Row"];
+}) => {
   const player = playerAndStats;
   const draftPick = player.draft_picks[0];
 
@@ -68,6 +75,17 @@ const PlayerCard = ({ playerAndStats }: { playerAndStats: PlayerGroup }) => {
       </div>
       <div className="flex justify-between">
         <div className="flex flex-col">
+          {college && (
+            <div className="mb-1 text-base">
+              College:{" "}
+              <a
+                href={`/where-are-they-now/${college.code}`}
+                className="font-semibold text-blue-600 hover:underline"
+              >
+                {college.name}
+              </a>
+            </div>
+          )}
           <div className="text-base">
             {draftPick && (
               <>

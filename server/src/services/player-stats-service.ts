@@ -176,6 +176,15 @@ const playerStatsService = {
         }
         // console.log(data)
         return data;
+    },
+    getPlayerStatsByIdFromDB: async (id: number) => {
+        const { data, error } = await supabase.from('players').select('*, player_stats(*), draft_picks(team_abbreviation, traded_to_team_abbreviation, pick_number, year)').eq('id', id).order('game_date', { referencedTable: 'player_stats', ascending: false });
+        if (error) {
+            console.error(error);
+            throw error;
+        }
+        // console.log(data)
+        return data;
     }
 }
 
