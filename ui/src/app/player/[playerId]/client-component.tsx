@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type collegesService from "~/app/(services)/colleges-service";
 import PlayerCard from "../../where-are-they-now/[collegeCode]/player-card";
@@ -34,6 +34,17 @@ export default function PlayerClientComponent({
       leaguesToInclude.add(stat.league_id);
     }
   });
+
+  useEffect(() => {
+    if (Array.from(leaguesToInclude).length === 1) {
+      const league = Object.keys(leagues).find(
+        (key) =>
+          leagues[key as keyof typeof leagues].id ===
+          Array.from(leaguesToInclude)[0],
+      );
+      setSelectedLeague(league as "nba" | "gl");
+    }
+  }, [leaguesToInclude]);
 
   const playerWithStatsInLeague = {
     ...playerWithStats,
