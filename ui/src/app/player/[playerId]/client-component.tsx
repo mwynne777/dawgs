@@ -24,12 +24,8 @@ export default function PlayerClientComponent({
       "all",
   );
 
-  if (!playerWithStats) {
-    return <div>Player not found</div>;
-  }
-
   const leaguesToInclude = new Set<number>();
-  playerWithStats.player_stats.forEach((stat) => {
+  playerWithStats?.player_stats.forEach((stat) => {
     if (!leaguesToInclude.has(stat.league_id)) {
       leaguesToInclude.add(stat.league_id);
     }
@@ -45,6 +41,10 @@ export default function PlayerClientComponent({
       setSelectedLeague(league as "nba" | "gl");
     }
   }, [leaguesToInclude]);
+
+  if (!playerWithStats) {
+    return <div>Player not found</div>;
+  }
 
   const playerWithStatsInLeague = {
     ...playerWithStats,
