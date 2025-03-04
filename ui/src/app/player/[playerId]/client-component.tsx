@@ -28,6 +28,13 @@ export default function PlayerClientComponent({
     return <div>Player not found</div>;
   }
 
+  const leaguesToInclude = new Set<number>();
+  playerWithStats.player_stats.forEach((stat) => {
+    if (!leaguesToInclude.has(stat.league_id)) {
+      leaguesToInclude.add(stat.league_id);
+    }
+  });
+
   const playerWithStatsInLeague = {
     ...playerWithStats,
     player_stats: playerWithStats.player_stats.filter((stat) => {
@@ -59,6 +66,7 @@ export default function PlayerClientComponent({
         acc.personal_fouls += stat.fouls ?? 0;
         acc.games_played += 1; // Increment games played for each record
         acc.games_started += stat.started ? 1 : 0;
+
         return acc;
       },
       {
@@ -97,6 +105,7 @@ export default function PlayerClientComponent({
             `/player/${playerWithStats.id}?${params.toString()}`,
           );
         }}
+        leaguesToInclude={Array.from(leaguesToInclude)}
       />
       <PlayerCard
         playerAndStats={playerWithStatsAndTotals}

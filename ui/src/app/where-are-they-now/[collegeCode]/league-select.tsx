@@ -9,12 +9,31 @@ import {
 type LeagueSelectProps = {
   selectedLeague: "nba" | "gl" | "all";
   setSelectedLeague: (league: "nba" | "gl" | "all") => void;
+  leaguesToInclude?: number[];
 };
 
 const LeagueSelect = ({
   selectedLeague,
   setSelectedLeague,
+  leaguesToInclude,
 }: LeagueSelectProps) => {
+  const allLeagues = [
+    { value: "nba", id: 46, name: "NBA" },
+    { value: "gl", id: 69, name: "G League" },
+  ];
+
+  const leaguesToShow = allLeagues.filter((league) =>
+    leaguesToInclude ? leaguesToInclude.includes(league.id) : true,
+  );
+
+  if (leaguesToShow.length > 1) {
+    leaguesToShow.unshift({
+      value: "all",
+      id: 0,
+      name: "All - NBA & G League",
+    });
+  }
+
   return (
     <Select
       value={selectedLeague}
@@ -27,9 +46,11 @@ const LeagueSelect = ({
         <SelectValue placeholder="Select a league" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All - NBA & G League</SelectItem>
-        <SelectItem value="nba">NBA</SelectItem>
-        <SelectItem value="gl">G League</SelectItem>
+        {leaguesToShow.map((league) => (
+          <SelectItem key={league.value} value={league.value}>
+            {league.name}
+          </SelectItem>
+        ))}
       </SelectContent>
     </Select>
   );
