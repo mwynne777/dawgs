@@ -17,6 +17,17 @@ type StatRankingsClientComponentProps = {
   >;
 };
 
+const getDifference = (previousYearRank: number, currentYearRank: number) => {
+  const difference = previousYearRank - currentYearRank;
+  if (difference === 0 || isNaN(difference))
+    return <span className="block w-full text-center">-</span>;
+  return (
+    <span className={difference > 0 ? "text-green-600" : "text-red-600"}>
+      {difference > 0 ? "↑" : "↓"} {Math.abs(difference)}
+    </span>
+  );
+};
+
 const StatRankingsClientComponent = ({
   collegeStatTotals,
   colleges,
@@ -44,11 +55,16 @@ const StatRankingsClientComponent = ({
       };
     });
 
+  const previousYearCollegeStatTotals = collegeStatTotals.filter(
+    (r) => r.season === 2024,
+  );
+
   // Sort colleges by the selected stat
   const sortedColleges =
     statNameWithLeague === "total_salary"
       ? sortedCollegesBySalary
       : collegeStatTotals
+          .filter((r) => r.season === 2025)
           .map((college) => {
             const collegeData = colleges.find(
               (c) => c.code === college.college_code,
@@ -63,6 +79,10 @@ const StatRankingsClientComponent = ({
               (b[statNameWithLeague as keyof typeof b] as number) -
               (a[statNameWithLeague as keyof typeof a] as number),
           );
+
+  const showTrend =
+    selectedLeague !== "gl" && !statNameWithLeague.includes("total_salary");
+
   return (
     <div className="container mx-auto py-6">
       <LeagueSelect
@@ -79,42 +99,61 @@ const StatRankingsClientComponent = ({
         }}
       />
       <StatTabs stat={stat} setStat={setStat} selectedLeague={selectedLeague} />
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="px-4 py-2 text-left">Rank</th>
-            <th className="px-4 py-2 text-left">School</th>
-            <th className="px-4 py-2 text-right">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedColleges.map((college, index) => (
-            <tr
-              key={college.college_code}
-              className={`border-t ${
-                college.college_code === selectedCollegeCode ? "bg-blue-50" : ""
-              }`}
-            >
-              <td className="px-4 py-2">{index + 1}</td>
-              <td className="px-4 py-2">
-                <Link
-                  href={`/where-are-they-now/${college.college_code}?league=${selectedLeague}`}
-                  className="text-blue-700 hover:text-blue-900 hover:underline"
-                >
-                  {college.display_name}
-                </Link>
-              </td>
-              <td className="px-4 py-2 text-right">
-                {statNameWithLeague.includes("total_salary")
-                  ? `$${college[statNameWithLeague as keyof typeof college]?.toLocaleString() ?? 0}`
-                  : (college[
-                      statNameWithLeague as keyof typeof college
-                    ]?.toLocaleString() ?? 0)}
-              </td>
+      <div className="overflow-x-auto">
+        <table className="min-w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="px-2 py-2 text-left sm:px-4">#</th>
+              <th className="px-2 py-2 text-left sm:px-4">School</th>
+              <th className="px-2 py-2 text-right sm:px-4">Total</th>
+              {showTrend && (
+                <th className="px-2 py-2 text-center sm:px-4">Trend</th>
+              )}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedColleges.map((college, index) => (
+              <tr
+                key={college.college_code}
+                className={`border-t ${
+                  college.college_code === selectedCollegeCode
+                    ? "bg-blue-50"
+                    : ""
+                }`}
+              >
+                <td className="px-2 py-2 text-left sm:px-4">{index + 1}</td>
+                <td className="px-2 py-2 text-left sm:px-4">
+                  <Link
+                    href={`/where-are-they-now/${college.college_code}?league=${selectedLeague}`}
+                    className="text-blue-700 hover:text-blue-900 hover:underline"
+                  >
+                    {college.display_name}
+                  </Link>
+                </td>
+                <td className="px-2 py-2 text-right sm:px-4">
+                  {statNameWithLeague.includes("total_salary")
+                    ? `$${college[statNameWithLeague as keyof typeof college]?.toLocaleString() ?? 0}`
+                    : (college[
+                        statNameWithLeague as keyof typeof college
+                      ]?.toLocaleString() ?? 0)}
+                </td>
+                {showTrend && (
+                  <td className="px-2 py-2 text-center sm:px-4">
+                    {getDifference(
+                      previousYearCollegeStatTotals.find(
+                        (r) => r.college_code === college.college_code,
+                      )?.[
+                        `${statNameWithLeague}_rank` as keyof (typeof previousYearCollegeStatTotals)[number]
+                      ] as number,
+                      index + 1,
+                    )}
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
