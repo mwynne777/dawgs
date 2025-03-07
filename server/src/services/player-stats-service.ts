@@ -65,6 +65,16 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '53469389': '62965654', // Tosan Evbuomwan
     '44851434': '58136275', // Matt Ryan
     '52566284': '58310626', // Isaiah Wong
+    '47882279': '58075618', // Dominick Barlow
+    '55530131': '55531829', // Wenyen Gabriel,
+    '54708117': '54710299', // Darius Bazley
+    // '0': '-1', // Charlie Brown - comment this out!
+    '53961452': '53962656', // Ashton Hagans
+    '52851934': '52851950', // Dmytro Skapintsev
+    '1686212': '58119281', // Jaylen Nowell
+    '52566294': '52833056', // GG Jackson II
+    '49315832': '55842335', // Jamaree Bouyea
+    // '0': '-2', // John Butler - comment this out!
 }
 
 const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
