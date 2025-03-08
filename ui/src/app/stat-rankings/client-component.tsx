@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import type collegesService from "../(services)/colleges-service";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import StatTabs from "./stat-tabs";
 import Link from "next/link";
 import LeagueSelect from "../where-are-they-now/[collegeCode]/league-select";
@@ -40,8 +40,15 @@ const StatRankingsClientComponent = ({
   );
   const selectedCollegeCode = searchParams.get("selectedCollegeCode");
 
-  const statNameWithLeague =
-    selectedLeague === "all" ? stat : `${selectedLeague}_${stat}`;
+  const statNameWithLeague = useMemo(() => {
+    if (selectedLeague === "gl" && stat === "total_salary") {
+      // Don't have salary data for GL, so use jump to minutes instead
+      setStat("total_minutes");
+      return "total_minutes";
+    }
+    if (stat === "total_salary") return "total_salary";
+    return selectedLeague === "all" ? stat : `${selectedLeague}_${stat}`;
+  }, [selectedLeague, stat]);
 
   const sortedCollegesBySalary = collegeSalaryTotals
     .filter(
