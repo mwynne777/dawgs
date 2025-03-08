@@ -13,7 +13,7 @@ type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
   college: Awaited<ReturnType<typeof collegesService.getCollegeByCode>>;
   collegeStatTotals: Awaited<
-    ReturnType<typeof collegesService.getCollegeStatTotalsWithRankings>
+    ReturnType<typeof collegesService.getCollegeStatTotals>
   >;
   collegeSalaryTotals: Awaited<
     ReturnType<typeof collegesService.getCollegeSalaryTotals>
