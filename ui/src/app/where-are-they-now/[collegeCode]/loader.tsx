@@ -16,7 +16,7 @@ export default async function Loader({
       fetch(
         `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/college-code?college_code=${collegeCode}${year ? `&year=${year}` : ""}`,
       ).then((res) => res.json() as Promise<PlayerWithStats[]>),
-      collegesService.getCollegeStatTotalsWithRankings(year),
+      collegesService.getCollegeStatTotals(year),
       collegesService.getCollegeSalaryTotals(),
     ]);
 

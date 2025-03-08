@@ -5,9 +5,7 @@ import { toOrdinal } from "~/lib/utils";
 import type collegesService from "~/app/(services)/colleges-service";
 
 type StatName = keyof Omit<
-  Awaited<
-    ReturnType<typeof collegesService.getCollegeStatTotalsWithRankings>
-  >[number],
+  Awaited<ReturnType<typeof collegesService.getCollegeStatTotals>>[number],
   "college_code"
 >;
 
@@ -25,7 +23,7 @@ const CollegeCard = ({
 }: {
   college: Database["public"]["Tables"]["colleges"]["Row"];
   allCollegeStatTotals: Awaited<
-    ReturnType<typeof collegesService.getCollegeStatTotalsWithRankings>
+    ReturnType<typeof collegesService.getCollegeStatTotals>
   >;
   playersWithStats: PlayerGroup[];
   collegeSalaryTotals: Awaited<
@@ -137,11 +135,11 @@ const CollegeCard = ({
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.[
-                        getStatName("total_minutes_ranking", selectedLeague)
+                        getStatName("total_minutes_rank", selectedLeague)
                       ] &&
                         toOrdinal(
                           collegeStatTotals[
-                            getStatName("total_minutes_ranking", selectedLeague)
+                            getStatName("total_minutes_rank", selectedLeague)
                           ],
                         )}
                     </Link>
@@ -163,11 +161,11 @@ const CollegeCard = ({
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.[
-                        getStatName("total_points_ranking", selectedLeague)
+                        getStatName("total_points_rank", selectedLeague)
                       ] &&
                         toOrdinal(
                           collegeStatTotals[
-                            getStatName("total_points_ranking", selectedLeague)
+                            getStatName("total_points_rank", selectedLeague)
                           ],
                         )}
                     </Link>
@@ -189,14 +187,11 @@ const CollegeCard = ({
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.[
-                        getStatName("total_rebounds_ranking", selectedLeague)
+                        getStatName("total_rebounds_rank", selectedLeague)
                       ] &&
                         toOrdinal(
                           collegeStatTotals[
-                            getStatName(
-                              "total_rebounds_ranking",
-                              selectedLeague,
-                            )
+                            getStatName("total_rebounds_rank", selectedLeague)
                           ],
                         )}
                     </Link>
@@ -218,11 +213,11 @@ const CollegeCard = ({
                       className="text-blue-600 hover:text-blue-800 hover:underline"
                     >
                       {collegeStatTotals?.[
-                        getStatName("total_assists_ranking", selectedLeague)
+                        getStatName("total_assists_rank", selectedLeague)
                       ] &&
                         toOrdinal(
                           collegeStatTotals[
-                            getStatName("total_assists_ranking", selectedLeague)
+                            getStatName("total_assists_rank", selectedLeague)
                           ],
                         )}
                     </Link>
