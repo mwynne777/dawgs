@@ -114,6 +114,99 @@ export type Database = {
         }
         Relationships: []
       }
+      player_season_totals: {
+        Row: {
+          assists: number | null
+          blocks: number | null
+          college_code: string | null
+          created_at: string
+          fg_a: number | null
+          fg_m: number | null
+          fouls: number | null
+          ft_a: number | null
+          ft_m: number | null
+          games_played: number | null
+          games_started: number | null
+          id: number
+          league_id: number
+          minutes: number | null
+          player_id: number
+          points: number | null
+          rebounds: number | null
+          rebounds_off: number | null
+          season: number
+          steals: number | null
+          three_fg_a: number | null
+          three_fg_m: number | null
+          turnovers: number | null
+        }
+        Insert: {
+          assists?: number | null
+          blocks?: number | null
+          college_code?: string | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          games_played?: number | null
+          games_started?: number | null
+          id?: number
+          league_id?: number
+          minutes?: number | null
+          player_id: number
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          season?: number
+          steals?: number | null
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
+        }
+        Update: {
+          assists?: number | null
+          blocks?: number | null
+          college_code?: string | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          games_played?: number | null
+          games_started?: number | null
+          id?: number
+          league_id?: number
+          minutes?: number | null
+          player_id?: number
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          season?: number
+          steals?: number | null
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_season_totals_college_code_fkey"
+            columns: ["college_code"]
+            isOneToOne: false
+            referencedRelation: "colleges"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "player_season_totals_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       player_stats: {
         Row: {
           assists: number | null
@@ -330,6 +423,12 @@ export type Database = {
           nba_total_assists_rank: number
           season: number
         }[]
+      }
+      update_player_season_totals: {
+        Args: {
+          season_param: number
+        }
+        Returns: undefined
       }
     }
     Enums: {
