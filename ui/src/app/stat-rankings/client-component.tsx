@@ -15,6 +15,9 @@ type StatRankingsClientComponentProps = {
   collegeSalaryTotals: Awaited<
     ReturnType<typeof collegesService.getCollegeSalaryTotals>
   >;
+  historicalCollegeStatTotals: Awaited<
+    ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
+  >;
 };
 
 const getDifference = (previousYearRank: number, currentYearRank: number) => {
@@ -32,6 +35,7 @@ const StatRankingsClientComponent = ({
   collegeStatTotals,
   colleges,
   collegeSalaryTotals,
+  historicalCollegeStatTotals,
 }: StatRankingsClientComponentProps) => {
   const searchParams = useSearchParams();
   const [stat, setStat] = useState(searchParams.get("stat") ?? "total_minutes");
@@ -61,10 +65,6 @@ const StatRankingsClientComponent = ({
         display_name: collegeData?.name,
       };
     });
-
-  const previousYearCollegeStatTotals = collegeStatTotals.filter(
-    (r) => r.season === 2024,
-  );
 
   // Sort colleges by the selected stat
   const sortedColleges =
@@ -147,10 +147,12 @@ const StatRankingsClientComponent = ({
                 {showTrend && (
                   <td className="px-2 py-2 text-center sm:px-4">
                     {getDifference(
-                      previousYearCollegeStatTotals.find(
-                        (r) => r.college_code === college.college_code,
+                      historicalCollegeStatTotals.find(
+                        (r) =>
+                          r.college_code === college.college_code &&
+                          r.season === 2024,
                       )?.[
-                        `${statNameWithLeague}_rank` as keyof (typeof previousYearCollegeStatTotals)[number]
+                        `${statNameWithLeague}_rank` as keyof (typeof historicalCollegeStatTotals)[number]
                       ] as number,
                       index + 1,
                     )}

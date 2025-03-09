@@ -39,6 +39,18 @@ const collegesService = {
     }
     return data;
   },
+  getHistoricalCollegeStatTotals: async (year?: number) => {
+    const { data, error } = await supabase.rpc("gethistoricalcollegestattotals", {
+          year_param: year,
+        })
+
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  },
 };
 
 export default collegesService;
