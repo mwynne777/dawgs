@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { leagues } from "~/app/(common)/leagues";
 import LeagueSelect from "./league-select";
+import { TestChart } from "./test-chart";
 
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
@@ -18,6 +19,9 @@ type WhereAreTheyNowClientComponentProps = {
   collegeSalaryTotals: Awaited<
     ReturnType<typeof collegesService.getCollegeSalaryTotals>
   >;
+  historicalCollegeStatTotals: Awaited<
+    ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
+  >;
 };
 
 export default function WhereAreTheyNowClientComponent({
@@ -25,6 +29,7 @@ export default function WhereAreTheyNowClientComponent({
   college,
   collegeStatTotals,
   collegeSalaryTotals,
+  historicalCollegeStatTotals,
 }: WhereAreTheyNowClientComponentProps) {
   const searchParams = useSearchParams();
   const [selectedLeague, setSelectedLeague] = useState<"nba" | "gl" | "all">(
@@ -140,6 +145,14 @@ export default function WhereAreTheyNowClientComponent({
           </div>
         );
       })}
+      <TestChart
+        collegeStatTotals={collegeStatTotals.filter(
+          (stat) => stat.college_code === college.code,
+        )}
+        historicalCollegeStatTotals={historicalCollegeStatTotals.filter(
+          (stat) => stat.college_code === college.code,
+        )}
+      />
     </div>
   );
 }
