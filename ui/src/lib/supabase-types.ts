@@ -315,6 +315,114 @@ export type Database = {
           },
         ]
       }
+      player_stats_gl: {
+        Row: {
+          assists: number | null
+          blocks: number | null
+          college_code: string | null
+          college_id: number | null
+          created_at: string
+          fg_a: number | null
+          fg_m: number | null
+          fouls: number | null
+          ft_a: number | null
+          ft_m: number | null
+          game_date: string
+          game_id: number
+          id: number
+          league_id: number
+          minutes: number | null
+          nat_stat_player_id: number
+          opponent_id: number
+          player_id: number
+          points: number | null
+          rebounds: number | null
+          rebounds_off: number | null
+          season: number
+          started: boolean | null
+          steals: number | null
+          team_id: number
+          three_fg_a: number | null
+          three_fg_m: number | null
+          turnovers: number | null
+        }
+        Insert: {
+          assists?: number | null
+          blocks?: number | null
+          college_code?: string | null
+          college_id?: number | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          game_date?: string
+          game_id: number
+          id: number
+          league_id?: number
+          minutes?: number | null
+          nat_stat_player_id: number
+          opponent_id: number
+          player_id: number
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          season?: number
+          started?: boolean | null
+          steals?: number | null
+          team_id: number
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
+        }
+        Update: {
+          assists?: number | null
+          blocks?: number | null
+          college_code?: string | null
+          college_id?: number | null
+          created_at?: string
+          fg_a?: number | null
+          fg_m?: number | null
+          fouls?: number | null
+          ft_a?: number | null
+          ft_m?: number | null
+          game_date?: string
+          game_id?: number
+          id?: number
+          league_id?: number
+          minutes?: number | null
+          nat_stat_player_id?: number
+          opponent_id?: number
+          player_id?: number
+          points?: number | null
+          rebounds?: number | null
+          rebounds_off?: number | null
+          season?: number
+          started?: boolean | null
+          steals?: number | null
+          team_id?: number
+          three_fg_a?: number | null
+          three_fg_m?: number | null
+          turnovers?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "player_stats_gl_college_code_fkey"
+            columns: ["college_code"]
+            isOneToOne: false
+            referencedRelation: "colleges"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "player_stats_gl_player_id_fkey"
+            columns: ["player_id"]
+            isOneToOne: false
+            referencedRelation: "players"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       players: {
         Row: {
           college_code: string | null

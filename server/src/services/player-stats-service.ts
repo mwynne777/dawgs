@@ -161,6 +161,22 @@ const ALTERNATE_PLAYER_NAME_MAP: Record<string, string> = {
     'Herb Jones': 'Herbert Jones',
     'EJ Liddell': 'E.J. Liddell',
     'DJ Carton': 'D.J. Carton',
+    'E.J. Harkless': 'Elijah Harkless',
+    'Ron Harper': 'Ron Harper Jr.',
+    'K.J. Simpson': 'KJ Simpson',
+    'D.J. Steward': 'DJ Steward',
+    'K.J. Jones': 'K.J. Jones II',
+    'Dwight Murray': 'Dwight Murray Jr.',
+    'Jameer Nelson': 'Jameer Nelson Jr.',
+    'Cameron Christie': 'Cam Christie',
+    'Mohamed Bamba': 'Mo Bamba',
+    'Dyson Disu': 'Dylan Disu',
+    'G.G. Jackson': 'GG Jackson',
+    'Cui Yongxi': 'Yongxi Cui',
+    'D.J. Rodman, Jr.': 'D.J. Rodman',
+    'Keion Brooks, Jr.': 'Keion Brooks Jr.',
+    'Jameer Nelson, Jr.': 'Jameer Nelson Jr.',
+    'Dwight Murray, Jr.': 'Dwight Murray Jr.',
 }
 
 const getPlayerByName = async (name: string) => {
@@ -169,7 +185,7 @@ const getPlayerByName = async (name: string) => {
     const { data, error } = await supabase
         .from('players')
         .select('id, college_id, college_code')
-        .eq('full_name', nameToSearchBy)
+        .ilike('full_name', `%${nameToSearchBy}%`)
         .single();
     if (error) {
         console.error(error, 'for player', name);
@@ -179,7 +195,7 @@ const getPlayerByName = async (name: string) => {
 }
 
 const playerStatsService = {
-    getPlayerStatsByIds: async (ids: number[], tableToUpsert: 'player_stats' | 'previous_season_player_stats' = 'player_stats') => {
+    getPlayerStatsByIds: async (ids: number[], tableToUpsert: 'player_stats' | 'player_stats_gl' | 'previous_season_player_stats' = 'player_stats') => {
         const { data, error } = await supabase
           .from(tableToUpsert)
           .select('id')
@@ -237,7 +253,11 @@ const playerStatsService = {
 
         const sanitizedPlayerStatsToSave = playerStatsToSave.filter(e => e !== undefined).filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
 
-        const tableToUpsert = year === 2025 ? 'player_stats' : 'previous_season_player_stats';
+        const tableToUpsert = year === 2025 ? 
+            leagueId === 'NBA' 
+                ? 'player_stats' 
+                : 'player_stats_gl' 
+            : 'previous_season_player_stats';
 
         const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id), tableToUpsert);
 
