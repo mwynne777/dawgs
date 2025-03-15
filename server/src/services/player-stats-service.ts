@@ -5,7 +5,8 @@ type PerformanceKey = `performance_${number}`
 
 type PlayerStatsResponse = {
   performances: Record<PerformanceKey, {
-    id: string, 
+    id: string,
+    player: string,
     'player-code': string,
     starter: string
     game: {
@@ -46,14 +47,13 @@ const BAD_PERF_IDS = [
     '12154957',
     '12154658',
     '12193210', 
-    '12234587' // Damion Baugh
+    '12234587', // Damion Baugh
+    '12251132',
+    '12225124'
 ]
 
 const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
-    '119696': '58075879', // Derrick Jones Jr.
     '538727': '3134324', // Daniel Theis
-    '538998': '58075619', // Bogdan Bogdanovic
-    '586': '58075621', // Clint Capela
     '52566256': '58075620', // Kobe Bufkin
     '54022359': '58076129', // Mason Jones
     '56876648': '58119281', // Jaylen Nowell
@@ -63,18 +63,38 @@ const NBA_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
     '76273415': '329856', // Markelle Fultz
     '80411197': '1251771', // Jalen McDaniels
     '53469389': '62965654', // Tosan Evbuomwan
-    '44851434': '58136275', // Matt Ryan
     '52566284': '58310626', // Isaiah Wong
-    '47882279': '58075618', // Dominick Barlow
     '55530131': '55531829', // Wenyen Gabriel,
     '54708117': '54710299', // Darius Bazley
     // '0': '-1', // Charlie Brown - comment this out!
     '53961452': '53962656', // Ashton Hagans
     '52851934': '52851950', // Dmytro Skapintsev
-    '1686212': '58119281', // Jaylen Nowell
     '52566294': '52833056', // GG Jackson II
     '49315832': '55842335', // Jamaree Bouyea
     // '0': '-2', // John Butler - comment this out!
+    '3134547': '329842', // Bam Adebayo
+    '3134549': '549', // Jimmy Butler
+    '3134559': '664841', // Duncan Robinson
+    '1853': '3134438', // Reggie Jackson
+    '4055': '55475784', // TJ Warren
+    '586': '58075029', // Clint Capela
+    '58075621': '58075029', // Clint Capela
+    '538998': '58075027', // Bogdan Bogdanovic
+    '58075619': '58075027', // Bogdan Bogdanovic
+    // '0': '538832', // PJ Dozier - comment this out!
+    '47882203': '55842499', // Raiquan Gray
+    // '0': '47267171', // Christian Koloko - comment this out!
+    '47882279': '58075026', // Dominick Barlow
+    '58075618': '58075026', // Dominick Barlow
+    '47882218': '57168960', // Jack White
+    '58075668': '47267106', // Tyrese Martin
+    '52851533': '10021549', // Vit Krejci
+    '52918618': '47882242', // Scotty Pippen Jr.
+    '54714878': '40722979', // Justin Champagnie
+    '55842554': '47882291', // Quenton Jackson
+    '56322809': '1683108', // Javonte Green
+    '58075879': '119696', // Derrick Jones Jr.
+    '55926197': '40722905', // Kai Jones
 }
 
 const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
@@ -87,26 +107,81 @@ const GL_ALTERNATE_PLAYER_ID_MAP: Record<string, string> = {
 
 }
 
-const getPlayerByNatStatId = async (natStatId: string, leagueId: 'NBA' | 'GL') => {
-    const natStatIdToUse = leagueId === 'NBA' ? 
-        parseInt(NBA_ALTERNATE_PLAYER_ID_MAP[natStatId] ?? natStatId) : 
-        parseInt(GL_ALTERNATE_PLAYER_ID_MAP[natStatId] ?? natStatId)
+const PERFORMANCE_ID_TO_NAT_STAT_ID_MAP: Record<string, string> = {
+    '11986342': '47267171', // Christian Koloko
+    '11985226': '47267171', // Christian Koloko
+    '11984960': '47267171', // Christian Koloko
+    '11986458': '538832', // PJ Dozier
+    '11985657': '538832', // PJ Dozier
+    '11985129': '538832', // PJ Dozier
+    '11985606': '-2', // John Butler
+    '11985275': '-2', // John Butler
+    '12251132': '52788300', // Jaylen Martin
+}
+
+const ALTERNATE_PLAYER_NAME_MAP: Record<string, string> = {
+    'Trey Murphy': 'Trey Murphy III',
+    'David Duke': 'David Duke Jr.',
+    'TJ McConnell': 'T.J. McConnell',
+    'Craig Porter': 'Craig Porter Jr.',
+    'Clayton Carrington': 'Bub Carrington',
+    'Jaren Jackson': 'Jaren Jackson Jr.',
+    'Nick Smith': 'Nick Smith Jr.',
+    'Alex Sarr': 'Alexandre Sarr',
+    'Tim Hardaway Jr': 'Tim Hardaway Jr.',
+    'Gary Payton': 'Gary Payton II',
+    'Jabari Smith': 'Jabari Smith Jr.',
+    'Jeff Dowtin': 'Jeff Dowtin Jr.',
+    'Ricky Council': 'Ricky Council IV',
+    "Jae'sean Tate": "Jae'Sean Tate",
+    'Vincent Williams': 'Vince Williams Jr.',
+    'Michael Porter': 'Michael Porter Jr.',
+    'Wendell Carter': 'Wendell Carter Jr.',
+    'Scotty Pippen': 'Scotty Pippen Jr.',
+    'Ronald Holland': 'Ronald Holland II',
+    'Lindy Waters': 'Lindy Waters III',
+    'Trey Jemison': 'Trey Jemison III',
+    'PJ Washington': 'P.J. Washington',
+    'Kelly Oubre': 'Kelly Oubre Jr.',
+    'Terrence Shannon': 'Terrence Shannon Jr.',
+    'Kevin Porter': 'Kevin Porter Jr.',
+    'Gary Trent': 'Gary Trent Jr.',
+    'Derrick Jones': 'Derrick Jones Jr.',
+    'Jaime Jaquez': 'Jaime Jaquez Jr.',
+    'TyTy Washington': 'TyTy Washington Jr.',
+    'Wendell Moore': 'Wendell Moore Jr.',
+    'Andre Jackson': 'Andre Jackson Jr.',
+    'Marvin Bagley': 'Marvin Bagley III',
+    'Robert Williams': 'Robert Williams III',
+    'DaRon Holmes': 'Elijah Harkless', // This is crazy...
+    'Larry Nance': 'Larry Nance Jr.',
+    'Keion Brooks': 'Keion Brooks Jr.',
+    'Patrick Baldwin': 'Patrick Baldwin Jr.',
+    'Dereck Lively': 'Dereck Lively II',
+    'Herb Jones': 'Herbert Jones',
+    'EJ Liddell': 'E.J. Liddell',
+    'DJ Carton': 'D.J. Carton',
+}
+
+const getPlayerByName = async (name: string) => {
+    const nameToSearchBy = ALTERNATE_PLAYER_NAME_MAP[name] ?? name;
+
     const { data, error } = await supabase
         .from('players')
         .select('id, college_id, college_code')
-        .eq(leagueId === 'NBA' ? 'nat_stat_id' : 'gl_nat_stat_id', natStatIdToUse)
+        .eq('full_name', nameToSearchBy)
         .single();
     if (error) {
-        console.error(error, 'for player', natStatId);
+        console.error(error, 'for player', name);
         throw error;
     }
     return data;
 }
 
 const playerStatsService = {
-    getPlayerStatsByIds: async (ids: number[]) => {
+    getPlayerStatsByIds: async (ids: number[], tableToUpsert: 'player_stats' | 'previous_season_player_stats' = 'player_stats') => {
         const { data, error } = await supabase
-          .from('player_stats')
+          .from(tableToUpsert)
           .select('id')
           .in('id', ids);
         
@@ -123,7 +198,7 @@ const playerStatsService = {
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
             const performance = data.performances[key];
-            const player = await getPlayerByNatStatId(performance['player-code'], leagueId);
+            const player = await getPlayerByName(performance['player']);
             if(player.id === undefined) {
                 console.error('player.data?.id is undefined', performance);
                 return
@@ -162,9 +237,11 @@ const playerStatsService = {
 
         const sanitizedPlayerStatsToSave = playerStatsToSave.filter(e => e !== undefined).filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
 
-        const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id));
+        const tableToUpsert = year === 2025 ? 'player_stats' : 'previous_season_player_stats';
 
-        const { error } = await supabase.from('player_stats').upsert(sanitizedPlayerStatsToSave);
+        const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id), tableToUpsert);
+
+        const { error } = await supabase.from(tableToUpsert).upsert(sanitizedPlayerStatsToSave);
         if (error) {
             console.error(error);
             throw error;
