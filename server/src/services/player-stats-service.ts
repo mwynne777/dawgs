@@ -195,10 +195,10 @@ const getPlayerByName = async (name: string) => {
 }
 
 const playerStatsService = {
-    getPlayerStatsByIds: async (ids: number[], tableToUpsert: 'player_stats' | 'player_stats_gl' | 'previous_season_player_stats' = 'player_stats') => {
+    getPlayerStatsByIds: async (ids: number[], tableToUpsert: 'player_stats' | 'previous_season_player_stats' = 'player_stats') => {
         const { data, error } = await supabase
           .from(tableToUpsert)
-          .select('id')
+          .select('id, league_id')
           .in('id', ids);
         
         if (error) {
@@ -253,13 +253,19 @@ const playerStatsService = {
 
         const sanitizedPlayerStatsToSave = playerStatsToSave.filter(e => e !== undefined).filter(playerStat => !BAD_PERF_IDS.includes(playerStat.id.toString()));
 
-        const tableToUpsert = year === 2025 ? 
-            leagueId === 'NBA' 
-                ? 'player_stats' 
-                : 'player_stats_gl' 
-            : 'previous_season_player_stats';
+        const tableToUpsert = year === 2025 ? 'player_stats' : 'previous_season_player_stats';
 
         const existingPlayerStats = await playerStatsService.getPlayerStatsByIds(sanitizedPlayerStatsToSave.map(playerStat => playerStat.id), tableToUpsert);
+
+        const problematicExistingRecords = existingPlayerStats.filter(playerStat => {
+            const sanitizedPlayerStat = sanitizedPlayerStatsToSave.find(stat => stat.id === playerStat.id);
+            return sanitizedPlayerStat?.league_id !== playerStat.league_id
+        });
+
+        if(problematicExistingRecords.length > 0) {
+            console.error('problematicExistingRecords', problematicExistingRecords);
+            throw new Error('Problematic existing records');
+        }
 
         const { error } = await supabase.from(tableToUpsert).upsert(sanitizedPlayerStatsToSave);
         if (error) {
