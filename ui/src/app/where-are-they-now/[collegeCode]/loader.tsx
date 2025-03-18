@@ -1,6 +1,7 @@
 import collegesService from "~/app/(services)/colleges-service";
 import type { PlayerWithStats } from "./recent-game-card";
 import WhereAreTheyNowClientComponent from "./client-component";
+import { Database } from "~/lib/supabase-types";
 
 export default async function Loader({
   params,
@@ -16,6 +17,7 @@ export default async function Loader({
     collegeStatTotals,
     collegeSalaryTotals,
     historicalCollegeStatTotals,
+    playerTotals,
   ] = await Promise.all([
     collegesService.getCollegeByCode(collegeCode),
     fetch(
@@ -24,6 +26,14 @@ export default async function Loader({
     collegesService.getCollegeStatTotals(year),
     collegesService.getCollegeSalaryTotals(),
     collegesService.getHistoricalCollegeStatTotals(),
+    fetch(
+      `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/player-totals?college_code=${collegeCode}`,
+    ).then(
+      (res) =>
+        res.json() as Promise<
+          Database["public"]["Views"]["player_season_totals_with_details"]["Row"][]
+        >,
+    ),
   ]);
 
   return (
@@ -33,6 +43,7 @@ export default async function Loader({
       collegeStatTotals={collegeStatTotals}
       collegeSalaryTotals={collegeSalaryTotals}
       historicalCollegeStatTotals={historicalCollegeStatTotals}
+      playerTotals={playerTotals}
     />
   );
 }

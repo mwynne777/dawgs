@@ -9,7 +9,8 @@ import { useSearchParams } from "next/navigation";
 import { leagues } from "~/app/(common)/leagues";
 import LeagueSelect from "./league-select";
 import { TestChart } from "./test-chart";
-
+import { TestTable } from "./test-table";
+import { Database } from "~/lib/supabase-types";
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
   college: Awaited<ReturnType<typeof collegesService.getCollegeByCode>>;
@@ -22,6 +23,7 @@ type WhereAreTheyNowClientComponentProps = {
   historicalCollegeStatTotals: Awaited<
     ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
   >;
+  playerTotals: Database["public"]["Views"]["player_season_totals_with_details"]["Row"][];
 };
 
 export default function WhereAreTheyNowClientComponent({
@@ -30,12 +32,14 @@ export default function WhereAreTheyNowClientComponent({
   collegeStatTotals,
   collegeSalaryTotals,
   historicalCollegeStatTotals,
+  playerTotals,
 }: WhereAreTheyNowClientComponentProps) {
   const searchParams = useSearchParams();
   const [selectedLeague, setSelectedLeague] = useState<"nba" | "gl" | "all">(
     (searchParams.get("league")?.toLowerCase() as "nba" | "gl" | "all") ??
       "all",
   );
+  const [selectedSeason, setSelectedSeason] = useState<number>(2025);
 
   const playersWithStatsAndTotals = playersWithStats
     .filter((player) => player.player_stats.length > 0)
@@ -152,6 +156,13 @@ export default function WhereAreTheyNowClientComponent({
         historicalCollegeStatTotals={historicalCollegeStatTotals.filter(
           (stat) => stat.college_code === college.code,
         )}
+        selectSeason={setSelectedSeason}
+      />
+      <TestTable
+        playerTotals={playerTotals.filter(
+          (stat) => stat.season === selectedSeason,
+        )}
+        season={selectedSeason}
       />
     </div>
   );

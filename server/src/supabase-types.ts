@@ -472,7 +472,35 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      player_season_totals_with_details: {
+        Row: {
+          assists: number | null
+          blocks: number | null
+          college_code: string | null
+          created_at: string | null
+          fg_a: number | null
+          fg_m: number | null
+          fouls: number | null
+          ft_a: number | null
+          ft_m: number | null
+          full_name: string | null
+          games_played: number | null
+          games_started: number | null
+          id: number | null
+          league_id: number | null
+          minutes: number | null
+          player_id: number | null
+          points: number | null
+          rebounds: number | null
+          rebounds_off: number | null
+          season: number | null
+          steals: number | null
+          three_fg_a: number | null
+          three_fg_m: number | null
+          turnovers: number | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_players_by_similar_name: {

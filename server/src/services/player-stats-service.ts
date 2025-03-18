@@ -177,6 +177,8 @@ const ALTERNATE_PLAYER_NAME_MAP: Record<string, string> = {
     'Keion Brooks, Jr.': 'Keion Brooks Jr.',
     'Jameer Nelson, Jr.': 'Jameer Nelson Jr.',
     'Dwight Murray, Jr.': 'Dwight Murray Jr.',
+    'BJ Boston': 'Brandon Boston',
+    'Moe Wagner': 'Moritz Wagner',
 }
 
 const getPlayerByName = async (name: string) => {
@@ -297,6 +299,17 @@ const playerStatsService = {
             throw error;
         }
         // console.log(data)
+        return data;
+    },
+    getPlayerTotals: async (collegeCode: string) => {
+        const { data, error } = await supabase.from('player_season_totals_with_details').select('*').eq('college_code', collegeCode).order('points', { ascending: false });
+        
+        console.log('data', data);
+        
+        if (error) {
+            console.error(error);
+            throw error;
+        }
         return data;
     }
 }

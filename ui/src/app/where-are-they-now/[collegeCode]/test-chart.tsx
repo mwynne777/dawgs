@@ -26,6 +26,7 @@ const chartConfig = {
 export function TestChart({
   collegeStatTotals,
   historicalCollegeStatTotals,
+  selectSeason,
 }: {
   collegeStatTotals: Awaited<
     ReturnType<typeof collegesService.getCollegeStatTotals>
@@ -33,14 +34,20 @@ export function TestChart({
   historicalCollegeStatTotals: Awaited<
     ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
   >;
+  selectSeason: (season: number) => void;
 }) {
   const chartData = [...historicalCollegeStatTotals, ...collegeStatTotals];
 
-  console.log("chartData", chartData);
-
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-      <BarChart accessibilityLayer data={chartData}>
+      <BarChart
+        accessibilityLayer
+        data={chartData}
+        onClick={(e) => {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          selectSeason(e.activePayload?.[0]?.payload.season as number);
+        }}
+      >
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="season"
