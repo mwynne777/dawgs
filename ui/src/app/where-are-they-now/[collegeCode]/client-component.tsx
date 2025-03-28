@@ -11,6 +11,7 @@ import LeagueSelect from "./league-select";
 import { TestChart } from "./test-chart";
 import { TestTable } from "./test-table";
 import { Database } from "~/lib/supabase-types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
   college: Awaited<ReturnType<typeof collegesService.getCollegeByCode>>;
@@ -122,48 +123,64 @@ export default function WhereAreTheyNowClientComponent({
 
   return (
     <div className="mx-auto max-w-3xl px-8 pt-4">
-      <LeagueSelect
-        selectedLeague={selectedLeague}
-        setSelectedLeague={(league) => {
-          setSelectedLeague(league);
-          const params = new URLSearchParams(searchParams);
-          params.set("league", league);
-          window.history.replaceState(
-            null,
-            "",
-            `/where-are-they-now/${college.code}?${params.toString()}`,
-          );
-        }}
-      />
-      <CollegeCard
-        college={college}
-        allCollegeStatTotals={collegeStatTotals}
-        playersWithStats={playersWithStatsAndTotals}
-        collegeSalaryTotals={collegeSalaryTotals}
-        selectedLeague={selectedLeague}
-      />
-      {playersWithStatsAndTotals.map((player) => {
-        return (
-          <div className="mb-8" key={player?.id}>
-            <PlayerCard playerAndStats={player} />
-          </div>
-        );
-      })}
-      <TestChart
-        collegeStatTotals={collegeStatTotals.filter(
-          (stat) => stat.college_code === college.code,
-        )}
-        historicalCollegeStatTotals={historicalCollegeStatTotals.filter(
-          (stat) => stat.college_code === college.code,
-        )}
-        selectSeason={setSelectedSeason}
-      />
-      <TestTable
-        playerTotals={playerTotals.filter(
-          (stat) => stat.season === selectedSeason,
-        )}
-        season={selectedSeason}
-      />
+      <Tabs defaultValue="current">
+        <div className="mb-6 flex w-full justify-center">
+          <TabsList className="grid w-[400px] grid-cols-2">
+            <TabsTrigger value="historical" className="w-full">
+              Historical Trends
+            </TabsTrigger>
+            <TabsTrigger value="current" className="w-full">
+              Current Season
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        <TabsContent value="current">
+          <LeagueSelect
+            selectedLeague={selectedLeague}
+            setSelectedLeague={(league) => {
+              setSelectedLeague(league);
+              const params = new URLSearchParams(searchParams);
+              params.set("league", league);
+              window.history.replaceState(
+                null,
+                "",
+                `/where-are-they-now/${college.code}?${params.toString()}`,
+              );
+            }}
+          />
+          <CollegeCard
+            college={college}
+            allCollegeStatTotals={collegeStatTotals}
+            playersWithStats={playersWithStatsAndTotals}
+            collegeSalaryTotals={collegeSalaryTotals}
+            selectedLeague={selectedLeague}
+          />
+          {playersWithStatsAndTotals.map((player) => {
+            return (
+              <div className="mb-8" key={player?.id}>
+                <PlayerCard playerAndStats={player} />
+              </div>
+            );
+          })}
+        </TabsContent>
+        <TabsContent value="historical">
+          <TestChart
+            collegeStatTotals={collegeStatTotals.filter(
+              (stat) => stat.college_code === college.code,
+            )}
+            historicalCollegeStatTotals={historicalCollegeStatTotals.filter(
+              (stat) => stat.college_code === college.code,
+            )}
+            selectSeason={setSelectedSeason}
+          />
+          <TestTable
+            playerTotals={playerTotals.filter(
+              (stat) => stat.season === selectedSeason,
+            )}
+            season={selectedSeason}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

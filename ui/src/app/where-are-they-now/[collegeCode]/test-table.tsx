@@ -20,30 +20,34 @@ export function TestTable({ playerTotals, season }: TestTableProps) {
     0,
   );
   return (
-    <Table>
-      <TableCaption>Player Totals for {season}</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Player</TableHead>
-          <TableHead>Points</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {playerTotals.map((playerTotal) => (
-          <TableRow key={playerTotal.id}>
-            <TableCell className="font-medium">
-              {playerTotal.full_name}
-            </TableCell>
-            <TableCell className="text-right">{playerTotal.points}</TableCell>
+    <>
+      <div className="mt-2 text-center text-lg font-bold">
+        Player Point Totals for {season}
+      </div>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Player</TableHead>
+            <TableHead className="text-right">Points</TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-      <TableFooter>
-        <TableRow>
-          <TableCell>Total</TableCell>
-          <TableCell className="text-right">{totalPoints}</TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {playerTotals.map((playerTotal) => (
+            <TableRow key={playerTotal.id}>
+              <TableCell className="font-medium">
+                {playerTotal.full_name}
+              </TableCell>
+              <TableCell className="text-right">{playerTotal.points}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+        <TableFooter>
+          <TableRow>
+            <TableCell>Total</TableCell>
+            <TableCell className="text-right">{totalPoints}</TableCell>
+          </TableRow>
+        </TableFooter>
+      </Table>
+    </>
   );
 }

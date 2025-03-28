@@ -179,6 +179,12 @@ const ALTERNATE_PLAYER_NAME_MAP: Record<string, string> = {
     'Dwight Murray, Jr.': 'Dwight Murray Jr.',
     'BJ Boston': 'Brandon Boston',
     'Moe Wagner': 'Moritz Wagner',
+    'Nathaniel Hinton': 'Nate Hinton',
+    'Anthony Barber': 'Cat Barber',
+    'PJ Tucker': 'P.J. Tucker',
+    "Ja'Vonte Smart": "Javonte Smart",
+    'Jayden Scrubb': 'Jay Scrubb',
+    'P.J. Hall': 'PJ Hall',
 }
 
 const getPlayerByName = async (name: string) => {
@@ -216,7 +222,30 @@ const playerStatsService = {
         const performanceKeys = Object.keys(data.performances) as PerformanceKey[];
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
             const performance = data.performances[key];
-            const player = await getPlayerByName(performance['player']);
+            let name = performance['player'];
+            if(performance['id'] === '11841028' || performance['id'] === '11832468' || performance['id'] === '11830126') {
+                name = 'Mike James'
+            } else if(performance['id'] === '11840529') {
+                name = 'Elijah Bryant'
+            } else if(performance['id'] === '11832491' || performance['id'] === '11828212' || performance['id'] === '11825937') { 
+                name = 'Sindarius Thornwell'
+            } else if(performance['id'] === '11832937') { 
+                name = 'Terence Davis'
+            } else if(performance['id'] === '11832957') { 
+                name = 'Gabriel Deck'
+            } else if(performance['id'] === '11833014') {
+                name = 'Justin Jackson'   
+            } else if (performance['id'] === '11834495') {
+                name = 'Rudy Gay'
+            } else if (performance['id'] === '11828318') {
+                name = 'Freddie Gillespie'
+            } else if (performance['id'] === '11908776') {
+                name = 'John Konchar'
+            } else if (performance['id'] === '11826008') {
+                name = 'Khem Birch'
+            }
+
+            const player = await getPlayerByName(name);
             if(player.id === undefined) {
                 console.error('player.data?.id is undefined', performance);
                 return
