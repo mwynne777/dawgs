@@ -48,7 +48,7 @@ export function TestChart({
     season: year,
     [selectedStat]: playerTotals
       .filter((pt) => pt.season === year)
-      .reduce((acc, pt) => acc + ((pt[selectedStat] as number) ?? 0), 0),
+      .reduce((acc, pt) => acc + pt[selectedStat]!, 0),
   }));
 
   const maxValue = Math.max(...chartData.map((d) => d[selectedStat] ?? 0));

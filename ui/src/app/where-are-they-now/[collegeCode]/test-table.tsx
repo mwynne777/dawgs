@@ -21,7 +21,7 @@ export function TestTable({
   selectedStat,
 }: TestTableProps) {
   const statisticTotal = playerTotals.reduce(
-    (acc, pt) => acc + ((pt[selectedStat] as number) ?? 0),
+    (acc, pt) => acc + pt[selectedStat]!,
     0,
   );
   return (
