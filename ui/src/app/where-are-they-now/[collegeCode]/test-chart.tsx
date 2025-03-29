@@ -55,7 +55,7 @@ export function TestChart({
 
   const yAxisTickFormatter = useCallback(
     (value: number) => {
-      if (maxValue > 1000) {
+      if (maxValue > 10000) {
         return (value / 1000).toLocaleString();
       }
       return value.toLocaleString();
@@ -85,7 +85,7 @@ export function TestChart({
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          unit={maxValue > 1000 ? "k" : ""}
+          unit={maxValue > 10000 ? "k" : ""}
           tickFormatter={yAxisTickFormatter}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
