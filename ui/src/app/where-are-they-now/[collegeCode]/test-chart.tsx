@@ -10,33 +10,38 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "~/components/ui/chart";
-import type collegesService from "~/app/(services)/colleges-service";
+import { Database } from "~/lib/supabase-types";
 
 const chartConfig = {
   total_points: {
     label: "Points",
-    color: "#2563eb",
+    color: "hsl(var(--primary))",
   },
-  mobile: {
-    label: "Mobile",
-    color: "#60a5fa",
-  },
+  // mobile: {
+  //   label: "Mobile",
+  //   color: "#60a5fa",
+  // },
 } satisfies ChartConfig;
 
 export function TestChart({
-  collegeStatTotals,
-  historicalCollegeStatTotals,
+  playerTotals,
   selectSeason,
 }: {
-  collegeStatTotals: Awaited<
-    ReturnType<typeof collegesService.getCollegeStatTotals>
-  >;
-  historicalCollegeStatTotals: Awaited<
-    ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
-  >;
+  playerTotals: Database["public"]["Views"]["player_season_totals_with_details"]["Row"][];
   selectSeason: (season: number) => void;
 }) {
-  const chartData = [...historicalCollegeStatTotals, ...collegeStatTotals];
+  console.log("playerTotals", playerTotals);
+  const yearsToDisplay = Array.from(
+    { length: 2025 - 2022 + 1 },
+    (_, index) => 2022 + index,
+  );
+
+  const chartData = yearsToDisplay.map((year) => ({
+    season: year,
+    total_points: playerTotals
+      .filter((pt) => pt.season === year)
+      .reduce((acc, pt) => acc + (pt.points ?? 0), 0),
+  }));
 
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
@@ -60,7 +65,7 @@ export function TestChart({
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          tickFormatter={(value: number) => value.toLocaleString()}
+          tickFormatter={(value: number) => (value / 1000).toLocaleString()}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />

@@ -16,7 +16,6 @@ export default async function Loader({
     playersWithStats,
     collegeStatTotals,
     collegeSalaryTotals,
-    historicalCollegeStatTotals,
     playerTotals,
   ] = await Promise.all([
     collegesService.getCollegeByCode(collegeCode),
@@ -25,7 +24,6 @@ export default async function Loader({
     ).then((res) => res.json() as Promise<PlayerWithStats[]>),
     collegesService.getCollegeStatTotals(year),
     collegesService.getCollegeSalaryTotals(),
-    collegesService.getHistoricalCollegeStatTotals(),
     fetch(
       `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}player-stats/player-totals?college_code=${collegeCode}`,
     ).then(
@@ -42,7 +40,6 @@ export default async function Loader({
       college={college}
       collegeStatTotals={collegeStatTotals}
       collegeSalaryTotals={collegeSalaryTotals}
-      historicalCollegeStatTotals={historicalCollegeStatTotals}
       playerTotals={playerTotals}
     />
   );

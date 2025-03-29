@@ -21,9 +21,6 @@ type WhereAreTheyNowClientComponentProps = {
   collegeSalaryTotals: Awaited<
     ReturnType<typeof collegesService.getCollegeSalaryTotals>
   >;
-  historicalCollegeStatTotals: Awaited<
-    ReturnType<typeof collegesService.getHistoricalCollegeStatTotals>
-  >;
   playerTotals: Database["public"]["Views"]["player_season_totals_with_details"]["Row"][];
 };
 
@@ -32,7 +29,6 @@ export default function WhereAreTheyNowClientComponent({
   college,
   collegeStatTotals,
   collegeSalaryTotals,
-  historicalCollegeStatTotals,
   playerTotals,
 }: WhereAreTheyNowClientComponentProps) {
   const searchParams = useSearchParams();
@@ -165,12 +161,7 @@ export default function WhereAreTheyNowClientComponent({
         </TabsContent>
         <TabsContent value="historical">
           <TestChart
-            collegeStatTotals={collegeStatTotals.filter(
-              (stat) => stat.college_code === college.code,
-            )}
-            historicalCollegeStatTotals={historicalCollegeStatTotals.filter(
-              (stat) => stat.college_code === college.code,
-            )}
+            playerTotals={playerTotals}
             selectSeason={setSelectedSeason}
           />
           <TestTable

@@ -1,7 +1,6 @@
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableFooter,
   TableHead,
@@ -37,14 +36,18 @@ export function TestTable({ playerTotals, season }: TestTableProps) {
               <TableCell className="font-medium">
                 {playerTotal.full_name}
               </TableCell>
-              <TableCell className="text-right">{playerTotal.points}</TableCell>
+              <TableCell className="text-right">
+                {playerTotal.points?.toLocaleString()}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TableCell>Total</TableCell>
-            <TableCell className="text-right">{totalPoints}</TableCell>
+            <TableCell className="text-right">
+              {totalPoints.toLocaleString()}
+            </TableCell>
           </TableRow>
         </TableFooter>
       </Table>
