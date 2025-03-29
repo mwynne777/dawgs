@@ -12,6 +12,7 @@ import { TestChart } from "./test-chart";
 import { TestTable } from "./test-table";
 import { Database } from "~/lib/supabase-types";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import StatSelect, { SelectableStats } from "./stat-select";
 type WhereAreTheyNowClientComponentProps = {
   playersWithStats: PlayerWithStats[];
   college: Awaited<ReturnType<typeof collegesService.getCollegeByCode>>;
@@ -37,6 +38,7 @@ export default function WhereAreTheyNowClientComponent({
       "all",
   );
   const [selectedSeason, setSelectedSeason] = useState<number>(2025);
+  const [selectedStat, setSelectedStat] = useState<SelectableStats>("points");
 
   const playersWithStatsAndTotals = playersWithStats
     .filter((player) => player.player_stats.length > 0)
@@ -160,15 +162,21 @@ export default function WhereAreTheyNowClientComponent({
           })}
         </TabsContent>
         <TabsContent value="historical">
+          <StatSelect
+            selectedStat={selectedStat}
+            setSelectedStat={setSelectedStat}
+          />
           <TestChart
             playerTotals={playerTotals}
             selectSeason={setSelectedSeason}
+            selectedStat={selectedStat}
           />
           <TestTable
             playerTotals={playerTotals.filter(
               (stat) => stat.season === selectedSeason,
             )}
             season={selectedSeason}
+            selectedStat={selectedStat}
           />
         </TabsContent>
       </Tabs>
