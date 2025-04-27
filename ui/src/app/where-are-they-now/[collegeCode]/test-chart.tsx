@@ -40,8 +40,8 @@ export function TestChart({
 
   console.log("playerTotals", playerTotals);
   const yearsToDisplay = Array.from(
-    { length: 2025 - 2022 + 1 },
-    (_, index) => 2022 + index,
+    { length: 2025 - 2021 + 1 },
+    (_, index) => 2021 + index,
   );
 
   const chartData = yearsToDisplay.map((year) => ({

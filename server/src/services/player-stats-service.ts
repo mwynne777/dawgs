@@ -1,9 +1,10 @@
 import { supabase } from '../initSupabase';
 import { teams } from '../teams';
+import { getPlayerNameFromBadPerformance_2021 } from './bad-data-helper';
 
 type PerformanceKey = `performance_${number}`
 
-type PlayerStatsResponse = {
+export type PlayerStatsResponse = {
   performances: Record<PerformanceKey, {
     id: string,
     player: string,
@@ -12,6 +13,7 @@ type PlayerStatsResponse = {
     game: {
         code: string
         gameday: string,
+        description: string,
     },
     team: { code: string },
     opponent: { code: string },
@@ -30,6 +32,7 @@ type PlayerStatsResponse = {
     oreb: string,
     to: string,
     pf: string,
+    statline: string
   }>,
   meta: {
     'results-max': string;
@@ -185,6 +188,7 @@ const ALTERNATE_PLAYER_NAME_MAP: Record<string, string> = {
     "Ja'Vonte Smart": "Javonte Smart",
     'Jayden Scrubb': 'Jay Scrubb',
     'P.J. Hall': 'PJ Hall',
+    'Isaiah Stewart II': 'Isaiah Stewart',
 }
 
 const getPlayerByName = async (name: string) => {
@@ -223,26 +227,8 @@ const playerStatsService = {
         const playerStatsToSave = await Promise.all(performanceKeys.map(async key => {
             const performance = data.performances[key];
             let name = performance['player'];
-            if(performance['id'] === '11841028' || performance['id'] === '11832468' || performance['id'] === '11830126') {
-                name = 'Mike James'
-            } else if(performance['id'] === '11840529') {
-                name = 'Elijah Bryant'
-            } else if(performance['id'] === '11832491' || performance['id'] === '11828212' || performance['id'] === '11825937') { 
-                name = 'Sindarius Thornwell'
-            } else if(performance['id'] === '11832937') { 
-                name = 'Terence Davis'
-            } else if(performance['id'] === '11832957') { 
-                name = 'Gabriel Deck'
-            } else if(performance['id'] === '11833014') {
-                name = 'Justin Jackson'   
-            } else if (performance['id'] === '11834495') {
-                name = 'Rudy Gay'
-            } else if (performance['id'] === '11828318') {
-                name = 'Freddie Gillespie'
-            } else if (performance['id'] === '11908776') {
-                name = 'John Konchar'
-            } else if (performance['id'] === '11826008') {
-                name = 'Khem Birch'
+            if(year === 2021) {
+                name = getPlayerNameFromBadPerformance_2021(name, performance);
             }
 
             const player = await getPlayerByName(name);
