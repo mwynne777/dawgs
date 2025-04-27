@@ -32,7 +32,7 @@ export function TestTable({
     if (a[selectedStat] === null) {
       return 1;
     }
-    return b[selectedStat]! - a[selectedStat]!;
+    return b[selectedStat]! - a[selectedStat];
   });
   return (
     <>
