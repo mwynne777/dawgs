@@ -24,6 +24,16 @@ export function TestTable({
     (acc, pt) => acc + pt[selectedStat]!,
     0,
   );
+
+  playerTotals.sort((a, b) => {
+    if (a[selectedStat] === null && b[selectedStat] === null) {
+      return 0;
+    }
+    if (a[selectedStat] === null) {
+      return 1;
+    }
+    return b[selectedStat]! - a[selectedStat]!;
+  });
   return (
     <>
       <div className="mt-2 text-center text-lg font-bold">
