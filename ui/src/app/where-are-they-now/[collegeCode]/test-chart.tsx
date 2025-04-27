@@ -38,7 +38,6 @@ export function TestChart({
     setChartConfig(getChartConfig(selectedStat));
   }, [selectedStat]);
 
-  console.log("playerTotals", playerTotals);
   const yearsToDisplay = Array.from(
     { length: 2025 - 2021 + 1 },
     (_, index) => 2021 + index,

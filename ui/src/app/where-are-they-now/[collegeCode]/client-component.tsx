@@ -37,6 +37,11 @@ export default function WhereAreTheyNowClientComponent({
     (searchParams.get("league")?.toLowerCase() as "nba" | "gl" | "all") ??
       "all",
   );
+  const [selectedTab, setSelectedTab] = useState<"historical" | "current">(
+    searchParams.get("tab")?.toLowerCase() === "historical"
+      ? "historical"
+      : "current",
+  );
   const [selectedSeason, setSelectedSeason] = useState<number>(2025);
   const [selectedStat, setSelectedStat] = useState<SelectableStats>("points");
 
@@ -115,19 +120,45 @@ export default function WhereAreTheyNowClientComponent({
     );
   });
 
-  if (!playersWithStats) {
+  if (!playersWithStatsAndTotals.length) {
     return <div>No players found</div>;
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-8 pt-4">
-      <Tabs defaultValue="current">
+    <div className="mx-auto mb-8 max-w-3xl px-8 pt-4">
+      <Tabs value={selectedTab}>
         <div className="mb-6 flex w-full justify-center">
           <TabsList className="grid w-[400px] grid-cols-2">
-            <TabsTrigger value="historical" className="w-full">
+            <TabsTrigger
+              value="historical"
+              className="w-full"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                params.set("tab", "historical");
+                window.history.replaceState(
+                  null,
+                  "",
+                  `/where-are-they-now/${college.code}?${params.toString()}`,
+                );
+                setSelectedTab("historical");
+              }}
+            >
               Historical Trends
             </TabsTrigger>
-            <TabsTrigger value="current" className="w-full">
+            <TabsTrigger
+              value="current"
+              className="w-full"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+                params.set("tab", "current");
+                window.history.replaceState(
+                  null,
+                  "",
+                  `/where-are-they-now/${college.code}?${params.toString()}`,
+                );
+                setSelectedTab("current");
+              }}
+            >
               Current Season
             </TabsTrigger>
           </TabsList>

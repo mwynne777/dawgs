@@ -36,7 +36,7 @@ export function TestTable({
   });
   return (
     <>
-      <div className="mt-2 text-center text-lg font-bold">
+      <div className="mt-4 text-center text-lg font-bold">
         Player {StatisticLabels[selectedStat]} Totals for {season}
       </div>
       <Table>
